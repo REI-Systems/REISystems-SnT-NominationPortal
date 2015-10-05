@@ -1437,7 +1437,7 @@ input[type=file]:after{
 }
 
 .field-widget-file-generic fieldset legend, .field-widget-file-generic label {
-    font-size: 18px;
+    font-size: 18px !important;
 }
 
 .form-item-field-nomination-office-und .loading_icon{
