@@ -709,6 +709,7 @@ function _create_nomination_update_file_field_titles(&$form, $award_selected) {
       for ($i = 1; $i <= 8; $i++) {
         if ($i <= $given_names_count) {
           $form['field_nomination_document_' . $i]['und']['#title'] = $titles_array[$i - 1];
+          $form['field_nomination_document_' . $i]['und'][0]['#title'] = $titles_array[$i - 1];
         }
         else {
           $form['field_nomination_document_' . $i]['und']['#title'] = 'File ' . $i;
