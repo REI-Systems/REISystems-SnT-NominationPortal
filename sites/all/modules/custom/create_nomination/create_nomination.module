@@ -606,7 +606,7 @@ function create_nomination_form_validate($form, &$form_state) {
       $v['field_nomination_city']['und'][0]['value']);
   }
 
-  _create_nomination_check_document_descriptions($v);
+  // _create_nomination_check_document_descriptions($v);
 }
 
 
