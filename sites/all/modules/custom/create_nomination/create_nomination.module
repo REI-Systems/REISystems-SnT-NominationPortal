@@ -1,0 +1,1731 @@
+<?php
+      
+/**
+ * @file
+ * Customization for 'Prepare your nomination' page.
+ */
+
+/**
+ * Implements hook_init().
+ */
+//TODO: hook_init is executed on ANY page load, these operations only affect 
+// nominations, should think of a better way/hook of doing it.
+function create_nomination_init() {
+  drupal_add_css(drupal_get_path('module', 'create_nomination') . '/create_nomination.css');
+
+  // Initialize deadline dates in cache, if not set already
+  _create_nomination_deadlines_array_from_cache();
+}
+
+/**
+ * Implements hook_menu().
+ */
+function create_nomination_menu() {
+  $items['submit-nid/%'] = array(
+    'title' => 'Submit a Nomination',
+    'page callback' => '_create_nomination_post_using_ftp',
+    'page arguments' => array(1),
+    'access callback' => array('_create_nomination_check_submit_access'),
+    'access arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['get_office/%/%'] = array(
+    'title' => 'Get Best Office Value',
+    'page callback' => '_create_nomination_best_office_value',
+    'page arguments' => array(1, 2),
+    //'access callback' => array('_create_nomination_check_submit_access'),
+    //'access arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['nominations'] = array(
+    'title' => 'Get Started',
+    'page callback' => '_create_nomination_show_own_nominations',
+    'access callback' => TRUE,
+  );
+
+  //TODO: access arguments either don't work or are not necessary
+  $items['admin/config/services/nomination'] = array(
+    'title' => t('Nomination'),
+    'description' => t('Update the deadline dates.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('create_nomination_admin_settings_form'),
+    'file' => 'create_nomination.admin.inc',
+    'access arguments' => array('administer nomination deadlines'),
+  );
+
+  $items['admin/config/nomination/awards-required-number-of-files'] = array(
+    'title' => t('Nomination Awards - Required Number of Files'),
+    'description' => t('Update the Required Number of Files to be Attached with Nomination Submission, for Each Award Category.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('_create_nomination_admin_no_of_files'),
+    'file' => 'create_nomination.admin.inc',
+    'access arguments' => array('administer nomination deadlines'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function create_nomination_form_alter(&$form, &$form_state, $form_id) {
+  switch ($form_id) {
+    case 'nomination_node_form':
+      _create_nomination_alter_nomination_node_form($form, $form_state);
+      break;
+    case 'user_profile_form':
+      _create_nomination_alter_user_profile_form($form, $form_state);
+      break;
+
+    case 'user_login_block': // Log-in block form.
+    case 'user_login': // Log-in form.
+      // Password
+      $form['pass']['#attributes']['autocomplete'] = 'off';
+      break;
+
+  }
+}
+
+/**
+ * Alter user profile form.
+ */
+function _create_nomination_alter_user_profile_form(&$form, &$form_state) {
+  $form['account']['pass']['#pre_render'][] = '_create_nomination_hide_password_strength';
+  $form['#pre_render'][] = '_create_nomination_hide_timezone';
+}
+
+/**
+ * Hide timezone selection from user profile page.
+ */
+function _create_nomination_hide_timezone($form) {
+  $form['timezone']['#access'] = FALSE;
+  return $form;
+}
+
+/**
+ * Hide 'Password strength' from user profile page.
+ */
+function _create_nomination_hide_password_strength($element) {
+  unset($element['#attached']['js'][1]);
+  return $element;
+}
+
+
+/*
+ * Implements hook_node_validate
+ */
+function create_nomination_node_validate($node, $form, &$form_state) {
+
+  // ADD JQuery for Documentation
+  if ($node->type == 'nomination') {
+    drupal_add_js(drupal_get_path('module', 'create_nomination') . '/create_nomination.js');
+    $set_active_class = "(function($){ $(document).ready(function(){
+      var x=document.getElementById('edit-field-nomination-office-und');
+      $('.form-submit').click(function() {
+        x.disabled=false;
+      });
+
+      var award_initial = $('#edit-field-nomination-select-award-und').val();
+      if (award_initial != '_none_') {
+        x.disabled=true;
+      }
+
+      //Use this Ajax way to populate the Office Select box
+      $('#edit-field-nomination-zip-und-0-value, #edit-field-nomination-select-award-und').change(function() {
+        var award = $('#edit-field-nomination-select-award-und').val();
+        var zip = $('#edit-field-nomination-zip-und-0-value').val();
+        var zipRegex = /^\d{5}$/;
+
+        if (award == '_none_') {
+          x.disabled=false;
+          $('#edit-field-nomination-office-und').val('_none_');
+        }
+        else if (zipRegex.test(zip)) {
+          $.ajax({
+            type: 'POST',
+            url: '/get_office/' + award + '/' + zip,
+            dataType: 'json',
+            success: officeSuccess
+            //error: officeError
+          });
+        }
+      });
+
+
+      /* Change the SBA Office selection as per result. */
+      function officeSuccess(data) {
+        var value = data.best_choice;
+        x.disabled=false;
+        $('#edit-field-nomination-office-und').val(value);
+        if (value != '_null_' && value != null) {
+          x.disabled=true;
+        }
+        return false;
+      }
+    });})(jQuery);";
+    drupal_add_js($set_active_class, "inline");
+  }
+}
+
+
+/**
+ * Alter nomination node form.
+ */
+function _create_nomination_alter_nomination_node_form(&$form, &$form_state) {
+  global $base_url;
+  global $_REQUEST;
+
+  // TO DO Add
+  //$form['field_nomination_document_1']['und'][0]['#process'][0] = '_create_nomination_my_file_element_process';
+
+  $form['#attached']['js'][] = drupal_get_path('module', 'create_nomination') . '/create_nomination.js';
+  drupal_add_library('system', 'ui.dialog');
+  //drupal_add_js(drupal_get_path('module', 'create_nomination') . '/create_nomination.js');
+  drupal_add_js(array('create_nomination' => array('module_path' => drupal_get_path('module', 'create_nomination'))), 'setting');
+
+  $form['title']['#access'] = FALSE;
+  $form['body']['#access'] = FALSE;
+  $form['actions']['preview']['#access'] = FALSE;
+  $form['actions']['delete']['#access'] = FALSE;
+  $form['field_nomination_do_name']['#access'] = FALSE;
+  $form['field_nomination_document_path']['#access'] = FALSE;
+
+  $form['actions']['#prefix'] = '<div class="button-text">Be sure to save '
+    . ' the files you have uploaded. You will not be able to make '
+    . 'any changes after clicking “Submit Nomination” button.</div>';
+
+  $prefix = '<h1>Review and Submit Your Nomination</h1>'
+    . '<p>Review the information below for accuracy. If you have updated your nomination, but are not ready to '
+    . ' submit it, click the “Save” button.</p>'
+    . '<p>If you are ready to submit  your nomination, click the “Submit Nomination” button. Your nomination will'
+    . ' not be accepted until you hit the “Submit Nomination” button.  Once you click the “Submit Nomination” '
+    . 'button, you cannot modify your nomination.</p>';
+
+  if (empty($form['nid']['#value'])) {
+    $prefix = '<h1>Prepare Your Nomination</h1>'
+      . '<p>Follow the steps below to submit your nomination package. Please '
+      . 'refer to the <a href="/sites/default/files/Nomination_Guidelines.pdf" '
+      . 'target="_blank"> Nomination Guidelines</a> for award rules. </p>'
+      . '<p><b>Individuals or businesses may not be nominated for more than one Small Business Week award category.</b></p>';
+
+  }
+  //TODO: year is hardcoded.
+  $modify_select_award = array(
+    '#prefix' => $prefix . '<p><div class="asterisk">*</div><div class="denotes-text"> The asterisk'
+    . ' denotes required fields</div></p>',
+    '#title' => '<h2>1. Select Award'
+      . '</h2><div id="select-award"> </div>'
+      . '<div class="select-award-text">The Small Business Week Awards Nomination '
+      . 'Portal only accepts nominations for awards listed in the dropdown '
+      . 'menu. Nominations for awards not listed in the dropdown menu should '
+      . 'be submitted directly to the affiliated <a href="http://www.sba.gov/about-offices-list/2" '
+      . 'title="U.S. Small Business Administration district office" target="_blank">U.S. '
+      . 'Small Business Administration district office</a> in the state or '
+      . 'territory where the nominee&#39;s business is located.</div>',
+    '#ajax' => array(
+      'callback' => '_create_nomination_select_award_changed',
+    ),
+    '#pre_render' => array('_create_nomination_only_show_active'),
+  );
+  $form['field_nomination_select_award']['#weight'] = 0;
+  $form['field_nomination_select_award']['und'] = array_merge(
+      $form['field_nomination_select_award']['und'], $modify_select_award);
+
+  $selected_award_type = @$form_state['values']['field_nomination_select_award']['und'][0]['value']
+    OR $selected_award_type = @$form['#node']->field_nomination_select_award['und'][0]['value']
+    OR $selected_award_type = '_none_';
+
+  $form['review_nominee'] = array(
+    '#type' => 'markup',
+    '#markup' => _create_nomination_get_review_nominee_text($selected_award_type),
+  );
+
+  $form['nominee_info'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div id="nominee-info"><div class="question-mark-wrapper">'
+      . '<h2>2. Enter Nominee Information</h2><div id="nominee-information">'
+      . '</div></div><p>Please complete all of the fields below for the '
+      . 'nominee.</p></div>',
+  );
+
+  // Updating the file field titles based on the award type of the nomination upon initial page load
+  if (isset($form_state['node'])) {
+    //$award_selected = $form_state['node']->field_nomination_select_award['und'][0]['value'];
+    _create_nomination_update_file_field_titles($form, $selected_award_type);
+  }
+
+  $form['field_nomination_document_1']['#prefix'] = '<div '
+    . 'class="question-mark-wrapper"><h2>3. Upload Supporting Documentation'
+    . '</h2><div id="supporting-documentation" class="question-mark">SEE REQUIRED DOCUMENTS</div>'
+    . '</div><p class="documentation-text">Click the button above to see the specific documentation required for this award.'
+    . ' You must submit all of the documents listed in the pop-up to complete the'
+    . ' nomination package. </p>'
+    . '<p><b>To upload a document:</b></p>'
+    . '<p>1.) Click the “Browse” button below to locate the file you want to upload from your computer.</p>'
+    . '<p>2.) Click the "Upload" button.</p>'
+    . '<p>3.) Enter a short description of the file within the description field. Be sure to include all of the'
+    . ' required files as listed in the "Required Documents" button above.</p>'
+    . '<p>4.) Repeat these steps to add additional documents.</p>'
+    . '<p> 5.) Click the "Save" button.</p>'
+    . '<p>Once your file is uploaded, it will be listed. You can remove a document by clicking the "remove" button.'
+    . ' You can upload the documents in any order. Please make sure you upload all the documents required in the '
+    . '<a href="/sites/default/files/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a></p>'
+    . '<p>Be sure to save the files you have uploaded. Files that have been saved can be '
+    . 'removed, revised, and re-uploaded prior to submission.</p>'
+    . '<p><b>Nominations that had been submitted are considered final and cannot be altered.</b></p>'
+    . '<div class="small-text"> * Each file must be less than 5 MB. Total file size of all documents combined must be '
+    . ' less than 100 MB. File names must not exceed 65 characters. The allowed file types include: .txt, .pdf, .ppt,'
+    . '.pptx, .doc, .docx, .xls, .xlsx, .jpg, .jpeg, .png, .tif, .tiff</div><br/>'
+    . '<p>SBA has implemented security controls for the protection of your personal information. If you do not wish to '
+    . 'submit your information electronically, you may mail your nomination package directly to your local SBA district '
+    . 'office listed within the <a href="/sites/default/files/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a> </p> ';
+
+  /*
+  $form['field_nomination_document_path']['#prefix'] = '<div '
+    . 'class="question-mark-wrapper"><h2>3. Upload Supporting Documentation'
+    . '</h2><div id="supporting-documentation" class="question-mark">SEE REQUIRED DOCUMENTS</div>'
+    . '</div><p class="documentation-text">Click the button above to see the specific documentation required for this award.'
+    . ' You must submit all of the documents listed in the pop-up to complete the'
+    . ' nomination package. </p>'
+    . '<p><b>To upload a document:</b></p>'
+    . '<p>1.) Click the “Browse” button below to locate the file you want to upload from your computer.</p>'
+    . '<p>2.) Click the "Upload" button.</p>'
+    . '<p>3.) Enter a short description of the file within the description field. Be sure to include all of the'
+    . ' required files as listed in the "Required Documents" button above.</p>'
+    . '<p>4.) Repeat these steps to add additional documents.</p>'
+    . '<p> 5.) Click the "Save" button.</p>'
+    . '<p>Once your file is uploaded, it will be listed. You can remove a document by clicking the "remove" button.'
+    . ' You can upload the documents in any order. Please make sure you upload all the documents required in the '
+    . '<a href="/sites/default/files/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a></p>'
+    . '<p>Be sure to save the files you have uploaded. Files that have been saved can be '
+    . 'removed, revised, and re-uploaded prior to submission.</p>'
+    . '<p><b>Nominations that had been submitted are considered final and cannot be altered.</b></p>'
+    . '<div class="small-text"> * Each file must be less than 5 MB. Total file size of all documents combined must be '
+    . ' less than 100 MB. File names must not exceed 65 characters. The allowed file types include: .txt, .pdf, .ppt,'
+    . '.pptx, .doc, .docx, .xls, .xlsx, .jpg, .jpeg, .png, .tif, .tiff</div><br/>'
+    . '<p>SBA has implemented security controls for the protection of your personal information. If you do not wish to '
+    . 'submit your information electronically, you may mail your nomination package directly to your local SBA district '
+    . 'office listed within the <a href="/sites/default/files/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a> </p> ';
+  */
+
+  $form['actions']['submit']['#submit'][] = 'create_nomination_form_submit';
+  $form['#validate'][] = 'create_nomination_form_validate';
+
+  $form['actions']['reset'] = array(
+    '#type' => 'submit',
+    '#value' => t('Reset'),
+    '#weight' => 1,
+    '#executes_submit_callback' => FALSE,
+    '#limit_validation_errors' => array(),
+    '#attributes' => array('onClick' => 'document.getElementById("nomination-node-form").reset();'),
+  );
+
+  if (!empty($form['nid']['#value'])) {
+    //$form['field_nomination_office']['und']['#attributes']['disabled'] = TRUE;
+    $select_type = $form['field_nomination_select_award']['und']['#default_value'][0];
+    $cache = _create_nomination_deadlines_array_from_cache();
+    if (time() < ($cache->data[$select_type] + 21600 + 86399)) {
+      if(!empty($form['#node']->field_nomination_submitted['und'][0]) &&
+        $form['#node']->field_nomination_submitted['und'][0]['value'] == 0
+      ) {
+        $show_dialog = isset($_REQUEST['submit_nomination']) ? $_REQUEST['submit_nomination'] : 0;
+        // Simple check agains CLEVER users, the most they'll do is submit
+        // without saving the form.
+        if (!is_numeric($show_dialog) || intval($show_dialog) != $form['nid']['#value']) {
+          $show_dialog = 0;
+        }
+
+
+        /*
+        * Begin - Sending the information of uploaded Files through 'field_nomination_document_path' to create_nomination.js
+        * file by setting up Drupal settings variables to be accessible through js file. It sends the count of number
+        * of files uploaded and a comma separated list of file names which are uploaded.
+        *
+        * This variable only gets set if $show_dialog !== 0, which means it will open up the Confirmation
+        * Checklist popup. So it only passes variable when the pop up has to open up, in other cases anyway we
+        * are not using these variables, so I am not passing them.
+        */
+        if ($show_dialog !== 0) {
+          $list_of_file_names = '';
+          $no_of_files_uploaded = $form['field_nomination_document_path']['und']['#file_upload_delta'];
+          for ($i=0; $i < $no_of_files_uploaded; $i++) {
+            $list_of_file_names.= $form['field_nomination_document_path']['und'][$i]['#default_value']['filename'];
+            if ($i !== $no_of_files_uploaded - 1) {
+              $list_of_file_names.= ',';
+            }
+          }
+          drupal_add_js(array('create_nomination' => array('file_names' => $list_of_file_names,
+            'files_uploaded_count' => $no_of_files_uploaded)), 'setting');
+        }
+        /*
+         * End - Sending the information of uploaded Files through 'field_nomination_document_path' to create_nomination.js
+         * file by setting up Drupal settings variables to be accessible through js file. It sends the count of number
+         * of files uploaded and a comma separated list of file names which are uploaded.
+         */
+
+
+        $form['actions']['submit_nomination'] = array(
+          '#type' => 'submit',
+          '#value' => t('Submit Nomination'),
+          '#weight' => 4,
+          '#submit' => array('node_form_submit', 'create_nomination_form_submit'),
+          '#suffix' => '<div id="dialog-text"><img style="margin-left:115px;" '
+            . 'src="' . $base_url . '/' . drupal_get_path('module', 'create_nomination')
+            . '/popup_image_larger.jpg"/><h1>Final Submission Notice</h1><p>Are you '
+            . 'sure you are ready to submit your nomination?</p>'
+            . '<p>You will not be able to make changes to your nomination package '
+            . 'after clicking the "Submit Nomination" button.</p></div>',
+          '#attributes' => array('nid' => $show_dialog),
+        );
+      }
+      else {
+        $form['actions']['submit']['#access'] = FALSE;
+      }
+    }
+    else {
+      $form['nominee_info'] = array(
+        '#prefix' => '<h2>',
+        '#markup' => t('Sorry, you have passed the nomination deadline. '
+            . 'You cannot submit the form anymore.'),
+        '#suffix' => '</h2>',
+        '#weight' => -7,
+      );
+      $form['actions']['submit']['#access'] = FALSE;
+      $form['actions']['cancel']['#access'] = FALSE;
+    }
+  }
+
+  // Force the _none value to be not included for the Select field
+  unset($form['field_nomination_office'][LANGUAGE_NONE]['#options']['_none']);
+
+  // Replace
+  /* Add #ajax behavior to ZipCode field to change options in Submission Office select
+  $form['field_nomination_zip']['und'][0]['value']['#ajax'] = array(
+    'callback' => '_create_nomination_render_field_nomination_office',
+    'wrapper' => 'edit-field-nomination-office',
+  );
+  *
+
+  if (isset($form_state['values']['field_nomination_zip']) && isset($form_state['values']['field_nomination_select_award'])) {
+    $form['field_nomination_office']['und']['value'] == '0001';
+  }
+  */
+
+  // Replace
+  /*
+  $form['field_nomination_office']['und']['#ajax'] = array(
+    'callback' => '_nomination_office_value_changed',
+    //'wrapper' => 'edit-field-nomination-office',
+  );*/
+
+  /*
+  //TO DO - Didn't work, most likely not needed as we are not doing file uploads, those submit buttons
+  // are hidden
+  $form['field_nomination_document_1']['und']['#ajax'] = array(
+    'callback' => '_create_nomination_render_field_nomination_office',
+    'wrapper' => 'edit-field-nomination-office',
+    //'wrapper' => 'edit-field-nomination-office',
+  );
+  $form['field_nomination_document_1']['und'][0]['#ajax'] = array(
+    'callback' => '_create_nomination_render_field_nomination_office',
+    'wrapper' => 'edit-field-nomination-office',
+    //'wrapper' => 'edit-field-nomination-office',
+  );
+*/
+
+  //_create_nomination_submission_office_options($form, $form_state, $selected_award_type);
+  //_create_nomination_select_correct_option($form, $form_state);
+
+  // 'Please wait loading' div
+  $form['loading'] = array(
+    '#prefix' => '<div id="loading-ajax"><div>',
+    '#markup' => '<p>Please wait, while we are processing your request</p>'
+       . '<img src="' . "$base_url/" . drupal_get_path('module', 'create_nomination')
+       . '/ajax-loader.gif"/>',
+    '#suffix' => '</div></div>',
+    '#weight' => 30,
+  );
+
+  // Help Dialog div
+  $form['nomination_help_dialog'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div id="nomination-help-dialog">.</div>',
+    '#weight' => 31,
+  );
+
+  _create_nomination_add_asterisk_to_file_description($form);
+
+  // Making sure the file field's title shows the correct Title, which was the problem happening in case of file Upload/Remove. Fixing the Title for the
+  // Used field to Upload/Remove the file.
+  if (isset($form_state['clicked_button'])) {
+    $name = $form_state['clicked_button']['#name'];
+    if (strpos($name, 'field_nomination_document_') !== FALSE) {
+      $field_name = explode('_', $name);
+      $file_field_no = $field_name[3];
+      $award_selected = $form_state['input']['field_nomination_select_award']['und'];
+      $variable_name = $award_selected . '_file_fields_titles';
+      $titles = variable_get($variable_name, '');
+      $titles_array = explode(',', $titles);
+      $form['field_nomination_document_' . $file_field_no]['und']['#title'] = $titles_array[$file_field_no - 1];
+    }
+  }
+}
+
+/*
+ * Implements hook_node_presave
+ */
+function create_nomination_node_presave($node) {
+  // Check to suppress warning messages
+  if (is_object($node) && $node->type == 'nomination') {
+    $replace_field_count = variable_get($node->field_nomination_select_award['und'][0]['value'] . '_files', 1);
+    // Appending all attachments(only from the fields mentioned in the config page for the specific award) to one File field which is field_nomination_document_path, which has been used in the existing logic
+    // everywhere and to try and do minimum changes in the existing logic, this has been done
+    $node->field_nomination_document_path['und'] = array();
+    for ($i = 1; $i <= 8; $i++) {
+      $field_name = 'field_nomination_document_' . $i;
+      if ($i <= $replace_field_count) {
+        $node->field_nomination_document_path['und'] = array_merge($node->field_nomination_document_path['und'], $node->{$field_name}['und']);
+      }
+      else {
+        // delete extra files before saving node, which are not in valid fields for the award category selected
+        if (isset($node->{$field_name}['und']) && !empty($node->{$field_name}['und'])) {
+          $node->{$field_name}['und'] = array();
+        }
+      }
+    }
+  }
+}
+
+
+/**
+ * Redirect back to edit page after submit.
+ */
+function create_nomination_form_submit($form, &$form_state) {
+  $append = '';
+  if ($form_state['clicked_button']['#id'] == 'edit-submit-nomination') {
+    $append = '?submit_nomination=' . $form_state['values']['nid'];
+  }
+  $_GET['destination'] = 'node/' . $form_state['values']['nid'] . '/edit' . $append;
+}
+
+/**
+ * Validation function.
+ */
+function create_nomination_form_validate($form, &$form_state) {
+  $v = &$form_state['values'];
+  $selected_value = $v['field_nomination_select_award']['und'][0]['value'];
+
+  // Make sure that at least one file is uploaded, when nomination is submitted.
+  if ($form_state['clicked_button']['#id'] == 'edit-submit-nomination') {
+    //$no_of_files_uploaded = _check_number_of_files_uploaded($form, $form_state);
+    $min_required_no_of_files = _create_nomination_get_required_no_of_files_for_award($selected_value);
+    $error_displayed = 0;
+    $remove_keys = array();
+    for ($i = 1; $i <= $min_required_no_of_files; $i++) {
+      $sub_file_uploaded = $form['field_nomination_document_' . $i]['und']['#file_upload_delta'];
+      if ($sub_file_uploaded < 1) {
+        //form_set_error('field_nomination_document_' . $i);
+        if ($error_displayed == 0) {
+          $error_displayed = 1;
+          form_set_error('field_nomination_document_' . $i, t("Required File Missing. There is supposed to be at least one file uploaded for each of the Required highlighted fields to upload a document. Please upload all the necessary files required for this particular award category to submit the nomination. For the award category '@name', you need a minimum of '@no' files, one for each requirement.", array('@name' => _ftp_put_get_award_name($selected_value), '@no' => $min_required_no_of_files)));
+        }
+        else {
+          form_set_error('field_nomination_document_' . $i, t("Required File Missing. There is supposed to be at least one file uploaded for each of the Required highlighted fields to upload a document. Please upload all the necessary files required for this particular award category to submit the nomination. For the award category '@name', you need a minimum of '@no' files, one for each requirement.", array('@name' => _ftp_put_get_award_name($selected_value), '@no' => $min_required_no_of_files)));
+          $remove_keys[] = 'field_nomination_document_' . $i;
+        }
+      }
+    }
+    /*
+    if ($no_of_files_uploaded < $min_required_no_of_files) {
+      form_set_error('field_nomination_document_path', t("There are not enough files attached to submit the nomination. Please upload all the necessary files required for this particular award category to submit the nomination. For the award category '@name', you need minimum '@no' files.", array('@name' => _ftp_put_get_award_name($selected_value), '@no' => $min_required_no_of_files)));
+    }
+    */
+
+    // Basically removing the extra form_set_error messages after setting them up, this was done as otherwise fields were not even getting
+    // the error class
+    $errors = form_get_errors();
+    foreach ($remove_keys as $val) {
+      $key = array_search($val, array_keys($errors));
+      unset($_SESSION['messages']['error'][$key]);
+    }
+  }
+
+  // function to check for duplicates, return 1 or 2 if there is a duplicate; 1 if duplicate with same award category,
+  // 2 if duplicate with different award category.
+  $is_duplicate = _create_nomination_check_for_duplication($form, $form_state);
+  if ($is_duplicate === 1) {
+    form_set_error('field_nomination_firstname', t("This individual has already been nominated for this award category, an individual can't be nominated more than once."));
+  }
+  elseif ($is_duplicate === 2) {
+    form_set_error('field_nomination_firstname', t("This individual has been nominated for one of the other award categories, can't be nominated for multiple categories. Individuals or businesses may not be nominated for more than one Small Business Week award category."));
+  }
+
+  $cache = _create_nomination_deadlines_array_from_cache();
+  if ($selected_value == '_none_') {
+    form_set_error('field_nomination_select_award', t('Please select an award'));
+  }
+  // 21600 == 6hrs, so that Hawaii don't feel bad
+  else if (($cache->data[$selected_value] + 21600 + 86399) <= time()) {
+    form_set_error('field_nomination_select_award', t('Deadline for this award '
+        . 'type has passed, you cannot edit or submit this nomination.'));
+  }
+
+  if ($v['field_nomination_office']['und'][0]['value'] == '_none_' || $form_state['input']['field_nomination_office']['und'] == '_none_') {
+    form_set_error('field_nomination_office', t('Please select a SBA Submission Office'));
+  }
+  else {
+    // We also save the actual name of the submission office selected.
+    $do_code = $v['field_nomination_office']['und'][0]['value'];
+    $v['field_nomination_do_name']['und'][0]['value'] = _create_nomination_get_do_name($do_code, $form['field_nomination_office']['und']['#options']);
+  }
+
+  if (!empty($v['field_nomination_firstname']['und'][0]['value'])) {
+    _create_nomination_validate_names('field_nomination_firstname', 'First Name',
+    $v['field_nomination_firstname']['und'][0]['value']);
+  }
+
+  if (!empty($v['field_nomination_lastname']['und'][0]['value'])) {
+    _create_nomination_validate_names('field_nominationlast_name', 'Last Name',
+      $v['field_nomination_lastname']['und'][0]['value']);
+  }
+
+  if (!empty($v['field_nomination_title']['und'][0]['value'])) {
+    _create_nomination_validate_names('field_nomination_title', 'Title',
+      $v['field_nomination_title']['und'][0]['value']);
+  }
+
+  if (!empty($v['field_nomination_business_name']['und'][0]['value'])) {
+    _create_nomination_validate_names('field_nomination_business_name', 'Business Name',
+      $v['field_nomination_business_name']['und'][0]['value']);
+  }
+
+  if (!empty($v['field_nomination_city']['und'][0]['value'])) {
+    _create_nomination_validate_names('field_nomination_city', 'City',
+      $v['field_nomination_city']['und'][0]['value']);
+  }
+
+  _create_nomination_check_document_descriptions($v);
+}
+
+
+/*
+ * Function returning the number of files to be uploaded for the award passed as an argument
+ *
+ */
+function _create_nomination_get_required_no_of_files_for_award($award) {
+  $number_of_docs = array(
+    'deadline_person_of_year' => variable_get('deadline_person_of_year_files_required', 1),
+    'deadline_exporter_of_year' => variable_get('deadline_exporter_of_year_files_required', 1),
+    'deadline_disaster_recovery' => variable_get('deadline_disaster_recovery_files_required', 1),
+    'deadline_disaster_recovery_contribution' => variable_get('deadline_disaster_recovery_contribution_files_required', 1),
+    'deadline_disaster_recovery_contribution_volunteer' => variable_get('deadline_disaster_recovery_contribution_volunteer_files_required', 1),
+    'deadline_prime_contractor' => variable_get('deadline_prime_contractor_files_required', 1),
+    'deadline_sub_contractor' => variable_get('deadline_sub_contractor_files_required', 1),
+    'deadline_d_eisenhower' => variable_get('deadline_d_eisenhower_files_required', 1),
+    'deadline_graduate_award_of_year' => variable_get('deadline_graduate_award_of_year_files_required', 1),
+    'deadline_innovation_award' => variable_get('deadline_innovation_award_files_required' , 1),
+    'deadline_outreach_centers' => variable_get('deadline_outreach_centers_files_required', 1),
+    'deadline_center_of_excellence' => variable_get('deadline_center_of_excellence_files_required', 1),
+  );
+  return isset($number_of_docs[$award]) ? $number_of_docs[$award] : FALSE;
+}
+
+
+/*
+ * Validation Helper function to make sure that at least one file is uploaded.
+ */
+function _check_number_of_files_uploaded($form, $form_state) {
+  return $form['field_nomination_document_path']['und']['#file_upload_delta'];
+}
+
+/**
+ * Render File Upload field passed.
+ */
+function _create_nomination_render_file_upload_field(&$form, $field_name) {
+  return drupal_render($form[$field_name]);
+}
+
+/*
+// Hide remove button from an image field
+function create_nomination_field_widget_form_alter(&$element, &$form_state, $context) {
+  $field_names = array(
+    'field_nomination_document_1','field_nomination_document_2','field_nomination_document_3',
+    'field_nomination_document_4','field_nomination_document_5','field_nomination_document_6',
+    'field_nomination_document_7','field_nomination_document_8',
+  );
+  // If this is an image field type
+  //if ($context['field']['field_name'] == 'field_nomination_document_1') {
+  if (in_array($context['field']['field_name'], $field_names)) {
+    // Loop through the element children (there will always be at least one).
+    foreach (element_children($element) as $key => $child) {
+      // Add the new process function to the element
+      $element[$key]['#process'][] = '_create_nomination_file_field_widget_process';
+    }
+  }
+}
+
+function _create_nomination_file_field_widget_process($element, &$form_state, $form) {
+  //dpm($element);
+  //_create_nomination_render_field_nomination_office($form, $form_state);
+  // Hide the remove button
+  //$element['remove_button']['#type'] = 'hidden';
+  //$element['remove_button']['#access'] = FALSE;
+  $element['upload_button']['#access'] = FALSE;
+
+  // Return the altered element
+  return $element;
+}
+*/
+
+/* TO DO Add
+function _create_nomination_my_file_element_process($element, &$form_state, $form) {
+  //_create_nomination_render_field_nomination_office($form, $form_state);
+  //_create_nomination_select_correct_option($form, $form_state);
+  $element = file_managed_file_process($element, $form_state, $form);
+  $element['upload_button']['#access'] = FALSE;
+  return $element;
+}
+*/
+
+/**
+ * To do
+ * Make it work for Ajax award change as well, it's working for Initial Page load I believe, needs more testing
+ */
+function _create_nomination_update_file_field_titles(&$form, $award_selected) {
+  switch($award_selected) {
+    case '_none_':
+      for ($i = 1; $i <= 8; $i++) {
+        $form['field_nomination_document_' . $i]['und']['#title'] = 'File ' . $i;
+      }
+      break;
+
+    default:
+      $variable_name = $award_selected . '_file_fields_titles';
+      $titles = variable_get($variable_name, '');
+      $titles_array = explode(',', $titles);
+      $given_names_count = count($titles_array);
+      for ($i = 1; $i <= 8; $i++) {
+        if ($i <= $given_names_count) {
+          $form['field_nomination_document_' . $i]['und']['#title'] = $titles_array[$i - 1];
+        }
+        else {
+          $form['field_nomination_document_' . $i]['und']['#title'] = 'File ' . $i;
+        }
+      }
+      break;
+  }
+}
+
+/*
+ * Function that checks for duplication, making sure that same person hasn't been nominated before. It only checks
+ * published/active nodes for duplication, supposing that old nodes get unpublished. It is not case-sensitive at
+ * this point. Duplication checks for First Name, Last Name, Business Name, City, State and Zip code at this point.
+ * All these six fields are same, then it is considered as a duplicate.
+ * Returns 1, if same user has been nominated for the same award category; otherwise
+ * Returns 2, if same user has been nominated for a different award category; otherwise
+ * Returns 0
+ */
+function _create_nomination_check_for_duplication($form, $form_state) {
+  /*
+   * checking that clicked_button was one of the Submit buttons and not Reset button.
+   */
+  if (isset($form_state['clicked_button']) && $form_state['clicked_button']['#value'] != 'Reset') {
+
+    // getting values entered in the form.
+    $first_name = $form_state['values']['field_nomination_firstname']['und'][0]['value'];
+    $last_name = $form_state['values']['field_nomination_lastname']['und'][0]['value'];
+    $bus_name = $form_state['values']['field_nomination_business_name']['und'][0]['value'];
+    $city = $form_state['values']['field_nomination_city']['und'][0]['value'];
+    $state = $form_state['values']['field_nomination_state']['und'][0]['value'];
+    $zip = $form_state['values']['field_nomination_zip']['und'][0]['value'];
+    $award_type = $form_state['values']['field_nomination_select_award']['und'][0]['value'];
+    $nid = $form_state['values']['nid'];
+
+    // Generating the query to check for duplication.
+    $query = db_select('field_data_field_nomination_firstname', 'first_name');
+    $query->join('field_data_field_nomination_lastname', 'last_name', 'last_name.entity_id = first_name.entity_id');
+    $query->join('field_data_field_nomination_business_name', 'bus_name', 'bus_name.entity_id = first_name.entity_id');
+    $query->join('field_data_field_nomination_city', 'city', 'city.entity_id = first_name.entity_id');
+    $query->join('field_data_field_nomination_state', 'state', 'state.entity_id = first_name.entity_id');
+    $query->join('field_data_field_nomination_zip', 'zip', 'zip.entity_id = first_name.entity_id');
+    $query->join('field_data_field_nomination_select_award', 'award_type', 'award_type.entity_id = first_name.entity_id');
+    $query->join('node', 'n', 'n.nid = first_name.entity_id');
+
+
+    $query->fields('n', array('nid'))
+        ->fields('award_type', array('field_nomination_select_award_value'))
+        ->condition('n.status', '1')
+        ->condition('field_nomination_firstname_value', $first_name)
+        ->condition('field_nomination_lastname_value', $last_name)
+        ->condition('field_nomination_business_name_value', $bus_name)
+        ->condition('field_nomination_city_value', $city)
+        ->condition('field_nomination_state_value', $state)
+        ->condition('field_nomination_zip_value', $zip);
+
+
+    if ($nid !== NULL) {
+      $query->condition('first_name.entity_id', $nid, '<>');
+    }
+
+    $result = $query->execute();
+    foreach ($result as $record) {
+      $duplicates_exist = TRUE;
+      if ($record->field_nomination_select_award_value === $award_type) {
+        return 1;
+      }
+    }
+
+    if ($duplicates_exist) {
+      return 2;
+    }
+  }
+  return 0;
+}
+
+
+/**
+ * Check that all uploaded files have descriptions.
+ */
+function _create_nomination_check_document_descriptions($values) {
+  for ($i = 1; $i <= 8; $i++) {
+    $v = $values['field_nomination_document_' . $i];
+    foreach ($v['und'] as $ndx => $data) {
+      if ($data['fid'] != 0 && empty($data['description'])) {
+        form_set_error("field_nomination_document_$i][und][$ndx",
+          t('A description is required for every uploaded file.'));
+        break;
+      }
+    }
+  }
+  /*
+  $v = $values['field_nomination_document_path'];
+  foreach ($v['und'] as $ndx => $data) {
+    if ($data['fid'] != 0 && empty($data['description'])) {
+      form_set_error("field_nomination_document_path][und][$ndx",
+          t('A description is required for every uploaded file.'));
+      break;
+    }
+  }*/
+}
+
+/**
+ * A helper validation for Names, Titles, Business names and City.
+ *
+ * MUST start with a letter (values are trimmed first)
+ * CAN have letters, digits, <space>, - , ' and . in them.
+ *
+ * Will modify $value in place
+ *
+ * @param $field_name
+ * @param $message - the field's title value
+ * @param &$value
+ *
+ * Will generate Form Error if value is not valid
+ */
+function _create_nomination_validate_names($field_name, $message, &$value) {
+  $pattern = "/^[a-zA-Z][a-zA-Z \-0-9'.,-]{0,}$/";
+  // Business Name can start with a digit
+  if ($message == 'Business Name') {
+    $pattern = "/^[a-zA-Z0-9][a-zA-Z \-0-9'.,-]{0,}$/";
+  }
+  $value = ucwords(trim($value));
+  if (!preg_match($pattern, $value)) {
+    form_set_error($field_name, "Please provide a valid $message.");
+  }
+}
+
+//TODO: could simplify this further by just sending
+// out the text that gets returned from ftp_put_nomprocess
+/**
+ * Submit the form details using ftp.
+ */
+function _create_nomination_post_using_ftp($nid=NULL) {
+  global $user;
+
+  $result = ftp_put_nomprocess($nid);
+// $result is an array keyed the following way
+//     array(
+//           'result' => $msg,
+//           'text'   => $result,
+//           );
+
+  // Send email to user
+  if (isset($result['result']) && $result['result'] == 'success') {
+    //send email
+    drupal_mail('create_nomination', 'nomination-submitted', '', language_default(),
+      array('nid' => $nid, 'email' => $user->mail), '', TRUE);
+  }
+
+  drupal_json_output($result);
+}
+
+
+/**
+ * Implements hook_mail().
+ */
+function create_nomination_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'nomination-submitted':
+      $message['subject'] = t('Nomination Submitted Successfully');
+      $message['body'][] = 'Nomination Submitter,';
+      $message['body'][] = 'You have successfully submitted a nomination.';
+      _create_nomination_email_get_body($params['nid'], $message);
+      $message['body'][] = 'If you have questions or issues about the Small '
+        . 'Business Week Awards Nomination Portal, please e-mail <a href="'
+        . 'mailto:websupport@sba.gov">websupport@sba.gov</a>';
+      $message['body'][] = '-- The Small Business Week Team';
+      //$message['body'][] = 'DEBUG: notification sent to [' . $params['email'] . ']';
+      $message['to'] = $params['email'];
+      //  'khuram.butt@reisystems.com';
+      //$message['to'] = $params['email'];
+      break;
+  }
+
+  /* Make this variable first
+  if (variable_get('nomination_environment', 'dev') == 'dev') {
+    $message['body'][] = '';
+    $message['body'][] = 'DEBUG: notification sent to [' . $message['to'] . ']';
+    $message['to'] = variable_get('qa-emails', 'khuram.butt@reisystems.com');
+  } */
+}
+
+/**
+ * Compile body of the nomination-submitted notification.
+ */
+function _create_nomination_email_get_body($nid, &$message) {
+  $node= node_load($nid);
+  $award_type = $node->field_nomination_select_award[LANGUAGE_NONE][0]['value'];
+
+  $field_names = array(
+    'field_nomination_document_1','field_nomination_document_2','field_nomination_document_3',
+    'field_nomination_document_4','field_nomination_document_5','field_nomination_document_6',
+    'field_nomination_document_7','field_nomination_document_8',
+  );
+
+  $files_attached = "\r\n\r";
+  foreach ($field_names as $field_name) {
+    if (!empty($node->{$field_name}['und'])) {
+      $field_name_array = explode('_', $field_name);
+      $file_field_no = $field_name_array[3];
+      $variable_name = $award_type . '_file_fields_titles';
+      $titles = variable_get($variable_name, '');
+      $field_title_array = explode(',', $titles);
+      $field_title = $field_title_array[$file_field_no - 1];
+      $files_attached .= "\nFiles For " . $field_title . ": " . count($node->{$field_name}['und']) . "\n";
+    }
+
+    foreach ($node->{$field_name}['und'] as $attached_file) {
+      if (isset($attached_file['description'])) {
+        $files_attached .=  'attached_file:'             . $attached_file['filename']    . "\r\n" .
+          'file_description:'          . $attached_file['description'] . "\r\n----------------------------\r\n";
+      }
+    }
+  }
+  /*
+  foreach ($node->field_nomination_document_path['und'] as $attached_file) {
+    if (isset($attached_file['description'])) {
+      $files_attached .=  'attached_file:'             . $attached_file['filename']    . "\r\n" .
+        'file_description:'          . $attached_file['description'] . "\r\n----------------------------\r\n";
+    }
+  }*/
+
+  $message['body'][] = 'The details of the nomination are listed below.';
+
+  //TODO: get an actual value here, instead of the variable name
+  $message['body'][] = 'Award Type: ' . _ftp_put_get_award_name($award_type);
+//      $node->field_nomination_select_award[LANGUAGE_NONE][0]['value']);
+  $message['body'][] = 'Nominee First Name: ' . $node->field_nomination_firstname[LANGUAGE_NONE][0]['value'];
+  $message['body'][] = 'Nominee Last Name: ' . $node->field_nomination_lastname[LANGUAGE_NONE][0]['value'];
+  $message['body'][] = 'Business Name: ' . $node->field_nomination_business_name[LANGUAGE_NONE][0]['value'];
+  $message['body'][] = 'City: ' . $node->field_nomination_city[LANGUAGE_NONE][0]['value'];
+  $message['body'][] = 'State: ' . $node->field_nomination_state[LANGUAGE_NONE][0]['value'];
+  $message['body'][] = 'Zip Code: ' . $node->field_nomination_zip[LANGUAGE_NONE][0]['value'];
+  $message['body'][] = 'Selected SBA Office: ' . $node->field_nomination_do_name[LANGUAGE_NONE][0]['value'];
+  $message['body'][] = 'Comments: ' . $node->field_nomination_comments[LANGUAGE_NONE][0]['value'];
+  if (!empty($files_attached)) {
+    $message['body'][] = 'Files Attached: ' . $files_attached;
+  }
+  $message['body'][] = 'submission time: ' .  date('jS F, Y h:i A', time())          . "\r\n" .
+                    'creation time: '   .  date('jS F, Y h:i A', $node->created)  . "\r\n";
+}
+
+
+/**
+ * User can submit only OWN PUBLISHED NOMINATIONS.
+ */
+function _create_nomination_check_submit_access($nid) {
+  global $user;
+  if (!$user->uid) {
+    return FALSE;
+  }
+  if (!$nid || !is_numeric($nid)) {
+    return FALSE;
+  }
+  $node = node_load($nid);
+  if ($node->type != 'nomination' || $node->status != 1 || $node->uid != $user->uid) {
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
+ * Display user's nominations.
+ */
+function _create_nomination_show_own_nominations() {
+  global $user;
+  if (!$user->uid) {
+    drupal_set_message(t('Nominations list is only shown to logged in users.'), 'error');
+    drupal_access_denied();
+  }
+
+  $content = '<div id="welcome"><div class="welcome-text"><p> To nominate a small business owner in your community for a'
+    . ' National Small Business Week award, click the "Start" button.</p>'
+    . '<p>If you are a returning user, your nomination will be listed below and will indicate a status of either '
+    . '“Submitted” or “Edit.” If a nomination has not been submitted,  you can complete your package by clicking the '
+    . '“Edit” link.</p></div>'
+    . '<a href="/node/add/nomination" value="Start" type="Create a nomination"><div class="start">START</div></div></a>';
+
+  $content .= '<div><p><span class="nominations-view-title">'
+    . t('Your Nominations') . '</span></p>'
+    . views_embed_view('nomination_list', 'page', $user->uid) . '</div>';
+  return $content;
+}
+
+/**
+ * Implements hook_boot().
+ *
+ * Redirect anonymous users to /user and authenticated users to /nominations
+ * from frontpage.
+ */
+function create_nomination_boot() {
+  global $user;
+  if (preg_match('#/user/register$#', $_SERVER['HTTP_REFERER'])) {
+    session_write_close();
+  }
+
+  _create_nomination_update_status_message_after_pass_change();
+
+  //$is_frontpage = empty($_GET['q']) ? TRUE : FALSE;
+  if (empty($_GET['q'])) {
+    if ($user->uid == 0) {
+      header('Location: user');
+    }
+    else {
+      header('Location: nominations');
+    }
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function create_nomination_permission() {
+  return array(
+    'administer nomination deadlines' => array(
+      'title' => t('Administer nomination submission deadline dates'),
+    ),
+  );
+}
+
+/**
+ * Store all the lengthy text for item #2 on nomination creation page.
+ *
+ * @param type: value of the award type selected option.
+ */
+function _create_nomination_get_review_nominee_text($type) {
+  $append = '<div id="review-qualifications"><div class="question-mark-wrapper">'
+    . '<h2>Review  Qualifications for This Award</h2>'
+    . '<div id="review-nomination"></div></div>';
+
+  $cache = _create_nomination_deadlines_array_from_cache();
+
+  if ($type != '_none_') {
+    $deadline_str = 'Deadline for this Award: ' 
+      . Date('M d, Y', $cache->data[$type]);
+  }
+
+  switch ($type) {
+    case '_none_':
+      return '<div id="review-qualifications"></div>';
+      break;
+    /*
+    case 'deadline_person_of_year':
+      return $append
+        . 'Any individual who owns and operates or who bears principal responsibility for operating a small business may be nominated. Partners who jointly own and operate a small business may be nominated as a “team,” so long as the number of individuals in the team nomination does not exceed four. A nominee for Small Business Person of the Year must own or operate a business defined as “small” under the applicable SBA size standards. Individuals who have received the Small Business Person Award at the State level within the past five years are not eligible. Elected officials are not eligible. Nominees must also be residents of the United States or its territories and will be subject to background checks. Small businesses owned and operated by nominees must comply with federal civil rights laws. While receipt of SBA assistance is not required, it is preferred. Consult your nearest SBA district office if you have questions.'
+        . ' <div id="eligibility">Award Nominators:</div><div class="criteria">Any individual or organization dedicated to the support of the small business community in the United States, including, but not limited to, trade and professional associations and business organizations, may submit nominations for the Small Business Person of the Year award. Individuals may self-nominate for this award. Individuals may not be nominated for more than one SBW 2014 award category.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';*/
+
+    case 'deadline_person_of_year':
+      return $append
+        . 'Any individual who owns and operates or who bears principal responsibility for operating a small business may be nominated.  Partners who jointly own and operate a small business may be nominated as a “team,” so long as the number of individuals in the team nomination does not exceed four.  A nominee for Small Business Person of the Year must own or operate a business defined as “small” for its primary industry under the applicable SBA size standards.  Individuals who have received the Small Business Person Award at the State level within the past five years are not eligible.   Elected officials are not eligible.  Nominees must also be residents of the United States or its territories and will be subject to background checks. Small businesses owned and operated by nominees must comply with federal civil rights laws.  While receipt of SBA assistance is not required, it is preferred.  Consult your nearest SBA district office if you have questions.'
+        . ' <div id="eligibility">Award Nominators:</div><div class="criteria">Any individual or organization dedicated to the support of the small business community in the United States, including, but not limited to, trade and professional associations and business organizations, may submit nominations for the Small Business Person of the Year award.  Individuals may self-nominate for this award.  Individuals may not be nominated for more than one SBW 2015 award category.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+    case 'deadline_exporter_of_year':
+      return $append
+        . 'Any individual, or team of individuals, who own and operate a small business that is defined as "small," for its primary industry under the applicable SBA size standards, and is engaged in exporting may be nominated. Nominees must also be residents of and employed in the United States or its territories and will be subject to background checks. Small businesses owned and operated by nominees must comply with federal civil rights laws. Consult your nearest SBA district office if you have questions.'
+        . '<div id="eligibility">Award Nominators:</div><div class="criteria">Any individual or organization dedicated to the support of the small business community in the United States, including, but not limited to, trade and professional associations and business organizations, may submit nominations for the Small Business Exporter of the Year award.  Individuals may also self-nominate.  Individuals may not be nominated for more than one SBW 2015 award category.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+
+    case 'deadline_disaster_recovery':
+      return $append
+        . "Any individual who owns and operates a small business or bears principal responsibility for operating a small business that suffered physical damage following a disaster during the previous fiscal year and received an SBA physical disaster loan may be nominated.  Partners who jointly own and operate a small business may be nominated as a “team” so long as the number of individuals in the team nomination does not exceed four.<br>"
+        . 'Businesses that suffered a physical disaster loss and received an SBA disaster loan during fiscal years 2013 or 2014 are eligible for nomination.  A business that suffered losses in a disaster that occurred during fiscal year 2012 but did not receive an SBA disaster loan until fiscal year 2013 is also eligible for nomination.'
+        . '<div id="eligibility">Award Nominators:</div><div class="criteria">Any individual or organization dedicated to the support of the small business community in the United States, including, but not limited to, trade and professional associations and business organizations, may submit nominations for this award.  Individuals may not be nominated for more than one SBW 2015 award category.  Individuals may self-nominate for this award.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+    case 'deadline_disaster_recovery_contribution':
+      return $append
+        . 'A public official may be nominated for his/her outstanding contribution to a community’s recovery following a natural disaster which occurred during the previous fiscal year. For purposes of this award, a public official is a person who has been elected to carry out some portion of a government’s powers, whether Federal, state, or local, or a person who has been appointed to a position at the Federal, state, or local level of government. In some cities, mayors or city council members are appointed, not elected, yet those non-elected officials are also eligible.'
+        . ' Public officials who suffered a physical disaster in their community during fiscal years 2013 or 2014 are eligible for nomination.'
+        . '<div id="eligibility">Award Nominators:</div><div class="criteria">Any individual or organization dedicated to the support of the small business community in the United States including, but not limited to, trade and professional associations and business organizations, may submit nominations for this award.  Individuals may not be nominated for more than one SBW 2015 award category. Individuals may self-nominate for this award.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+
+    case 'deadline_disaster_recovery_contribution_volunteer':
+      return $append
+        . 'A private-citizen volunteer may be nominated for his/her outstanding contribution to a community’s recovery following a natural disaster which occurred during the previous fiscal year. For purposes of this award, a private citizen volunteer is an individual who uses available resources to support the recovery efforts of the community. Corporate citizens are not eligible for this award.'
+        . ' Volunteers who suffered a physical disaster in their community during fiscal years 2013 or 2014 are eligible for nomination.'
+        . '<div id="eligibility">Award Nominators:</div><div class="criteria">Any individual or organization dedicated to the support of the small business community in the United States including, but not limited to, trade and professional associations and business organizations, may submit nominations for this award.  Individuals may not be nominated for more than one SBW 2015 award category. Individuals may self-nominate for this award.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+
+    case 'deadline_prime_contractor':
+      return $append
+        . 'This award honors small businesses that have provided the government with outstanding goods and services as prime contractors. All nominees must be defined as “small” according to applicable SBA size standards. Firms that have received this award at any level within the past three years are not eligible. For more information, contact the nearest Government Contracting Area Office.'
+        . '<div id="eligibility">Award Nominators:</div><div class="criteria">Only Federal agencies may nominate firms for the Small Business Prime Contractor of the Year Award.  Each Federal agency may nominate only one firm for this award.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+    case 'deadline_sub_contractor':
+      return $append
+        . 'This award honors small businesses that have provided the government and industry with outstanding goods and services as subcontractors. All nominees must be defined as “small” according to applicable SBA size standards. Firms that have received this award within the past three years are not eligible for nomination. For more information, contact the nearest Government Contracting Area Office.'
+        . '<div id="eligibility">Award Nominators:</div><div class="criteria">Only large federal prime contractors may nominate a firm for the Small Business Subcontractor of the Year Award.  Each large federal prime contractor may nominate one firm for the award.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+    case 'deadline_d_eisenhower':
+      return $append
+        . 'This award recognizes large prime contractors that have excelled in their utilization of small businesses as suppliers and subcontractors.  One award may be made in each of the following five categories: manufacturing, service, research and development, construction, and utilities.  Firms that have received this award in any of the five categories within the past three years are not eligible for nomination.  For more information, contact the nearest Government Contracting Area Office.'
+        . '<div id="eligibility">Award Nominators:</div><div class="criteria">The Dwight D. Eisenhower Award for Excellence is a self-nomination award program; large prime contractors nominate themselves.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+    case 'deadline_graduate_award_of_year':
+      return $append
+      .  '1. Nominees must be residents of the United States or its territories and will be subject to background checks.<br>
+          2. Firm must have a demonstrated history of successful performance on 8(a) contracts while in the 8(a) Business Development Program.<br>
+          3. Companies and/or their principal owner(s) must not appear on the suspending or debarred list as published by GSA at www.sam.gov.<br>
+          4. Firm must still be primarily owned, managed, and controlled by the person(s) whom 8(a) eligibility was based at the time of participation.<br>
+          5. The most recent fiscal year-end financial statement must reflect non 8(a) sales of not less than 51 percent of total sales.<br>
+          6. Businesses owned and operated by nominees must comply with federal civil rights laws.<br>
+          7. If nominee or nominee’s firm has an SBA loan, payment record must be satisfactory and the loan must be current and in good standing.<br>
+          8. Firm must be in satisfactory financial condition (i.e. financial capability:  sufficient capitalization, financial performance, bonding capacity, manageable debts). Applicants are ineligible if it is found that the firm, or any of its principals, has failed to pay Federal financial obligations.<br>
+          9. For government contracts, the nominee must have performed satisfactorily on all contracts, and have had no terminations for default.<br>
+          10. Before SBA publicly announces any awards, nominee must be cleared by the SBA’s Office of Inspector General and EEO/CR offices.<br>
+          11. The nominee must be a formerly certified 8(a) Business Development Program participant that graduated from the 8(a) Program for at least one year as of April 1, 2014.<br>
+          12. The firm does not have to be a small business.'
+          . '<div id="eligibility">Award Nominators:</div><div class="criteria">Any individual or organization dedicated to the support of the small business community in the United States, including, but not limited to, trade and professional associations and business organizations, may submit nominations for the 8(a) Graduate of the Year award. Individuals may self-nominate for the 8(a) Graduate of the Year award. Individuals may not be nominated for more than one SBW 2015 award category.</div>'
+          . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+    case 'deadline_innovation_award':
+      return $append
+        . 'This award honors a Small Business Development Center (SBDC) Service Center for excellence in providing value to small businesses and advancing program delivery and management through innovation.'
+        . '<div id="eligibility">Award Nominators:</div><div class="criteria">Any individual or organization dedicated to the support of the small business community in the United States, including, but not limited to, trade and professional associations and business organizations, may nominate an SBDC Service Center for this award. Lead SBDC Centers may nominate SBDC Service Centers in their network.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+    case 'deadline_outreach_centers':
+      return $append
+        . 'This award honors the Veterans Business Outreach Centers (VBOCs) for excellence in providing value to veterans and the veteran small business community by increasing the number of small businesses owned and controlled by veterans.  The award should focus on the work of the VBOC and not on the host organization or the VBOC director.'
+        . '<div id="eligibility">Award Nominators:</div><div class="criteria">Any individual or organization dedicated to the support of the small business community in the United States, including, but not limited to, trade and professional associations and business organizations.  Individual VBOCs may not be nominated for more than one SBW 2015 award category.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+    case 'deadline_center_of_excellence':
+      return $append
+        . 'This award honors a Women’s Business Center (WBC) for its excellence and innovation in assisting women entrepreneurs by providing a wide variety of training and counseling. The award should focus on the work of the WBC and not on the host organization or the women’s business center director.'
+        . '<div id="eligibility">Award Nominators:</div><div class="criteria">Any individual or organization dedicated to the support of the small business community in the United States, including, but not limited to, trade and professional associations and business organizations, may submit nominations for this award.  Individual WBCs may not be nominated for more than one SBW 2015 award category.</div>'
+        . '<div id="nomination-deadline">' . $deadline_str . '</div></div>';
+
+    case '':
+      return '<div id="review-qualifications"><h3>All nomination\'s deadlines '
+        . 'are passed. Try the next year.</h3></div>';
+  }
+}
+
+/**
+ * Dynamically re-render review_nominee form element.
+ */
+function _create_nomination_render_review_nominee($form, &$form_state) {
+  return $form['review_nominee'];
+}
+
+/**
+ * Dynamically re-render field_nomination_office form element.
+ *
+function _create_nomination_render_field_nomination_office(&$form, &$form_state) {
+  $form['field_nomination_office']['und']['#value'] = '_none_';
+  return $form['field_nomination_office'];
+} */
+
+/**
+ * Dynamically re-render field_nomination_office form element, when field_nomination_zip(Zip code) gets changed.
+ *  To do & added for both $form_state
+ * *
+function _create_nomination_render_field_nomination_office(&$form, &$form_state) {
+  $commands = array();
+
+  $best_choice = 0001;
+  $form['field_nomination_office']['und']['#value'] = $best_choice;
+  $form['field_nomination_office']['und']['#default_value'] = $best_choice;
+  $form_state['values']['field_nomination_office']['und'][0]['value'] = $best_choice;
+  //$form_state['values']['field_nomination_office']['und'][0]['default_value'] = $best_choice;
+  //$form_state['values']['field_nomination_office']['und'][0]['#value'] = $best_choice;
+  //$form_state['values']['field_nomination_office']['und'][0]['#default_value'] = $best_choice;
+  //$form_state['values']['field_nomination_office']['und']['#default_value'] = $best_choice;
+  //$form_state['values']['field_nomination_office']['und']['#value'] = $best_choice;
+  //$form_state['input']['field_nomination_office']['und'] = $best_choice;
+
+
+  $selected_award_type = @$form_state['values']['field_nomination_select_award']['und'][0]['value']
+      OR $selected_award_type = @$form['#node']->field_nomination_select_award['und'][0]['value']
+          OR $selected_award_type = '_none_';
+
+  return $form['field_nomination_office'];
+
+  /* Replace
+  //$commands[] = ajax_command_replace('#edit-field-nomination-office',
+  //  _create_nomination_render_submission_office_select($form, $form_state, $selected_award_type));
+  return array(
+    '#type' => 'ajax',
+    '#commands' => $commands,
+    'effect' => 'fade');
+
+}
+*/
+
+
+/**
+ * Return cached array of nomination deadlines.
+ *
+ * Populate it, if not set.
+ */
+function _create_nomination_deadlines_array_from_cache() {
+  $cache = cache_get('nomination_admin');
+  if (!$cache || !$cache->data) {
+    $year = Date('Y');
+    $deadline_var1 = strtotime('11/09/' . $year);
+    $deadline_var2 = strtotime('12/03/' . $year);
+    $deadline_var3 = strtotime('11/13/' . $year);
+    $data = array(
+      'deadline_person_of_year' => variable_get('deadline_person_of_year', $deadline_var1),
+      'deadline_exporter_of_year' => variable_get('deadline_exporter_of_year', $deadline_var1),
+      'deadline_disaster_recovery' => variable_get('deadline_disaster_recovery', $deadline_var1),
+      'deadline_disaster_recovery_contribution' => variable_get('deadline_disaster_recovery_contribution', $deadline_var1),
+      'deadline_disaster_recovery_contribution_volunteer' => variable_get('deadline_disaster_recovery_contribution_volunteer', $deadline_var1),
+      'deadline_prime_contractor' => variable_get('deadline_prime_contractor', $deadline_var1),
+      'deadline_sub_contractor' => variable_get('deadline_sub_contractor', $deadline_var1),
+      'deadline_d_eisenhower' => variable_get('deadline_d_eisenhower', $deadline_var2),
+      'deadline_graduate_award_of_year' => variable_get('deadline_graduate_award_of_year', $deadline_var1),
+      'deadline_innovation_award' => variable_get('deadline_innovation_award' , $deadline_var1),
+      'deadline_outreach_centers' => variable_get('deadline_outreach_centers', $deadline_var3),
+      'deadline_center_of_excellence' => variable_get('deadline_center_of_excellence' , $deadline_var1),
+    );
+    cache_set('nomination_admin', $data, 'cache');
+    $cache = new stdClass;
+    $cache->data = $data;
+  }
+  return $cache;
+}
+
+/**
+ * Don't show award options, whose deadline is passed.
+ */
+function _create_nomination_only_show_active($element) {
+  // Remove '- None -' option
+  array_shift($element['#options']);
+
+  $time = time();
+  $remove_options = array();
+  $cache = _create_nomination_deadlines_array_from_cache();
+
+  // Don't remove selected option, even if the date is passed.
+  $selected_value = '';
+  if (!empty($element['#entity']->nid)) {
+    $selected_value = $element['#entity']->field_nomination_select_award['und'][0]['value'];
+  }
+
+  foreach ($element['#options'] as $val => $title) {
+    if ($val == $selected_value || $val = '_none_') continue;
+    if (($cache->data[$val] + 21600 + 86399) <= $time) {
+      $remove_options[] = $val;
+    }
+  }
+
+  foreach($remove_options as $ndx => $val) {
+    unset($element['#options'][$val]);
+  }
+
+  //TODO: should also remove all buttons too. just a have a func that'll return
+  // an array of all active options, and if it's empty hide buttons
+  // Add one option, for when all deadlines are passed.
+  if (empty($element['#options'])) {
+    $element['#options'][''] = t('Deadlines of all nomination types have passed.');
+  }
+
+  return $element;
+}
+
+/**
+ * Update Submission Office select options list based on award type and zipcode.
+ *
+function _create_nomination_submission_office_options(&$form, &$form_state, $award_type) {
+
+  $options = array('_none_' => t('- Select a SBA Submission Office -'));
+
+  $zip_code = NULL;
+  if (!empty($form_state['values']['field_nomination_zip']['und'][0]['value'])) {
+    $zip_code = $form_state['values']['field_nomination_zip']['und'][0]['value'];
+  }
+
+  if ($zip_code) {
+    $result = db_query('SELECT * FROM {zips_doffices} WHERE zip_code = :zip',
+        array(':zip' => $zip_code));
+    foreach ($result as $row) {
+      break;
+    }
+  }
+
+  $all_doffices = _create_nomination_district_offices_list();
+
+  $other_options = $all_doffices;
+  if (in_array($award_type, array(
+    'deadline_person_of_year',
+    'deadline_exporter_of_year',
+    'deadline_center_of_excellence',
+    'deadline_graduate_award_of_year',
+    'deadline_innovation_award',
+  ))) {
+    $other_options = $all_doffices['States and Territories Offices'];
+    $best_choice = @$row->office_code OR NULL;
+  }
+  else if (in_array($award_type, array(
+    'deadline_disaster_recovery',
+    'deadline_disaster_recovery_contribution',
+  ))) {
+    $other_options = $all_doffices['Disaster Recovery Offices'];
+    $best_choice = @$row->disaster_region OR NULL;
+  }
+  else if (in_array($award_type, array(
+    'deadline_prime_contractor',
+    'deadline_sub_contractor',
+    'deadline_d_eisenhower',
+  ))) {
+    $other_options = $all_doffices['Gov. Contracting Offices'];
+    $best_choice = @$row->area OR NULL;
+  }
+  else if ($award_type == 'deadline_outreach_centers') {
+    $other_options = $all_doffices['Veterans Business Development Office'];
+    // Assigns the first element of the list by default, asked by Mayank; there was only one option in the list
+    // so Mayank wanted that one to be pre-selected.
+
+    if (isset($form_state['input']) && !empty($form_state['input'])) {
+      $office = $form_state['input']['field_nomination_office']['und'];
+      if ($office === '_none_' || !array_key_exists($office, $other_options)) {
+        reset($other_options);
+        $key = key($other_options);
+        $form['field_nomination_office']['und']['#value'] = $key;
+      }
+    }
+  }
+
+  //unset($form['field_nomination_office']['und']['#attributes']['disabled']);
+  if ($other_options) {
+    if (isset($best_choice) && isset($other_options[$best_choice])) {
+      $options['Best choice'][$best_choice] = $other_options[$best_choice];
+      unset($other_options[$best_choice]);
+      $options['Other Offices'] = $other_options;
+
+      // Assign the best value according to the zip code to the Select box of List of District Offices,
+      // only if field_nomination_zip or field_nomination_select_award triggers the ajax.
+      // Otherwise this statement executes before saving too and it doesn't allow you to choose a wrong
+      // District Office according to the Zip code chosen. It will automatically correct the Office, if you
+      // want to make it this way, then you can remove the if condition from next statement so that it
+      // executes without the condition even. But we didn't want this currently, so had to apply this condition to
+      // not force the correct office, and user can choose whichever office they want, if they want to.
+      if (isset($form_state['triggering_element']['#field_name']) && ($form_state['triggering_element']['#field_name'] == 'field_nomination_zip' || $form_state['triggering_element']['#field_name'] == 'field_nomination_select_award')) {
+        $form['field_nomination_office']['und']['#value'] = $best_choice;
+      }
+    }
+    else {
+      $options = array_merge($options, $other_options);
+    }
+  }
+
+  $form['field_nomination_office']['und']['#options'] = $options;
+}
+*/
+
+/**
+ * @param $award_type
+ * @param $zip_code
+ * Returning best possible Office value or _null_ or null based on the passed Award type and Zip code
+ */
+function _create_nomination_best_office_value($award_type, $zip_code) {
+
+  /*
+  $options = array('_none_' => t('- Select a SBA Submission Office -'));
+
+  $zip_code = NULL;
+  if (!empty($form_state['values']['field_nomination_zip']['und'][0]['value'])) {
+    $zip_code = $form_state['values']['field_nomination_zip']['und'][0]['value'];
+  }*/
+
+  $best_choice = '_null_';
+  if ($zip_code) {
+    $result = db_query('SELECT * FROM {zips_doffices} WHERE zip_code = :zip',
+      array(':zip' => $zip_code));
+    foreach ($result as $row) {
+      break;
+    }
+  }
+
+  $all_doffices = _create_nomination_district_offices_list();
+  $other_options = $all_doffices;
+  if (in_array($award_type, array(
+    'deadline_person_of_year',
+    'deadline_exporter_of_year',
+    'deadline_center_of_excellence',
+    'deadline_graduate_award_of_year',
+    'deadline_innovation_award',
+  ))) {
+    //$other_options = $all_doffices['States and Territories Offices'];
+    $best_choice = @$row->office_code OR $best_choice;
+  }
+  else if (in_array($award_type, array(
+    'deadline_disaster_recovery',
+    'deadline_disaster_recovery_contribution',
+    'deadline_disaster_recovery_contribution_volunteer',
+  ))) {
+    //$other_options = $all_doffices['Disaster Recovery Offices'];
+    $best_choice = @$row->disaster_region OR $best_choice;
+  }
+  else if (in_array($award_type, array(
+    'deadline_prime_contractor',
+    'deadline_sub_contractor',
+    'deadline_d_eisenhower',
+  ))) {
+    //$other_options = $all_doffices['Gov. Contracting Offices'];
+    $best_choice = @$row->area OR $best_choice;
+  }
+  else if ($award_type == 'deadline_outreach_centers') {
+    $other_options = $all_doffices['Veterans Business Development Office'];
+    // Assigns the first element of the list by default, asked by Mayank; there was only one option in the list
+    // so Mayank wanted that one to be pre-selected.
+    /*
+    if (isset($form_state['input']) && !empty($form_state['input'])) {
+      $office = $form_state['input']['field_nomination_office']['und'];
+      if ($office === '_none_' || !array_key_exists($office, $other_options)) {
+        reset($other_options);
+        $key = key($other_options);
+        $form['field_nomination_office']['und']['#value'] = $key;
+      }
+    }*/
+
+    reset($other_options);
+    $best_choice = key($other_options);
+  }
+
+  if ($best_choice == NULL || $best_choice == NULL) {
+    $best_choice = '_null_';
+  }
+
+  $office_choice = array(
+    'best_choice' => $best_choice,
+  );
+
+  return drupal_json_output($office_choice);
+
+  /*
+  unset($form['field_nomination_office']['und']['#attributes']['disabled']);
+  if ($other_options) {
+    if (isset($best_choice) && isset($other_options[$best_choice])) {
+      $options['Best choice'][$best_choice] = $other_options[$best_choice];
+      unset($other_options[$best_choice]);
+      $options['Other Offices'] = $other_options;
+
+      // Assign the best value according to the zip code to the Select box of List of District Offices,
+      // only if field_nomination_zip or field_nomination_select_award triggers the ajax.
+      // Otherwise this statement executes before saving too and it doesn't allow you to choose a wrong
+      // District Office according to the Zip code chosen. It will automatically correct the Office, if you
+      // want to make it this way, then you can remove the if condition from next statement so that it
+      // executes without the condition even. But we didn't want this currently, so had to apply this condition to
+      // not force the correct office, and user can choose whichever office they want, if they want to.
+      if (isset($form_state['triggering_element']['#field_name']) && ($form_state['triggering_element']['#field_name'] == 'field_nomination_zip' || $form_state['triggering_element']['#field_name'] == 'field_nomination_select_award')) {
+        $form['field_nomination_office']['und']['#value'] = $best_choice;
+      }
+    }
+    else {
+      $options = array_merge($options, $other_options);
+    }
+  }
+
+  $form['field_nomination_office']['und']['#options'] = $options;
+  */
+
+}
+
+
+
+/*
+ * Setup the Form_state value of Nomination Office field when the field value gets changed field_nomination_office
+ * through the Drupal UI. It wasn't assigning the value properly to it as it should automatically, so had to do it
+ * this way to make sure the value is assigned.
+ *
+function _nomination_office_value_changed($form, $form_state) {
+  $office_value = $form_state['input']['field_nomination_office']['und'];
+  $form_state['values']['field_nomination_office']['und'][0]['value'] = $office_value;
+
+
+  //$form['field_nomination_office']['und']['#value'] = $office_value;
+  //$form['field_nomination_office']['und']['#value'] = $office_value;
+}
+*/
+
+
+/**
+ * Render Submission Office select.
+ * To do & $form_state added
+ *
+function _create_nomination_render_submission_office_select(&$form, &$form_state, $award_type) {
+  $form['field_nomination_office']['#id'] = 'edit-field-nomination-office';
+  $id = $form['field_nomination_office']['und']['#id'];
+  $form['field_nomination_office']['und']['#id'] = 'edit-field-nomination-office-und';
+  $values = $form['field_nomination_office']['und']['#attached']['js'][0]['data']['ajax'][$id];
+  $form['field_nomination_office']['und']['#attached']['js'][0]['data']['ajax']['edit-field-nomination-office-und'] = $values;
+  unset($form['field_nomination_office']['und']['#attached']['js'][0]['data']['ajax'][$id]);
+
+  _create_nomination_submission_office_options($form, $form_state, $award_type);
+  return drupal_render($form['field_nomination_office']);
+}
+*/
+
+/**
+ * Re-render section 2 and submission office select when Select Award is changed.
+ *  To do & $form_state added
+ */
+function _create_nomination_select_award_changed(&$form, &$form_state) {
+  $commands = array();
+
+  $selected_award_type = @$form_state['values']['field_nomination_select_award']['und'][0]['value']
+    OR $selected_award_type = @$form['#node']->field_nomination_select_award['und'][0]['value']
+    OR $selected_award_type = '_none_';
+  $commands[] = ajax_command_replace('#review-qualifications',
+      _create_nomination_get_review_nominee_text($selected_award_type));
+  // Replace
+  //$commands[] = ajax_command_replace('#edit-field-nomination-office',
+  //    _create_nomination_render_submission_office_select($form, $form_state, $selected_award_type));
+
+  // Update new file upload field titles
+  _create_nomination_update_file_field_titles($form, $selected_award_type);
+  $replace_field_count = variable_get($selected_award_type . '_files', 1);
+  /**
+   * Only replace file fields which are needed, as per the Award type selected. If you replace all fields
+   * then conditional fields will also start showing up, so it's necessary other than just not doing
+   * what's not needed.
+   */
+  unset($form['field_nomination_document_1']['#prefix']);
+  for ($i = 1; $i <= $replace_field_count; $i++) {
+    $id = '#edit-field-nomination-document-' . $i;
+    $field_name = 'field_nomination_document_' . $i;
+    $class = '.field-name-field-nomination-document-' . $i;
+
+    $commands[] = ajax_command_replace($class,
+      _create_nomination_render_file_upload_field($form, $field_name));
+  }
+
+  return array(
+    '#type' => 'ajax',
+    '#commands' => $commands,
+    'effect' => 'fade');
+}
+
+//TODO: below 2 functions belong in nomination_ui module.
+/**
+ * Add a red asterisk to uploaded file description fields.
+ */
+function _create_nomination_add_asterisk_to_file_description(&$form) {
+  for ($i = 1; $i <= 8; $i++) {
+    $field_name = 'field_nomination_document_' . $i;
+    $form[$field_name]['und']['#file_upload_title'] = '';
+    //  t('Add the next document for submission to complete your package');
+    foreach ($form[$field_name]['und'] as $ndx => &$val) {
+      if (preg_match('/^\d{1,3}$/', $ndx)) {
+        $val['#process'][] = '_create_nomination_process_file_description';
+      }
+    }
+  }
+
+
+  $form['field_nomination_document_path']['und']['#file_upload_title'] =
+      t('Add the next document for submission to complete your package');
+  foreach ($form['field_nomination_document_path']['und'] as $ndx => &$val) {
+    if (preg_match('/^\d{1,3}$/', $ndx)) {
+      $val['#process'][] = '_create_nomination_process_file_description';
+    }
+  }
+}
+
+/**
+ * #process function to add red asterisk to uploaded file description fields.
+ */
+function _create_nomination_process_file_description($element, &$form_state) {
+  // Add red asterisks to description fields.
+  if (isset($element['description'])) {
+    $element['description']['#title'] .= '<span class="form-required"> * </span>';
+  }
+  // Show uploaded files as simple text, not links.
+  if (isset($element['filename'])) {
+    $pattern = '/<a href=[^>]+>/';
+    $element['filename']['#markup'] = preg_replace($pattern, '', $element['filename']['#markup']);
+    $element['filename']['#markup'] = str_replace('</a>', '', $element['filename']['#markup']);
+  }
+  return $element;
+}
+
+/**
+ * Return a static list of all district offices and their codes.
+ *
+ * @param type - award type selected option.
+ */
+function _create_nomination_district_offices_list() {
+  $do_list = &drupal_static(__FUNCTION__);
+  if (!isset($do_list)) {
+    $result = db_query('SELECT * FROM {district_office}');
+    foreach ($result as $row) {
+      if (preg_match('/West$/', $row->office_name) || preg_match('/East$/', $row->office_name)){
+        $do_list['Disaster Recovery Offices'][$row->office_code] = $row->office_name;
+      }
+      else if (preg_match('/Area [IV]+$/', $row->office_name)) {
+        $do_list['Gov. Contracting Offices'][$row->office_code] = $row->office_name;
+      }
+      else if (preg_match('/Veterans Business Development$/', $row->office_name)) {
+        $do_list['Veterans Business Development Office'][$row->office_code] = $row->office_name;
+      }
+      else {
+        $do_list['States and Territories Offices'][$row->office_code] = $row->office_name;
+      }
+    }
+  }
+
+  // Sort alphabetically by submission office name.
+  foreach ($do_list as $title => &$list) {
+    asort($list);
+  }
+
+  return $do_list;
+}
+
+/**
+ * After we change options for Submission office select the option that was
+ *  selected before(when we are editing an existing nomination) is not selected,
+ *  fix that.
+ *
+function _create_nomination_select_correct_option(&$form, $form_state) {
+  $default_value = NULL;
+  if (isset($form['field_nomination_office']['und'][0]['#value'])) {
+    $default_value = $form['field_nomination_office']['und'][0]['#value'];
+  }
+  else if (isset($form_state['values']['field_nomination_office']['und'][0]['value'])) {
+    $default_value = $form_state['values']['field_nomination_office']['und'][0]['value'];
+  }
+  else if (isset($form['#node']->field_nomination_office['und'][0]['value'])) {
+    $default_value = $form['#node']->field_nomination_office['und'][0]['value'];
+    // LOVE DRUPAL CONSISTENCY
+    $form['field_nomination_office']['und']['#default_value'] = $default_value;
+    unset($default_value);
+  }
+  // This next if else condition wasn't there before
+  else if (isset($form['field_nomination_office']['und']['#value'])) {
+    $default_value = $form['field_nomination_office']['und']['#value'];
+  }
+
+  if (isset($default_value)) {
+    $form['field_nomination_office']['und'][0]['#default_value'] = $default_value;
+    //$form_state['input']['field_nomination_office']['und'][0]['value'] = $default_value;
+  }
+  //$form['field_nomination_office']['und']['#attributes']['disabled'] = TRUE;
+}
+*/
+/**
+ * Change $_SESSION['messages']['status'] on user edit form.
+ */
+function _create_nomination_update_status_message_after_pass_change() {
+  $replace_me = 'It is no longer necessary to use this link to log in.';
+  if (preg_match('#user/\d+/edit#', $_SERVER['REQUEST_URI']) &&
+     !empty($_SESSION['messages']['status'])
+  ) {
+    foreach ($_SESSION['messages']['status'] as $ndx => &$val) {
+      if ($val == 'The changes have been saved.') {
+        // strstr($_SERVER['HTTP_REFERER'], 'pass-reset-token')
+        $val .= ' To prepare your nomination,  <a href="/nominations" '
+            . 'title="Prepare a nomination" class="message-link">click here.</a>';
+      } 
+      else if (strstr($val, $replace_me)) {
+        // $_SERVER[HTTP_REFERER] is http://dev-nomportalpub.reisys.com/user/reset/54/1351201875/1AQpRlL_l.....
+        $val = str_replace($replace_me, '', $val);
+      }
+    }
+  }
+}
+
+function __logme($var, $text = 'LOGME ') {
+  file_put_contents('/tmp/form', "$text\n >>>" . print_r($var, 1), FILE_APPEND);
+}
+
+/**
+ * Return name of submission office by do code.
+ */
+function _create_nomination_get_do_name($do_code, $options) {
+  $return = '';
+  if (isset($options[$do_code]) && is_string($options[$do_code])) {
+    $return = $options[$do_code];
+  }
+  else {
+    foreach ($options as $key => $val) {
+      if (!is_array($val)) continue;
+      if (isset($val[$do_code]) && is_string($val[$do_code])) {
+        $return = $val[$do_code];
+        break;
+      }
+    }
+  } 
+
+  return $return;
+}
+
+/**
+ * Implements hook_user_insert().
+ *
+ * Add 'nominator' group to all registered users.
+ */
+function create_nomination_user_insert(&$edit, $account, $category) {
+  $all_roles = user_roles();
+  foreach ($all_roles as $rid => $rtitle) {
+    if ($rtitle == 'nominator') {
+      $edit['roles'][$rid] = 'nominator';
+      $account->roles[$rid] = 'nominator';
+    }
+  }
+}
+
+/**
+ * Implements hook_node_access().
+ */
+function create_nomination_node_access($node, $op, $account) {
+  if (is_object($node) && $node->type == 'nomination' && $node->uid != $account->uid) {
+    // drupal_access_denied() throws an error
+    drupal_set_message(t('You are only allowed to view or edit own nominations.'), 'error');
+    drupal_goto('nominations');
+  }
+}

@@ -1,0 +1,192 @@
+#edit-submit-nomination{
+    width:190px;
+}
+
+#review-qualifications{
+    float:left;
+    width:600px;
+}
+
+#edit-field-nomination-document-path-und-ajax-wrapper .fieldset-wrapper .form-file{
+    margin-left:96px;
+    margin-top:35px;
+}
+#edit-field-nomination-document-path-und-ajax-wrapper fieldset .fieldset-wrapper{
+    margin-left:-38px!important;
+}
+
+#edit-field-nomination-document-path-und-ajax-wrapper .form-managed-file input.form-file{
+    width:360px;
+}
+
+#edit-field-nomination-document-path-und-ajax-wrapper .file-widget .form-submit, #edit-field-nomination-document-path-und-table tbody tr.draggable input.form-submit{
+    margin-top:33px;
+    height:30px;
+    line-height: 15px;
+}
+
+form.node-nomination-form #edit-field-nomination-document-path-und-table .form-managed-file input.form-text{
+    margin-top:20px;
+}
+
+form.node-nomination-form #edit-field-nomination-document-path-und-table .form-managed-file label, #edit-field-nomination-document-path-und table tbody tr.ajax-new-content .form-item label{
+    margin-top:20px;
+}
+
+.file-widget div.messages{
+    margin-top:30px;
+    margin-right:155px;
+    float:left;
+}
+div.messages{
+    min-width: 458px;
+    max-width:526px;
+}
+.new-to-site{
+    width:126px;
+    margin-top:35px;
+}
+
+#user-login a{
+    line-height: 3em;
+
+}
+span.reglink{
+    margin-top:25px;
+}
+span.passlink{
+    margin-top:-8px;
+}
+
+#user-pass input.form-submit{
+    width:200px;
+    padding-bottom:5px;
+}
+
+h1#page-title{
+    margin-left:16px;
+}
+
+a:hover,
+a:active,
+a:focus {
+    text-decoration: underline;
+    outline:0;
+}
+
+form.node-nomination-form .form-type-textfield input.text-full {
+    height:13px;
+    margin-top:12px;
+}
+
+form.node-nomination-form #edit-field-nomination-state-und.form-select{
+    margin-top:10px;
+}
+
+.form-item-field-nomination-office-und select#edit-field-nomination-office-und{
+    margin-top:10px;
+}
+
+form.node-nomination-form #edit-field-nomination-state-und.form-select{
+    margin-top:10px;
+}
+
+form.node-nomination-form .form-type-textfield label{
+    margin-top:14px;
+}
+
+body.page-user #edit-submit{
+    margin-top:30px;
+}
+
+form.user-info-from-cookie fieldset#edit-profile-main span.fieldset-legend{
+    float:left;
+    margin-left:-79px;
+}
+
+#block-system-main-menu ul li.leaf{
+    list-style-image:none;
+}
+
+#supporting-documentation{
+    margin-top:16px;
+    cursor: pointer;
+}
+
+.form-item-profile-main-field-profile-company-name-und-0-value label{
+    margin-left:-2px;
+}
+
+.form-item-profile-main-field-profile-company-name-und-0-value input.text-full{
+    margin-left:22px;
+}
+
+body.page-user-edit #edit-mail{
+    margin-left:32px;
+}
+
+
+body.page-user-edit input.password-confirm{
+    margin-left:16px;
+}
+
+form.node-nomination-form .form-managed-file{
+    width:426px;
+}
+
+/*------Fix fieldset table on file upload nomination form----*/
+
+#edit-field-nomination-document-path-und table tbody tr td, tr th{
+    border:0;
+    max-width:253px;
+}
+
+#edit-field-nomination-document-path-und-table .form-type-managed-file{
+    margin-left: 15px;
+
+}
+
+#edit-field-nomination-document-path-und-ajax-wrapper {
+    margin-left:-18px!important;
+}
+
+body.page-node-add-nomination .asterisk, body.page-node-add-nomination .denotes-text{
+    margin-top:-28px!important;
+}
+
+#edit-actions input.form-submit{
+line-height: 15px!important;
+}
+
+input.form-submit,
+a.button,.ui-button-text-only .ui-button-text {
+    height:30px;
+    width:136px
+}
+
+body.page-user-register .form-item-mail label{
+    width:130px!important;
+    margin-left:16px;
+    float:left;
+}
+
+body.page-user-register .form-item-name{
+    margin-left:38px;
+    margin-bottom:38px;
+}
+
+body.page-user-register .form-item-name label{
+    margin-left:-1px;
+}
+
+body.page-user-register .form-item-mail{
+    width:415px;
+}
+
+body.page-user-register #edit-mail{
+    margin-left:2px;
+}
+
+body.page-user-register .username{
+    margin-left:16px;
+}

@@ -1,0 +1,208 @@
+<?php
+
+// **************** Hooks Begin ***************************
+
+/**
+* Implements hook_menu().
+*/
+function data_encrypt_menu() {
+  $items = array();
+  $items['admin/config/services/data_encrypt'] = array(
+    'title' => 'Data Encrypt module settings',
+    'description' => 'Data Encrypt module settings',
+    'page callback' => 'drupal_get_form',
+    'access callback'  => 'user_access',
+    'page arguments' => array('data_encrypt_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
+ /**
+* Implements hook_permission().
+*/
+function data_encrypt_permission() {
+  return array(
+    'process FTP requests over a URL' =>  array(
+      'title' => t('Data Encrypt'),
+      'description' => t('Settings for Data Encrypt, /data_encrypt.'),
+    ),
+  );
+}
+
+/**
+* Form generator for module settings.
+*/
+function data_encrypt_form($form, &$form_state) {
+  $form['data_encrypt_files'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Encrypt Files Option'),
+    '#default_value' => variable_get('data_encrypt_files', 0),
+    '#description' => t("Encrypt uploaded files? All files with the extensions listed below will be encrypted with the public key."),
+    '#required' => FALSE,
+  );
+    $form['data_encrypt_ext'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Extensions to encrypt'),
+    '#default_value' => variable_get('data_encrypt_ext', ''),
+    '#size' => 100,
+    '#maxlength' => 100,
+    '#description' => t("File extensions to encrypt separated by space. Leave blank to ecrypt all extensions."),
+    '#required' => FALSE,
+  );
+  $form['data_encrypt_pubkey'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Public Key'),
+    '#default_value' => variable_get('data_encrypt_pubkey', ''),
+  '#cols' => 30,
+  '#rows' => 10,
+    '#description' => t("Encrypt with this Public Key. Do not use your Private Key anywhere on this site."),
+    '#required' => FALSE,
+  );
+  $form = system_settings_form($form);
+  return $form;
+}
+
+
+/**
+* Implements hook_file_insert().
+* This hook is called when a file is uploaded 
+* hook_presave is called twice during the node saving process:
+* when the file is uploaded and when the node is save. It therefore
+* was abandoned in favor of file_insert
+*/
+function data_encrypt_file_insert($file) {
+// check if uploaded file encryption is set in module's settings
+  $file_setting = variable_get('data_encrypt_files', 0);
+  if ($file_setting === 0) {
+    return;
+  }
+// check if a valid object has been passed in $file
+  if (!is_object($file) ||  $file->filesize == 0)  {
+    drupal_set_message('Data encrypt module received an empty file or an invalid file object', 'error');
+    return;
+ }
+// check for the extensions to encrypt: if empty, encode all extensions,
+// if not empty return if the file has an extension that is not in the list
+  $extensions = variable_get('data_encrypt_ext', '');
+  if (!empty($extensions)) { 
+    $extensions_validated = file_validate_extensions($file, $extensions);
+    if (!empty($extensions_validated)) {
+      return;
+  }
+}
+
+// get public key from db and check if it's valid
+  $pub_key = variable_get('data_encrypt_pubkey', '');
+  $key_get_result = openssl_pkey_get_public($pub_key);
+  if ($key_get_result === FALSE) {
+    drupal_set_message('Data encrypt module found no valid public key. Go to the data_encrypt settings and supply a valid public key', 'error');
+    return;
+  }
+ 
+// get a random session key, the size is in the arguement
+  $session_key = urandom_gen(32);
+// encrypt the key using assymetric encryption
+  $encrypted_session_key = assymetric_pub_encrypt($pub_key, $session_key);
+// check if encryption has failed and if it did, return from the function with a Drupal error message  
+  if ($encrypted_session_key === FALSE) {
+    drupal_set_message('Data encrypt module was not able to encrypt the uploaded file', 'error');
+    return;  
+  }
+// Use the phpseclib library class
+// set the include path
+  $local_path = 'sites/all/libraries/phpseclib';
+  set_include_path($local_path);
+  $ftp_lib_path = $local_path . '/Crypt/AES.php';
+// load a phpseclib library class
+  if (!file_exists($ftp_lib_path)) {
+    drupal_set_message('ftp_put module is unable locate the phpseclib library ' . $ftp_lib_path, 'error');
+  	return FALSE;
+  }
+  require_once($ftp_lib_path);
+// create a new cipher object from the phpseclib library class
+  $cipher = new Crypt_AES(CRYPT_AES_MODE_OFB);
+// set key length
+  $cipher->setKeyLength(128);
+// set cipher key
+  $cipher->setKey($session_key);
+// make a 16 byte initialization vector
+  $iv = urandom_gen(16);
+// set the initialization vector
+  $cipher->setIV($iv);
+// get the file contents
+  $file_path = drupal_realpath($file->uri);
+  $file_content = file_get_contents($file_path);
+// check if file has been fetched and return if it has not
+  if (abs((int)strlen($file_content) - (int)$file->filesize) > 1) {
+    drupal_set_message('Data encrypt module is unable to fetch a file '. $file->uri, 'error');
+    return;
+  }
+// encrypt with AES 128 symmetric encryption, return a binary file where
+// encrypted session key of 256 bytes, IV of 16 bytes and the encrypted content follow in this order
+  $encrypted = $cipher->encrypt($file_content);
+  $combined_file = $encrypted_session_key . $iv . $encrypted;
+// change the file object according to the encrypted file value and save it with overwrite option
+  $file->filesize = strlen($combined_file);
+  $save_result = file_unmanaged_save_data($combined_file, $file->uri, FILE_EXISTS_REPLACE);
+  if ($save_result === FALSE) {
+    drupal_set_message('data encrypt module is unable to save a file '. $file->uri, 'error');
+    return;
+  }
+// return the altered file object
+  return $file;
+}
+// **************** Hooks End ***************************
+
+// urandom_get functions generates a random string of length $len
+// it attempts to use Linux/Unix urandom first and if not, it uses its own algorithm
+function urandom_gen($len) {
+    if (@is_readable('/dev/urandom')) {
+        $f = fopen('/dev/urandom', 'r');
+        $urandom = fread($f, $len);
+        fclose($f);
+    }
+
+    $return = '';
+    for ($i = 0; $i < $len; ++$i) {
+        if (!isset($urandom)) {
+            if ($i%2 == 0) mt_srand(time()%2147 * 1000000 + (double)microtime() * 1000000);
+            $rand = 48 + mt_rand()%64;
+        } 
+        else $rand = 48 + ord($urandom[$i])%64;
+
+        if ($rand > 57) {
+            $rand += 7;
+          }
+        if ($rand > 90) {
+            $rand += 6;
+          }
+
+        if ($rand == 123) {
+          $rand = 45;
+        }
+        if ($rand == 124) {
+          $rand = 46;
+        }
+        $return .= chr($rand);
+    }
+    return $return;
+}
+
+/**
+* function for assymetric encryption with a public key
+**/ 
+function assymetric_pub_encrypt($pub_key, $clear_data) {
+  $pub_key_resource = openssl_pkey_get_public($pub_key);
+  if ($pub_key_resource === FALSE) {
+    return FALSE;
+  }
+  $encrypt_result = openssl_public_encrypt($clear_data, $encrypted_chunk, $pub_key_resource);
+  if ($encrypt_result) {
+    return $encrypted_chunk;
+  }
+  else {
+    return FALSE;
+  }
+}

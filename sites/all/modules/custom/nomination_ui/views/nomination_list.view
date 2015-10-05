@@ -1,0 +1,222 @@
+<?php
+$view = new view;
+$view->name = 'nomination_list';
+$view->description = 'List all nominations of a user';
+$view->tag = 'default';
+$view->base_table = 'node';
+$view->human_name = 'Nomination List';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Your Nominations';
+$handler->display->display_options['use_ajax'] = TRUE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['query']['options']['query_comment'] = FALSE;
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['pager']['options']['items_per_page'] = '50';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['pager']['options']['id'] = '0';
+$handler->display->display_options['pager']['options']['expose']['items_per_page_options_all'] = 0;
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['columns'] = array(
+  'title' => 'title',
+  'field_nomination_title' => 'field_nomination_title',
+  'field_nomination_first_name' => 'field_nomination_first_name',
+  'field_nomination_last_name' => 'field_nomination_last_name',
+  'created' => 'created',
+);
+$handler->display->display_options['style_options']['default'] = '-1';
+$handler->display->display_options['style_options']['info'] = array(
+  'title' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_nomination_title' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_nomination_first_name' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_nomination_last_name' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'created' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
+$handler->display->display_options['style_options']['override'] = 1;
+$handler->display->display_options['style_options']['sticky'] = 0;
+$handler->display->display_options['style_options']['empty_table'] = 0;
+/* No results behavior: Global: Text area */
+$handler->display->display_options['empty']['area']['id'] = 'area';
+$handler->display->display_options['empty']['area']['table'] = 'views';
+$handler->display->display_options['empty']['area']['field'] = 'area';
+$handler->display->display_options['empty']['area']['empty'] = FALSE;
+$handler->display->display_options['empty']['area']['content'] = 'No current nominations found.';
+$handler->display->display_options['empty']['area']['format'] = 'filtered_html';
+$handler->display->display_options['empty']['area']['tokenize'] = 0;
+/* Field: Node: Edit link */
+$handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
+$handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
+$handler->display->display_options['fields']['edit_node']['field'] = 'edit_node';
+$handler->display->display_options['fields']['edit_node']['exclude'] = TRUE;
+$handler->display->display_options['fields']['edit_node']['alter']['alter_text'] = 0;
+$handler->display->display_options['fields']['edit_node']['alter']['make_link'] = 0;
+$handler->display->display_options['fields']['edit_node']['alter']['absolute'] = 0;
+$handler->display->display_options['fields']['edit_node']['alter']['replace_spaces'] = 0;
+$handler->display->display_options['fields']['edit_node']['alter']['trim_whitespace'] = 0;
+$handler->display->display_options['fields']['edit_node']['alter']['nl2br'] = 0;
+$handler->display->display_options['fields']['edit_node']['alter']['word_boundary'] = 1;
+$handler->display->display_options['fields']['edit_node']['alter']['ellipsis'] = 1;
+$handler->display->display_options['fields']['edit_node']['alter']['more_link'] = 0;
+$handler->display->display_options['fields']['edit_node']['alter']['strip_tags'] = 0;
+$handler->display->display_options['fields']['edit_node']['alter']['trim'] = 0;
+$handler->display->display_options['fields']['edit_node']['alter']['html'] = 0;
+$handler->display->display_options['fields']['edit_node']['element_label_colon'] = 1;
+$handler->display->display_options['fields']['edit_node']['element_default_classes'] = 1;
+$handler->display->display_options['fields']['edit_node']['hide_empty'] = 0;
+$handler->display->display_options['fields']['edit_node']['empty_zero'] = 0;
+$handler->display->display_options['fields']['edit_node']['hide_alter_empty'] = 1;
+/* Field: Content: Select Award */
+$handler->display->display_options['fields']['field_nomination_select_award']['id'] = 'field_nomination_select_award';
+$handler->display->display_options['fields']['field_nomination_select_award']['table'] = 'field_data_field_nomination_select_award';
+$handler->display->display_options['fields']['field_nomination_select_award']['field'] = 'field_nomination_select_award';
+$handler->display->display_options['fields']['field_nomination_select_award']['label'] = 'Award Name';
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['alter_text'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['make_link'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['absolute'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['external'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['replace_spaces'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['trim_whitespace'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['nl2br'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['word_boundary'] = 1;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['ellipsis'] = 1;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['more_link'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['strip_tags'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['trim'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['alter']['html'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['element_label_colon'] = 1;
+$handler->display->display_options['fields']['field_nomination_select_award']['element_default_classes'] = 1;
+$handler->display->display_options['fields']['field_nomination_select_award']['hide_empty'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['empty_zero'] = 0;
+$handler->display->display_options['fields']['field_nomination_select_award']['hide_alter_empty'] = 1;
+$handler->display->display_options['fields']['field_nomination_select_award']['field_api_classes'] = 0;
+/* Field: Content: Post date */
+$handler->display->display_options['fields']['created']['id'] = 'created';
+$handler->display->display_options['fields']['created']['table'] = 'node';
+$handler->display->display_options['fields']['created']['field'] = 'created';
+$handler->display->display_options['fields']['created']['label'] = 'Date';
+$handler->display->display_options['fields']['created']['alter']['alter_text'] = 1;
+$handler->display->display_options['fields']['created']['alter']['text'] = '[created]  EST';
+$handler->display->display_options['fields']['created']['alter']['make_link'] = 0;
+$handler->display->display_options['fields']['created']['alter']['absolute'] = 0;
+$handler->display->display_options['fields']['created']['alter']['external'] = 0;
+$handler->display->display_options['fields']['created']['alter']['replace_spaces'] = 0;
+$handler->display->display_options['fields']['created']['alter']['trim_whitespace'] = 0;
+$handler->display->display_options['fields']['created']['alter']['nl2br'] = 0;
+$handler->display->display_options['fields']['created']['alter']['word_boundary'] = 1;
+$handler->display->display_options['fields']['created']['alter']['ellipsis'] = 1;
+$handler->display->display_options['fields']['created']['alter']['more_link'] = 0;
+$handler->display->display_options['fields']['created']['alter']['strip_tags'] = 0;
+$handler->display->display_options['fields']['created']['alter']['trim'] = 0;
+$handler->display->display_options['fields']['created']['alter']['html'] = 0;
+$handler->display->display_options['fields']['created']['element_label_colon'] = 1;
+$handler->display->display_options['fields']['created']['element_default_classes'] = 1;
+$handler->display->display_options['fields']['created']['hide_empty'] = 0;
+$handler->display->display_options['fields']['created']['empty_zero'] = 0;
+$handler->display->display_options['fields']['created']['hide_alter_empty'] = 1;
+$handler->display->display_options['fields']['created']['date_format'] = 'short';
+/* Field: Content: Nomination Submitted? */
+$handler->display->display_options['fields']['field_nomination_submitted']['id'] = 'field_nomination_submitted';
+$handler->display->display_options['fields']['field_nomination_submitted']['table'] = 'field_data_field_nomination_submitted';
+$handler->display->display_options['fields']['field_nomination_submitted']['field'] = 'field_nomination_submitted';
+$handler->display->display_options['fields']['field_nomination_submitted']['label'] = 'Status';
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['alter_text'] = 1;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['text'] = 'submitted';
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['make_link'] = 0;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['absolute'] = 0;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['external'] = 0;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['replace_spaces'] = 0;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['trim_whitespace'] = 0;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['nl2br'] = 0;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['word_boundary'] = 1;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['ellipsis'] = 1;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['more_link'] = 0;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['strip_tags'] = 0;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['trim'] = 0;
+$handler->display->display_options['fields']['field_nomination_submitted']['alter']['html'] = 0;
+$handler->display->display_options['fields']['field_nomination_submitted']['element_label_colon'] = 1;
+$handler->display->display_options['fields']['field_nomination_submitted']['element_default_classes'] = 1;
+$handler->display->display_options['fields']['field_nomination_submitted']['empty'] = '[edit_node]';
+$handler->display->display_options['fields']['field_nomination_submitted']['hide_empty'] = 0;
+$handler->display->display_options['fields']['field_nomination_submitted']['empty_zero'] = 1;
+$handler->display->display_options['fields']['field_nomination_submitted']['hide_alter_empty'] = 1;
+$handler->display->display_options['fields']['field_nomination_submitted']['settings'] = array(
+  'thousand_separator' => ' ',
+  'prefix_suffix' => 1,
+);
+$handler->display->display_options['fields']['field_nomination_submitted']['field_api_classes'] = 0;
+/* Sort criterion: Content: Nomination Submitted? (field_nomination_submitted) */
+$handler->display->display_options['sorts']['field_nomination_submitted_value']['id'] = 'field_nomination_submitted_value';
+$handler->display->display_options['sorts']['field_nomination_submitted_value']['table'] = 'field_data_field_nomination_submitted';
+$handler->display->display_options['sorts']['field_nomination_submitted_value']['field'] = 'field_nomination_submitted_value';
+/* Sort criterion: Content: Post date */
+$handler->display->display_options['sorts']['created']['id'] = 'created';
+$handler->display->display_options['sorts']['created']['table'] = 'node';
+$handler->display->display_options['sorts']['created']['field'] = 'created';
+$handler->display->display_options['sorts']['created']['order'] = 'DESC';
+/* Contextual filter: Content: Author uid */
+$handler->display->display_options['arguments']['uid']['id'] = 'uid';
+$handler->display->display_options['arguments']['uid']['table'] = 'node';
+$handler->display->display_options['arguments']['uid']['field'] = 'uid';
+$handler->display->display_options['arguments']['uid']['default_action'] = 'empty';
+$handler->display->display_options['arguments']['uid']['default_argument_type'] = 'fixed';
+$handler->display->display_options['arguments']['uid']['default_argument_skip_url'] = 0;
+$handler->display->display_options['arguments']['uid']['summary']['number_of_records'] = '0';
+$handler->display->display_options['arguments']['uid']['summary']['format'] = 'default_summary';
+$handler->display->display_options['arguments']['uid']['summary_options']['items_per_page'] = '25';
+$handler->display->display_options['arguments']['uid']['break_phrase'] = 0;
+$handler->display->display_options['arguments']['uid']['not'] = 0;
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'node';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = 1;
+$handler->display->display_options['filters']['status']['group'] = 1;
+$handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'nomination' => 'nomination',
+);
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['path'] = 'nominations-list';

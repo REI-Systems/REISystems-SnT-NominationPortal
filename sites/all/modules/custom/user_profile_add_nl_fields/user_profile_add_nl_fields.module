@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the User profile add-nl fields feature.
+ */
+
+include_once 'user_profile_add_nl_fields.features.inc';

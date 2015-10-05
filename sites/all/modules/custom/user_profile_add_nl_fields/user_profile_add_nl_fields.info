@@ -1,0 +1,17 @@
+name = User profile add-nl fields
+description = User profile additional fields
+core = 7.x
+package = Features
+version = 7.x-1.0
+project = user_profile_add_nl_fields
+dependencies[] = entity
+dependencies[] = features
+dependencies[] = field_sql_storage
+dependencies[] = profile2
+dependencies[] = text
+features[features_api][] = api:1
+features[field][] = profile2-main-field_profile_company_name
+features[field][] = profile2-main-field_profile_first_name
+features[field][] = profile2-main-field_profile_last_name
+features[field][] = profile2-main-field_profile_title
+features[profile2_type][] = main

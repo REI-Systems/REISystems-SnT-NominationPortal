@@ -1,0 +1,6 @@
+name = Create a Nomination
+description = "Customization of nomination node add/edit form."
+package = Nominations Portal
+core = 7.x
+files[] = create_nomination.admin.inc
+configure = admin/config/services/nomination

@@ -1,0 +1,123 @@
+<?php
+
+//TODO: pack all variables in a single variable.
+
+//TODO: on uninstall table will be deleted, along with all data
+//      and on the next module install tables will be empty.
+/**
+ * Implements hook_install().
+ */
+function create_nomination_install(){
+  $year = Date('Y');
+  $deadline_var1 = strtotime('11/09/' . $year);
+  $deadline_var2 = strtotime('12/03/' . $year);
+  $deadline_var3 = strtotime('11/13/' . $year);
+  variable_set('deadline_exporter_of_year', $deadline_var1);
+  variable_set('deadline_person_of_year', $deadline_var1);
+  variable_set('deadline_disaster_recovery', $deadline_var1);
+  variable_set('deadline_disaster_recovery_contribution', $deadline_var1);
+  variable_set('deadline_disaster_recovery_contribution_volunteer', $deadline_var1);
+  variable_set('deadline_prime_contractor', $deadline_var1);
+  variable_set('deadline_sub_contractor', $deadline_var1);
+  variable_set('deadline_d_eisenhower', $deadline_var2);
+  variable_set('deadline_graduate_award_of_year', $deadline_var1);
+  variable_set('deadline_innovation_award' , $deadline_var1);
+  variable_set('deadline_outreach_centers', $deadline_var3);
+  variable_set('deadline_center_of_excellence' , $deadline_var1);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function create_nomination_uninstall(){
+  variable_del('deadline_exporter_of_year');
+  variable_del('deadline_person_of_year');
+  variable_del('deadline_disaster_recovery');
+  variable_del('deadline_disaster_recovery_contribution');
+  variable_del('deadline_disaster_recovery_contribution_volunteer');
+  variable_del('deadline_prime_contractor');
+  variable_del('deadline_sub_contractor');
+  variable_del('deadline_d_eisenhower');
+  variable_del('deadline_graduate_award_of_year');
+  variable_del('deadline_innovation_award');
+  variable_del('deadline_outreach_centers');
+  variable_del('deadline_center_of_excellence');
+}
+
+/**
+ * Implements hook_schema().
+ */
+function create_nomination_schema() {
+  $schema['zips_doffices'] = array(
+    // The table which store correlation of zip codes to district offices.
+    'description' => 'The Zip Code to District Office correlation table.', 
+    'fields' => array(
+      'zip_code' => array(
+        'description' => 'The zip code.', 
+        'type' => 'char', 
+        'length' => 5,
+        'not null' => TRUE,
+      ), 
+      'fips' => array(
+        'description' => 'State abbreviation, 2 char long.', 
+        'type' => 'char', 
+        'length' => 2,
+        'not null' => TRUE, 
+      ), 
+      'office_code' => array(
+        'description' => 'The district office code.',
+        'type' => 'char', 
+        'length' => 4, 
+        'not null' => TRUE, 
+      ), 
+      'office_name' => array(
+        'description' => 'The district office name.',
+        'type' => 'varchar', 
+        'length' => 255, 
+        'not null' => TRUE, 
+      ),
+      'area' => array(
+        'description' => 'The area of gov. contracting that this district office belongs to.',
+        'type' => 'char', 
+        'length' => 4,
+      ),
+      'disaster_region' => array(
+        'description' => 'The disaster region the district office belongs to.',
+        'type' => 'char', 
+        'length' => 4, 
+      ),
+    ), 
+    'indexes' => array(
+      'zip' => array('zip_code'), 
+    ), 
+    'foreign keys' => array(
+      'district_office' => array(
+        'table' => 'district_office',
+        'columns' => array('office_name' => 'office_name'),
+      ), 
+    ),
+    'primary key' => array('zip_code', 'office_code'),
+  );
+
+  $schema['district_office'] = array(
+    // A list of all district offices and their codes.
+    'description' => 'The table to store all district offices.',
+    'fields' => array(
+      'office_code' => array(
+        'description' => 'The district office code.',
+        'type' => 'char',
+        'length' => 4,
+        'not null' => TRUE,
+      ),
+      'office_name' => array(
+        'description' => 'The district office name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('office_code'),
+  );
+
+  return $schema;
+}

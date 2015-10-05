@@ -1,0 +1,5 @@
+name = Nomination UI
+description = "Customization of different UI elements and user handling for Nominations Portal."
+package = Nominations Portal
+core = 7.x
+files[] = nomination.module

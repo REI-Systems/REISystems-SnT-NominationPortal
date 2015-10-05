@@ -1,0 +1,69 @@
+<?php
+/**
+ * @file
+ * Customization of UI elements and user handling for Nominations Portal.
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function nomination_ui_form_alter(&$form, &$form_state, $form_id) {
+  switch ($form_id) {
+    case 'user_login':
+      drupal_set_title(t('Small Business Week Awards'));
+      $form['links'] = array(
+        '#type' => 'markup',
+        '#markup' => t('New to the site?') 
+            . ' <a href="/user/register" title="Register here">' . t('Register here') 
+            . '</a>. <a href="/user/password" title="Forgot password?">' 
+            . t('Forgot password?') . '</a>',
+      );
+
+      // The right triangle HTML code &#9654;
+      $form['actions']['submit']['#value'] = t('Submit'); 
+      break;
+    case 'user_register_form':
+      // New user registration for unauth users doesn't have password fields.
+      // Same form for admins has them. 
+      // Changing submit button #value breaks user save functionality for admins. 
+      if (!empty($form['account']['pass'])) {
+        break;
+      }
+
+      drupal_set_title(t('Create New User Account'));
+
+      $form['message'] = array(
+        '#type' => 'markup',
+        '#markup' => '<p>' . t('Please complete all of the fields below to '
+            . 'establish a user account for submitting an SBA Awards nomination.'
+            . ' An email with a temporary password will be sent to the provided '
+            . 'email address.') . '</p>',
+        '#weight' => -20,
+      );
+
+      $form['account']['name']['#description'] = '';
+      $form['account']['mail']['#description'] = '';
+
+      $form['actions']['submit']['#value'] = t('Create User');
+      break;
+  }
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function nomination_ui_user_login(&$edit, $account) {
+  // Redirect ALL users to /nominations page after login.
+  $edit['redirect'] = 'nominations';
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function nomination_ui_views_api() {
+  return array(
+    'api' => 3, 
+    //'path' => drupal_get_path('module', 'nomination_ui'), 
+    //'template path' => drupal_get_path('module', 'nomination_ui') . '/views/themes',
+  );
+} 

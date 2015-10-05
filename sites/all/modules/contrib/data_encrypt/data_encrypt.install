@@ -1,0 +1,23 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the data encrypt module.
+ */
+
+/**
+* Implements hook_install()
+*/
+function data_encrypt_install() {
+  variable_set('data_encrypt_files', '');
+  variable_set('data_encrypt_ext', '');
+  variable_set('data_encrypt_pubkey', '');
+}
+
+/**
+* Implements hook_uninstall()
+*/
+function data_encrypt_uninstall() {
+  variable_del('data_encrypt_files');
+  variable_del('data_encrypt_ext');
+  variable_del('data_encrypt_pubkey');
+}

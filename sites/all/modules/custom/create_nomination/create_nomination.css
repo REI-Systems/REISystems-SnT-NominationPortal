@@ -1,0 +1,1471 @@
+#dialog-text {
+  display: none;
+    color: black;
+}
+#loading-ajax{
+  background-color: #000;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  opacity: 0.2; /* also -moz-opacity, etc. */
+  z-index: 10;
+  display: none;
+}
+#loading-ajax div{
+  border-radius: 9px;
+  background: url('pixel.gif');
+  top: 40%;
+  left: 30%;
+  position: fixed;
+  z-index: 11;
+  opacity: 0.9;
+}
+#loading-ajax img{
+  /*top: 50%;
+  left:50%;
+  position: fixed;*/
+  position: relative;
+  color: #fff;
+  display: block;
+  margin: auto;
+}
+#loading-ajax p{
+  width: 500px;
+  /*top: 45%;
+  left:50%;
+  position: fixed;*/
+  color: #fff;
+  font-size: 20px;
+}
+
+/*--------Pop Up styling----------*/
+
+.ui-dialog .ui-dialog-buttonpane{
+    border:none;
+}
+.ui-dialog .ui-dialog-buttonpane .ui-button{
+    float:right;
+    outline:0px;
+}
+
+/* NO CHANGE AFTER THIS */ 
+
+.question-mark{
+  background: #000;
+  width: 10px;
+  height: 10px;
+}
+label[for=edit-field-nomination-select-award-und]{
+  display: block;
+}
+.question-mark-wrapper{
+  display: block;
+  /*width: 900px;*/
+  height: 50px;
+  clear: both;
+}
+#on-success img{
+    border:2px solid #fff;
+    outline:1px solid #ccc;
+}
+.question-mark-wrapper h2{
+  float: left;
+    color:#508694;
+}
+.question-mark-wrapper .question-mark{
+    background: rgb(30,154,199); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(30,154,199,1) 0%, rgba(125,185,232,1) 100%, rgba(41,137,216,1) 100%, rgba(32,124,202,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,154,199,1)), color-stop(100%,rgba(125,185,232,1)), color-stop(100%,rgba(41,137,216,1)), color-stop(100%,rgba(32,124,202,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e9ac7', endColorstr='#207cca',GradientType=0 ); /* IE6-9 */
+    height: 21px;
+    clear: both;
+    width: 165px;
+    padding: 7px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.question-mark-wrapper .question-mark:hover{
+    text-decoration: underline;
+    background: rgb(26,115,163); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(26,115,163,1) 1%, rgba(27,139,179,1) 51%, rgba(30,154,199,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(26,115,163,1)), color-stop(51%,rgba(27,139,179,1)), color-stop(100%,rgba(30,154,199,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(26,115,163,1) 1%,rgba(27,139,179,1) 51%,rgba(30,154,199,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(26,115,163,1) 1%,rgba(27,139,179,1) 51%,rgba(30,154,199,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(26,115,163,1) 1%,rgba(27,139,179,1) 51%,rgba(30,154,199,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(26,115,163,1) 1%,rgba(27,139,179,1) 51%,rgba(30,154,199,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1a73a3', endColorstr='#1e9ac7',GradientType=0 ); /* IE6-9 */
+}
+.documentation-text{
+    clear:both;
+}
+
+#nomination-deadline{
+    color: #508694;
+    font-weight: bold;
+    font-size: 17px;
+    margin-top:13px;
+}
+
+#eligibility{
+    margin-bottom:5px;
+    color: #508694;
+    font-weight: bold;
+    font-size: 17px;
+    margin-top:15px;
+}
+#review-qualifications{
+    border-bottom:1px solid #ddd;
+    padding-bottom:20px;
+}
+.node-type-nomination .ui-dialog .ui-dialog-titlebar {
+  background: none;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
+    border:none;
+    background:transparent;
+}
+.error{
+  color: #ff0000;
+  font-size: 14px;
+  font-weight: bold;
+}
+.page-node-edit h1#page-title,.page-node-add-nomination h1#page-title{
+    display: none;
+}
+#edit-field-nomination-document-path-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-1-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-2-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-3-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-4-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-5-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-6-und-ajax-wrapper .fieldset-wrapper .form-file {
+    float: left;
+    margin-left: 132px;
+    margin-top:0;
+    width:260px;
+}
+#edit-profile-main-field-profile-first-name-und-0-value{
+
+}
+#edit-profile-main-field-profile-title-und-0-value{
+}
+#edit-field-nomination-document-path-und-table, #edit-field-nomination-document-1-und-table, #edit-field-nomination-document-2-und-table, #edit-field-nomination-document-3-und-table,
+#edit-field-nomination-document-4-und-table, #edit-field-nomination-document-5-und-table, #edit-field-nomination-document-6-und-table {
+    width: 660px;
+    margin-left: 15px;
+
+}
+body.page-nominations #content .section{
+padding:0 16px;
+}
+
+/*-------------Nomination Buttons------------*/
+#edit-reset{
+    float:left;
+    background: rgb(153,153,153); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(153,153,153,1) 0%, rgba(153,153,153,1) 50%, rgba(204,204,204,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(153,153,153,1)), color-stop(50%,rgba(153,153,153,1)), color-stop(100%,rgba(204,204,204,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(153,153,153,1) 0%,rgba(153,153,153,1) 50%,rgba(204,204,204,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(153,153,153,1) 0%,rgba(153,153,153,1) 50%,rgba(204,204,204,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(153,153,153,1) 0%,rgba(153,153,153,1) 50%,rgba(204,204,204,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(153,153,153,1) 0%,rgba(153,153,153,1) 50%,rgba(204,204,204,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#999999', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+    color:#fff;
+    margin-left:-18px;
+}
+#edit-reset:hover{
+    float:left;
+    background: #999999;
+    color:#fff;
+}
+#edit-submit-nomination{
+    float:right;
+    margin-right: -2px;
+    margin-left: 20px;
+}
+#edit-submit{
+    float:right;
+    margin-right:-4px;
+
+}
+#edit-field-nomination-document-path-und-table tbody tr.ajax-new-content,
+#edit-field-nomination-document-1-und-table tbody tr.ajax-new-content,
+#edit-field-nomination-document-2-und-table tbody tr.ajax-new-content,
+#edit-field-nomination-document-3-und-table tbody tr.ajax-new-content,
+#edit-field-nomination-document-4-und-table tbody tr.ajax-new-content,
+#edit-field-nomination-document-5-und-table tbody tr.ajax-new-content,
+#edit-field-nomination-document-6-und-table tbody tr.ajax-new-content {
+    margin-bottom:0;
+    border-bottom: 1px dotted #CCC;
+    max-width:660px;
+}
+.form-wrapper .form-type-managed-file .description{
+    margin-left:37px;
+    font-size:13px;
+    display:none;
+}
+label[for="edit-field-nomination-document-path-und-0"], label[for="edit-field-nomination-document-1-und-0"], label[for="edit-field-nomination-document-2-und-0"], label[for="edit-field-nomination-document-3-und-0"],
+label[for="edit-field-nomination-document-4-und-0"], label[for="edit-field-nomination-document-5-und-0"], label[for="edit-field-nomination-document-6-und-0"] {
+  display: none;
+}
+
+#edit-field-nomination-document-path-und .form-wrapper{
+
+}
+#edit-field-nomination-document-path-und-table tbody .form-item .description, #edit-field-nomination-document-1-und-table tbody .form-item .description, #edit-field-nomination-document-2-und-table tbody .form-item .description, #edit-field-nomination-document-3-und-table tbody .form-item .description,
+#edit-field-nomination-document-4-und-table tbody .form-item .description, #edit-field-nomination-document-5-und-table tbody .form-item .description, #edit-field-nomination-document-6-und-table tbody .form-item .description {
+    font-size: 0.85em;
+    display:none;
+}
+
+table.sticky-header {
+    display:none;
+}
+
+#edit-field-nomination-document-path-und table tbody tr td, #edit-field-nomination-document-1-und table tbody tr td, #edit-field-nomination-document-2-und table tbody tr td, #edit-field-nomination-document-3-und table tbody tr td,
+#edit-field-nomination-document-4-und table tbody tr td, #edit-field-nomination-document-5-und table tbody tr td, #edit-field-nomination-document-6-und table tbody tr td, tr th{
+    border:0;
+    max-width:253px;
+}
+#edit-field-nomination-document-path-und table thead, #edit-field-nomination-document-1-und table thead, #edit-field-nomination-document-2-und table thead, #edit-field-nomination-document-3-und table thead,
+#edit-field-nomination-document-4-und table thead, #edit-field-nomination-document-5-und table thead, #edit-field-nomination-document-6-und table thead {
+    display:none;
+}
+/*--------- UPload Fields----------*/
+#edit-field-nomination-document-path-und table tbody,#edit-field-nomination-document-path-und table tbody tr.odd,
+#edit-field-nomination-document-1-und table tbody,#edit-field-nomination-document-1-und table tbody tr.odd,
+#edit-field-nomination-document-2-und table tbody,#edit-field-nomination-document-2-und table tbody tr.odd,
+#edit-field-nomination-document-3-und table tbody,#edit-field-nomination-document-3-und table tbody tr.odd,
+#edit-field-nomination-document-4-und table tbody,#edit-field-nomination-document-4-und table tbody tr.odd,
+#edit-field-nomination-document-5-und table tbody,#edit-field-nomination-document-5-und table tbody tr.odd,
+#edit-field-nomination-document-6-und table tbody,#edit-field-nomination-document-6-und table tbody tr.odd {
+    border-bottom:1px solid #ccc;
+    background: #F1F1F1;
+    height: 92px;
+
+}
+
+#edit-field-nomination-document-path-und table tbody,#edit-field-nomination-document-path-und table tbody tr.even,
+#edit-field-nomination-document-1-und table tbody,#edit-field-nomination-document-1-und table tbody tr.even,
+#edit-field-nomination-document-2-und table tbody,#edit-field-nomination-document-2-und table tbody tr.even,
+#edit-field-nomination-document-3-und table tbody,#edit-field-nomination-document-3-und table tbody tr.even,
+#edit-field-nomination-document-4-und table tbody,#edit-field-nomination-document-4-und table tbody tr.even,
+#edit-field-nomination-document-5-und table tbody,#edit-field-nomination-document-5-und table tbody tr.even,
+#edit-field-nomination-document-6-und table tbody,#edit-field-nomination-document-6-und table tbody tr.even {
+    background:none;
+    border-bottom:1px solid #ccc;
+
+}
+#edit-field-nomination-document-path-und-table tbody tr.ajax-new-content, #edit-field-nomination-document-1-und-table tbody tr.ajax-new-content, #edit-field-nomination-document-2-und-table tbody tr.ajax-new-content,
+#edit-field-nomination-document-3-und-table tbody tr.ajax-new-content, #edit-field-nomination-document-4-und-table tbody tr.ajax-new-content, #edit-field-nomination-document-5-und-table tbody tr.ajax-new-content,
+#edit-field-nomination-document-6-und-table tbody tr.ajax-new-content {
+    margin-bottom: 0;
+    border-bottom: 1px dotted #CCC;
+    background: white;
+}
+#edit-field-nomination-document-path-und-table tbody tr.ajax-new-content input.form-submit, #edit-field-nomination-document-1-und-table tbody tr.ajax-new-content input.form-submit, #edit-field-nomination-document-2-und-table tbody tr.ajax-new-content input.form-submit,
+#edit-field-nomination-document-3-und-table tbody tr.ajax-new-content input.form-submit, #edit-field-nomination-document-4-und-table tbody tr.ajax-new-content input.form-submit, #edit-field-nomination-document-5-und-table tbody tr.ajax-new-content input.form-submit,
+#edit-field-nomination-document-6-und-table tbody tr.ajax-new-content input.form-submit {
+    float: left;
+
+}
+#edit-field-nomination-document-path-und-table tbody tr.draggable input.form-submit, #edit-field-nomination-document-1-und-table tbody tr.draggable input.form-submit, #edit-field-nomination-document-2-und-table tbody tr.draggable input.form-submit,
+#edit-field-nomination-document-3-und-table tbody tr.draggable input.form-submit, #edit-field-nomination-document-4-und-table tbody tr.draggable input.form-submit,
+#edit-field-nomination-document-5-und-table tbody tr.draggable input.form-submit, #edit-field-nomination-document-6-und-table tbody tr.draggable input.form-submit {
+    float:right;
+    margin-right:12px;
+
+}
+.field-type-file .form-item{
+    border-bottom:1px dotted #ccc;
+    padding-bottom: 20px;
+    /* margin-left: -32px; */
+}
+.node-form node-nomination-form .form-type-managed-file .form-submit{
+    float:left;
+}
+.thanks-image {
+    /*margin-left:-37px;*/
+    text-align: center;
+}
+.thanks-image img{
+    /*width: 400px;
+    height: 250px;*/
+}
+
+#dialog-text .thanks-image{
+    margin:0px;
+}
+.thanks{
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+}
+.thanks-text{
+    clear: both;
+    text-align: center;
+    width: 463px;
+    margin-top: 15px;
+}
+.page-node-add-nomination h2 p{
+    margin-top:10px;
+}
+.page-node-add-nomination h1{
+    font-size: 25px;
+    font-weight: bold;
+    color: #3B3B3B;
+    line-height: 1;
+}
+.form-wrapper p{
+    margin: -6px 20px 0 39px;
+    width: 553px;
+}
+.form-item-field-nomination-office-und label{
+    font-size:15px;
+    margin-left:-3px;
+}
+.form-item-field-nomination-office-und .description{
+    clear: both;
+    width: 587px;
+    font-size: 0.85em;
+    margin-left:2px;
+}
+#nominee-info{
+    margin-bottom:10px;
+}
+.file-widget div.messages{
+    width: 488px;
+    padding: 5px;
+    float: left;
+    margin: 10px 0 15px 89px;
+}
+input[type=file] {
+    -webkit-appearance: textfield;
+    position: relative;
+    -webkit-box-sizing: border-box;
+    width:262px;
+}
+input[type=file]::-webkit-file-upload-button {
+    width: 0;
+    padding: 0;
+    margin: 0 0 0 5px;
+    -webkit-appearance: none;
+    border: none;
+}
+
+/* To make the file upload the same in all broswers--box with square upload button "x::-webkit-file-upload-button" forces the rules to only apply to browsers that support this pseudo-element */
+x::-webkit-file-upload-button, input[type=file]:after {
+    content: 'Browse...';
+    display: inline-block;
+    left: 100%;
+    margin-left:6px;
+    height:20px;
+    position: relative;
+    -webkit-appearance: button;
+    padding: 5px 8px 5px;
+    border-radius: 5px;
+}
+
+
+form.node-form node-nomination-form .field-name-field-nomination-select-award h1{
+    font-size: 25px;
+    font-weight: bold;
+    color: #3B3B3B;
+    line-height: 1;
+}
+#nominee-info h2{
+    color: #508694;
+}
+#edit-field-nomination-select-award h1{
+    font-size: 25px;
+    font-weight: bold;
+    color: #3B3B3B;
+    line-height: 1;
+}
+#edit-field-nomination-select-award p{
+    margin: 20px 20px 0 1px;
+}
+ul,ol {
+    list-style-type:none;
+}
+
+li{
+    list-style-type:disc;
+}
+form.node-nomination-form .form-managed-file span.file-size{
+}
+#sbeya_text h3{
+    font-size: 25px;
+    font-weight: bold;
+    color: #3B3B3B;
+    line-height: 1;
+    text-align: left;
+}
+.node-type-nomination .ui-dialog .ui-dialog-titlebar{
+    font-size: 20px;
+    font-weight: bold;
+    color: #3B3B3B;
+    line-height: 1;
+    text-align: left;
+    padding: 10px 0 12px 15px;
+}
+
+#nomination-help-dialog h3{
+    font-size: 25px;
+    font-weight: bold;
+    color: #3B3B3B;
+    line-height: 1;
+    text-align: left;
+}
+.ui-dialog .ui-dialog-title{
+    font-size: 20px;
+    font-weight: bold;
+    color: #3B3B3B;
+    line-height: 1;
+    text-align: left;
+}
+span.nominations-view-title{
+    font-weight: bold;
+    clear: both;
+    float: left;
+    margin-top: 20px;
+    font-size:15px;
+}
+table.views-table{
+    clear:both;
+}
+.question-mark{
+    background:url('/sites/all/themes/nominations/images/question_mark.png') no-repeat right;
+    height:20px;
+    width:20px;
+}
+form.node-nomination-form .form-file {
+    font-size:14px;
+}
+form.node-nomination-form .form-managed-file .form-submit .active{
+    float:right;
+    font-size: 14px;
+    margin-right: 10px;
+    width:124px;
+}
+form.node-nomination-form .form-managed-file .form-submit {
+
+}
+form.node-nomination-form .form-item-field-nomination-select-award-und #edit-field-nomination-select-award-und.form-select{
+    clear: both;
+    width: 575px;
+    margin-top: 5px;
+    height: 30px;
+    margin-left:0px;
+    -moz-box-shadow: 0 -1px 5px 0 #CCC;
+    -webkit-box-shadow: 0 -1px 5px 0 rgba(204, 204, 204, 1);
+    box-shadow: 0 -1px 5px 0 rgba(204, 204, 204, 1);
+    font-size: 13px;
+    color: #555;
+}
+form.node-nomination-form .form-actions{
+    margin-right: -8px;
+    margin-top: 25px;
+    padding-bottom: 15px;
+    width: 100%;
+    margin-bottom:25px;
+}
+form.node-nomination-form .form-item-field-nomination-submitted-und-0-value label{
+    width:200px;
+}
+form.node-nomination-form ul li{
+    list-style-type: none;
+}
+form.node-nomination-form label{
+    font-size: 15px;
+    font-family: 'Helvetica', sans-serif;
+    clear: both;
+    padding-bottom: 11px;
+    width: 188px;
+    text-align: right;
+    margin-top: 11px;
+    margin-left:-71px;
+}
+form.node-nomination-form .form-item-field-nomination-state-und label{
+    margin-left: -2px;
+    font-size: 15px;
+    margin-top: 17px;
+    text-align: left;
+}
+form.node-nomination-form .form-type-managed-file label{
+    text-align: left;
+    margin-left: 27px;
+    margin-top: 0;
+    width: 300px;
+    margin-bottom: 10px;
+}
+form.node-nomination-form #review-nomination p{
+    border-bottom:1px solid #ccc;
+}
+
+form.node-nomination-form .form-type-textfield{
+    margin-left:-20px;
+    margin-top: -9px;
+}
+form.node-nomination-form .form-file{
+    color: #216885;
+}
+form.node-nomination-form{
+
+}
+form.node-nomination-form #edit-field-nomination-state-und.form-select{
+    height: 36px;
+    width: 262px;
+    -moz-box-shadow: 0px -1px 5px 0px #CCC;
+    -webkit-box-shadow: 0px -1px 5px 0px rgba(204, 204, 204, 1);
+    box-shadow: 0px -1px 5px 0px rgba(204, 204, 204, 1);
+    font-size: 13px;
+    color: #555;
+    margin-left: -12px;
+    margin-top: 5px;
+    width: 311px;
+}
+#edit-field-nomination-zip-und-0-value{
+    margin-top: 4px;
+}
+
+#edit-field-nomination-document-path-und table tbody, #edit-field-nomination-document-path-und table tbody tr.draggable
+form.node-nomination-form .form-managed-file .form-submit,
+#edit-field-nomination-document-1-und table tbody, #edit-field-nomination-document-1-und table tbody tr.draggable
+form.node-nomination-form .form-managed-file .form-submit,
+#edit-field-nomination-document-2-und table tbody, #edit-field-nomination-document-2-und table tbody tr.draggable
+form.node-nomination-form .form-managed-file .form-submit,
+#edit-field-nomination-document-3-und table tbody, #edit-field-nomination-document-3-und table tbody tr.draggable
+form.node-nomination-form .form-managed-file .form-submit,
+#edit-field-nomination-document-4-und table tbody, #edit-field-nomination-document-4-und table tbody tr.draggable
+form.node-nomination-form .form-managed-file .form-submit,
+#edit-field-nomination-document-5-und table tbody, #edit-field-nomination-document-5-und table tbody tr.draggable
+form.node-nomination-form .form-managed-file .form-submit,
+#edit-field-nomination-document-6-und table tbody, #edit-field-nomination-document-6-und table tbody tr.draggable
+form.node-nomination-form .form-managed-file .form-submit {
+    -moz-box-shadow: 0px -1px 5px 0px #CCC;
+    -webkit-box-shadow: 0px -1px 5px 0px rgba(204, 204, 204, 1);
+    box-shadow: 0px -1px 5px 0px rgba(204, 204, 204, 1);
+    padding: 0px 26px 0px 18px;
+    min-width: 109px;
+}
+form.node-nomination-form .form-managed-file {
+    margin:17px 9px 15px 22px;
+    width:426px;
+}
+form.node-nomination-form .form-type-textfield .description{
+    margin-left:22px;
+    clear:both;
+}
+form.node-nomination-form .form-managed-file input
+form.node-nomination-form input.form-text{
+    float:left;
+    margin-top: 20px;
+    box-shadow: 0px -1px 5px 0px #CCC;
+    -moz-box-shadow: 0px -1px 5px 0px #CCC;
+    -webkit-box-shadow: 0px -1px 5px 0px rgba(204, 204, 204, 1);
+    box-shadow: 0px -1px 5px 0px rgba(204, 204, 204, 1);
+
+}
+form.node-nomination-form #edit-cancel{
+    float:left;
+    background: #999 url('/sites/all/themes/nominations/images/continue_grey_arrow.png') no-repeat right;
+    color:#fff;
+    padding:0px 26px 0px 18px;
+}
+
+form.node-nomination-form #edit-cancel:hover{
+    float:left;
+    background: #ACABAB url('/sites/all/themes/nominations/images/continue_grey_arrow.png') no-repeat right;
+    color:#fff;
+    padding:0px 26px 0px 18px;
+
+}
+form.node-nomination-form h2{
+    clear:both;
+    padding-top:0px;
+    font-family: 'Helvetica', sans-serif;
+    font-size:18px!important;
+    font-weight: bold;
+}
+
+form.node-nomination-form .form-item-field-nomination-select-award-und label{
+    font-weight:bold;
+    color:#508694;
+    float:left;
+    margin-left:0px;
+     margin-top:-10px;
+}
+div.form-item-field-nomination-select-award-und label{
+    padding-top: 10px;
+    width:200px;
+    text-align: left;
+}
+
+form.node-nomination-form h3{
+    clear:both;
+    padding-top:15px;
+    font-family: 'Helvetica', sans-serif;
+    font-size:18px!important;
+    font-weight: bold;
+}
+#field-nomination-submitted-add-more-wrapper {
+    display:none;
+}
+
+
+#edit-field-nomination-document-path-1-und-0-ajax-wrapper .form-managed-file span.file, #edit-field-nomination-document-1-1-und-0-ajax-wrapper .form-managed-file span.file,
+#edit-field-nomination-document-2-1-und-0-ajax-wrapper .form-managed-file span.file, #edit-field-nomination-document-3-1-und-0-ajax-wrapper .form-managed-file span.file,
+#edit-field-nomination-document-4-1-und-0-ajax-wrapper .form-managed-file span.file, #edit-field-nomination-document-5-1-und-0-ajax-wrapper .form-managed-file span.file,
+#edit-field-nomination-document-6-1-und-0-ajax-wrapper .form-managed-file span.file {
+    padding:3px;
+    margin-left:-40px;
+}
+
+#edit-field-nomination-document-path-1-und-0-remove-button, #edit-field-nomination-document-1-und-0-remove-button, #edit-field-nomination-document-2-und-0-remove-button,
+#edit-field-nomination-document-3-und-0-remove-button, #edit-field-nomination-document-4-und-0-remove-button, #edit-field-nomination-document-5-und-0-remove-button,
+#edit-field-nomination-document-6-und-0-remove-button {
+    float:right;
+    padding: 0px 23px 0px 11px;
+}
+form.node-nomination-form .form-type-textfield label{
+    margin-left: 20px;
+    font-size: 15px;
+    width: 164px;
+    text-align: left;
+}
+
+form.node-nomination-form .form-type-textfield input.text-full {
+    margin-left: 10px;
+    -moz-box-shadow: 0px -1px 5px 0px #CCC;
+    -webkit-box-shadow: 0px -1px 5px 0px rgba(204, 204, 204, 1);
+    box-shadow: 0px -1px 5px 0px rgba(204, 204, 204, 1);
+    margin-top: 6px;
+    height: 25px;
+    width: 300px;
+}
+form.node-nomination-form input.form-text{
+    margin-left:-34px;
+}
+
+form.node-nomination-form #edit-field-nomination-document-path-und-table .form-managed-file span.file, form.node-nomination-form #edit-field-nomination-document-1-und-table .form-managed-file span.file, form.node-nomination-form #edit-field-nomination-document-2-und-table .form-managed-file span.file,
+form.node-nomination-form #edit-field-nomination-document-3-und-table .form-managed-file span.file, form.node-nomination-form #edit-field-nomination-document-4-und-table .form-managed-file span.file,
+form.node-nomination-form #edit-field-nomination-document-5-und-table .form-managed-file span.file, form.node-nomination-form #edit-field-nomination-document-6-und-table .form-managed-file span.file {
+    float: left;
+    margin: 0px 0px 0px 126px;
+    font-size: 14px;
+    max-width:250px;
+}
+
+#edit-field-nomination-document-path-und-table .form-type-managed-file, #edit-field-nomination-document-1-und-table .form-type-managed-file, #edit-field-nomination-document-2-und-table .form-type-managed-file,
+#edit-field-nomination-document-3-und-table .form-type-managed-file, #edit-field-nomination-document-4-und-table .form-type-managed-file,
+#edit-field-nomination-document-5-und-table .form-type-managed-file, #edit-field-nomination-document-6-und-table .form-type-managed-file {
+    margin-left: 14px;
+    width: 660px;
+}
+form.node-nomination-form .form-managed-file span.file{
+    margin-left: -92px;
+}
+#edit-field-nomination-document-path-und-table tbody tr.ajax-new-content .form-managed-file span.file,
+#edit-field-nomination-document-1-und-table tbody tr.ajax-new-content .form-managed-file span.file,
+#edit-field-nomination-document-2-und-table tbody tr.ajax-new-content .form-managed-file span.file,
+#edit-field-nomination-document-3-und-table tbody tr.ajax-new-content .form-managed-file span.file,
+#edit-field-nomination-document-4-und-table tbody tr.ajax-new-content .form-managed-file span.file,
+#edit-field-nomination-document-5-und-table tbody tr.ajax-new-content .form-managed-file span.file,
+#edit-field-nomination-document-6-und-table tbody tr.ajax-new-content .form-managed-file span.file {
+    margin-top:0px;
+    max-width:250px;
+}
+
+form.node-nomination-form #edit-field-nomination-document-path-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-1-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-2-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-3-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-4-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-5-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-6-und-table .form-managed-file span.file-size {
+    margin: 0px 0 0 0;
+    float:right;
+    font-size: 13px;
+}
+form.node-nomination-form #edit-field-nomination-document-path-und-table .form-managed-file label,#edit-field-nomination-document-path-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-1-und-table .form-managed-file label,#edit-field-nomination-document-1-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-2-und-table .form-managed-file label,#edit-field-nomination-document-2-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-3-und-table .form-managed-file label,#edit-field-nomination-document-3-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-4-und-table .form-managed-file label,#edit-field-nomination-document-4-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-5-und-table .form-managed-file label,#edit-field-nomination-document-5-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-6-und-table .form-managed-file label,#edit-field-nomination-document-6-und table tbody tr.ajax-new-content .form-item label {
+    font-size: 15px;
+    font-family: 'Helvetica', sans-serif;
+    text-align:left;
+    margin-top: 0px;
+    width:127px;
+    /* margin-left: -17px; */
+}
+form.node-nomination-form #edit-field-nomination-document-path-und-table .form-managed-file input.form-text,
+form.node-nomination-form #edit-field-nomination-document-1-und-table .form-managed-file input.form-text,
+form.node-nomination-form #edit-field-nomination-document-2-und-table .form-managed-file input.form-text,
+form.node-nomination-form #edit-field-nomination-document-3-und-table .form-managed-file input.form-text,
+form.node-nomination-form #edit-field-nomination-document-4-und-table .form-managed-file input.form-text,
+form.node-nomination-form #edit-field-nomination-document-5-und-table .form-managed-file input.form-text,
+form.node-nomination-form #edit-field-nomination-document-6-und-table .form-managed-file input.form-text {
+    margin: 0px 0 0 -3px;
+}
+a.tabledrag-handle .handle {
+    display: none;
+}
+#edit-field-nomination-document-path-und, #edit-field-nomination-document-1-und, #edit-field-nomination-document-2-und, #edit-field-nomination-document-3-und,
+#edit-field-nomination-document-4-und, #edit-field-nomination-document-5-und, #edit-field-nomination-document-6-und {
+    font-size: 18px;
+    clear:both;
+    margin-top:-10px;
+    background:transparent;
+    margin-bottom:0px;
+}
+.form-item-field-nomination-office-und select#edit-field-nomination-office-und{
+    margin-left: -14px;
+    height: 36px;
+    width: 262px;
+    margin-top:4px;
+    font-size: 13px;
+    color: #555;
+    width:311px;
+    -moz-box-shadow: 0px -1px 5px 0px #CCC;
+    -webkit-box-shadow: 0px -1px 5px 0px rgba(204, 204, 204, 1);
+    box-shadow: 0px -1px 5px 0px rgba(204, 204, 204, 1);
+}
+#edit-field-nomination-document-path-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-1-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-2-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-3-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-4-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-5-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-6-und-ajax-wrapper .file-widget .form-submit {
+   float:right;
+    margin-right:-187px;
+}
+#edit-field-nomination-document-path-und-ajax-wrapper .fieldset-wrapper .form-item,
+#edit-field-nomination-document-1-und-ajax-wrapper .fieldset-wrapper .form-item,
+#edit-field-nomination-document-2-und-ajax-wrapper .fieldset-wrapper .form-item,
+#edit-field-nomination-document-3-und-ajax-wrapper .fieldset-wrapper .form-item,
+#edit-field-nomination-document-4-und-ajax-wrapper .fieldset-wrapper .form-item,
+#edit-field-nomination-document-5-und-ajax-wrapper .fieldset-wrapper .form-item,
+#edit-field-nomination-document-6-und-ajax-wrapper .fieldset-wrapper .form-item, {
+    border:none;
+    margin-bottom:20px;
+    margin-left: 20px;
+}
+
+.small-text,.smaller-text{
+    font-style:italic;
+}
+
+.form-item-profile-main-field-profile-title-und-0-value label{
+    margin-left:0px;
+}
+
+.form-item-profile-main-field-profile-title-und-0-value input.text-full{
+    margin-left:19px;
+}
+
+
+
+/*---------Start button-----------*/
+
+.start{
+    float: left;
+    background: rgb(30,154,199); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(30,154,199,1) 0%, rgba(125,185,232,1) 100%, rgba(41,137,216,1) 100%, rgba(32,124,202,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,154,199,1)), color-stop(100%,rgba(125,185,232,1)), color-stop(100%,rgba(41,137,216,1)), color-stop(100%,rgba(32,124,202,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e9ac7', endColorstr='#207cca',GradientType=0 ); /* IE6-9 */
+    height: 51px;
+    width: 75px;
+    line-height: 22px;
+    text-align: center;
+    padding: 43px 20px 9px 20px;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-family: 'Helvetica', sans-serif;
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 19px;
+}
+
+.start a{
+    color:#fff;
+    font-size:20px;
+}
+.start:hover {
+    background: rgb(26,115,163); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(26,115,163,1) 1%, rgba(27,139,179,1) 51%, rgba(30,154,199,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(26,115,163,1)), color-stop(51%,rgba(27,139,179,1)), color-stop(100%,rgba(30,154,199,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(26,115,163,1) 1%,rgba(27,139,179,1) 51%,rgba(30,154,199,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(26,115,163,1) 1%,rgba(27,139,179,1) 51%,rgba(30,154,199,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(26,115,163,1) 1%,rgba(27,139,179,1) 51%,rgba(30,154,199,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(26,115,163,1) 1%,rgba(27,139,179,1) 51%,rgba(30,154,199,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1a73a3', endColorstr='#1e9ac7',GradientType=0 ); /* IE6-9 */
+    border:none;
+    color: #fff;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+.start a:hover {
+    color:#fff;
+    text-decoration: none;
+}
+.welcome-text{
+    width:438px;
+    float:left
+}
+#welcome{
+    width:100%
+
+}
+
+.start-button a{
+    color: white;
+    font-size: 20px;
+}
+
+
+.view-empty p{
+    clear:both;
+    margin-top:20px;
+}
+
+#supporting-documentation{
+    float: right;
+    margin-right: 47px;
+    margin-top: -30px;
+    cursor: pointer;
+    padding: 5px 0px 3px 16px;
+    font-weight: bold;
+    font-family: 'Helvetica', sans-serif;
+    font-size: 13px;
+    width: 200px;
+}
+
+#supporting-documentation:hover{
+    text-decoration: none;
+    background: #1B8BB3;
+}
+
+#edit-field-nomination-document-path-und-table tbody tr td.tabledrag-hide,
+#edit-field-nomination-document-1-und-table tbody tr td.tabledrag-hide,
+#edit-field-nomination-document-2-und-table tbody tr td.tabledrag-hide,
+#edit-field-nomination-document-3-und-table tbody tr td.tabledrag-hide,
+#edit-field-nomination-document-4-und-table tbody tr td.tabledrag-hide,
+#edit-field-nomination-document-5-und-table tbody tr td.tabledrag-hide,
+#edit-field-nomination-document-6-und-table tbody tr td.tabledrag-hide {
+    display:none;
+}
+
+#edit-field-nomination-document-path-und-table tbody tr td.form-submit,
+#edit-field-nomination-document-1-und-table tbody tr td.form-submit,
+#edit-field-nomination-document-2-und-table tbody tr td.form-submit,
+#edit-field-nomination-document-3-und-table tbody tr td.form-submit,
+#edit-field-nomination-document-4-und-table tbody tr td.form-submit,
+#edit-field-nomination-document-5-und-table tbody tr td.form-submit,
+#edit-field-nomination-document-6-und-table tbody tr td.form-submit {
+    margin-left:20px;
+}
+
+
+.select-award-text{
+    width: 597px;
+    color: #3B3B3B;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.field-name-field-nomination-select-award p{
+    width:600px;
+}
+
+#field-nomination-business-name-add-more-wrapper label{
+    text-align: left;
+    margin-left: 22px;
+    font-size: 15px;
+}
+#field-nomination-business-name-add-more-wrapper input.text-full{
+    margin-top:19px;
+    margin-left:8px;
+}
+
+#field-nomination-city-add-more-wrapper input.text-full{
+margin-top:1px;
+}
+#field-nomination-comments-add-more-wrapper label{
+    text-align: left;
+    margin-left: -1px;
+}
+
+.field-name-field-nomination-office .form-item-field-nomination-office-und label{
+    margin-left: 0px;
+    text-align: left;
+}
+
+#field-nomination-comments-add-more-wrapper .form-type-textarea .form-textarea-wrapper textarea.form-textarea{
+    margin-left: -13px;
+}
+
+body.page-user-register #edit-mail{
+    float:left;
+
+}
+
+/*---------Nomination Portal 2013------------*/
+
+#dialog-text.ui-dialog-content p.error_notification{
+    color: #ff0000;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid #ff0000;
+    padding: 6px;
+    background: #f5f5f5;
+}
+
+.modal-confirmation #dialog-text .dialog_content .popup_left{
+    width:627px;
+    float:left;
+
+}
+
+.modal-confirmation #dialog-text .dialog_content .popup_left p.description{
+    color:#444242;
+    clear:both;
+    text-align: left;
+
+}
+.modal-confirmation #dialog-text .dialog_content .popup_left span.award_name label,
+.modal-confirmation #dialog-text .dialog_content .popup_left span.required_docs label{
+    color:#29678c;
+    font-size:14px;
+}
+
+.modal-confirmation #dialog-text .dialog_content .popup_left .check_list div{
+    width: 93%;
+    float: left;
+    margin-bottom: 20px;
+    margin-left: 23px;
+}
+
+.modal-confirmation #dialog-text .dialog_content .popup_left .check_list p{
+    text-align: left;
+}
+.modal-confirmation #dialog-text .dialog_content .popup_left .check_list .right_indented div{
+    margin-left:10%;
+}
+.modal-confirmation #dialog-text .dialog_content .popup_left .check_list div label{
+    font-weight: normal;
+    line-height: 18px;
+    margin-left: 31px;
+    color:#444242;
+}
+
+.modal-confirmation #dialog-text .dialog_content .popup_left .check_list div input.checklist_item{
+    float: left;
+    margin-right: 10px;
+}
+.modal-confirmation #dialog-text .dialog_content .popup_left .check_list div table{
+    margin-left:22px;
+    background: #f5f5f5!important;
+}
+.modal-confirmation #dialog-text .dialog_content .popup_left span.award_name p.award_title{
+    color:#434343;
+    font-weight: bold;
+    float: left;
+    padding-top: 2px;
+}
+
+.modal-confirmation #dialog-text .dialog_content .popup_left p span.prominent_text{
+    color:#e26000;
+    font-weight: bold;
+}
+.modal-confirmation #dialog-text .dialog_content .popup_left span.required_docs label{
+    margin-bottom: 20px;
+}
+.modal-confirmation #dialog-text .dialog_content .popup_left img{
+    margin-left:-3px!important;
+}
+.modal-confirmation #dialog-text .dialog_content .popup_left span.award_name label{
+   float: left;
+    margin-right:3px;
+}
+.modal-confirmation #dialog-text .dialog_content .popup_right{
+    float: right;
+    border: 1px solid #000;
+    padding:0px;
+    background: url(bkg.jpg) center top scroll repeat-x #d8d8d8;
+    width: 232PX;
+    margin-top:25px;
+}
+.modal-confirmation #dialog-text .dialog_content .popup_right p{
+    padding:8px 8px 0 8px;
+    font-size:12px;
+    color:#3b3b3b;
+}
+
+.modal-confirmation #dialog-text .dialog_content .popup_right ol li{
+    list-style-type: decimal;
+    font-size: 14px;
+    /*margin-left: -14px;*/
+    width: 177px;
+}
+.modal-confirmation #dialog-text .dialog_content .popup_right h3{
+    color:#ffffff;
+    font-weight: bold;
+    background: #93af27;
+    margin:0px;
+    padding:3px 0 3px 0px;
+    text-align:center;
+    font-size: 17px;
+}
+/*.node-type-nomination .ui-dialog .ui-dialog-titlebar {
+    background: url(popuptitle.jpg) no-repeat;
+    height:24px;
+    border:none;
+}
+*/
+.ui-dialog .ui-dialog-title{
+    font-size: 20px;
+    font-weight: bold;
+    color: #3B3B3B;
+    line-height: 1;
+    text-align: left;
+    /* display: none;*/
+}
+
+.ui-widget-content{
+    font-family: 'Helvetica', sans-serif;
+    font-size: 12px;
+
+}
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset button.cancel-button{
+    /*background: url(cancel_btn.jpg) no-repeat;*/
+    border:none;
+}
+
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset button.cancel-button span{
+    color:#ffffff;
+    line-height: 12px;
+    font-size: 13px;
+    width: 55px;
+    background: rgb(30,154,199);
+    background: -moz-linear-gradient(top, rgba(30,154,199,1) 0%, rgba(125,185,232,1) 100%, rgba(41,137,216,1) 100%, rgba(32,124,202,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,154,199,1)), color-stop(100%,rgba(125,185,232,1)), color-stop(100%,rgba(41,137,216,1)), color-stop(100%,rgba(32,124,202,1)));
+    background: -webkit-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%);
+    background: -o-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%);
+    background: -ms-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%);
+    background: linear-gradient(to bottom, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e9ac7', endColorstr='#207cca',GradientType=0 );
+    padding: 10px;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset button.submit-button{
+    /*background: url(submit-button.jpg) no-repeat;*/
+    border:none;
+}
+
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset button.submit-button span{
+    color:#ffffff;
+    line-height: 12px;
+    font-size: 13px;
+    background: rgb(30,154,199);
+    background: -moz-linear-gradient(top, rgba(30,154,199,1) 0%, rgba(125,185,232,1) 100%, rgba(41,137,216,1) 100%, rgba(32,124,202,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,154,199,1)), color-stop(100%,rgba(125,185,232,1)), color-stop(100%,rgba(41,137,216,1)), color-stop(100%,rgba(32,124,202,1)));
+    background: -webkit-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%);
+    background: -o-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%);
+    background: -ms-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%);
+    background: linear-gradient(to bottom, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e9ac7', endColorstr='#207cca',GradientType=0 );
+    padding: 10px;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset{
+    margin-right:13px;
+}
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset .ui-button-text-only span.ui-button-text{
+    background: rgb(30,154,199); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(30,154,199,1) 0%, rgba(125,185,232,1) 100%, rgba(41,137,216,1) 100%, rgba(32,124,202,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,154,199,1)), color-stop(100%,rgba(125,185,232,1)), color-stop(100%,rgba(41,137,216,1)), color-stop(100%,rgba(32,124,202,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(30,154,199,1) 0%,rgba(125,185,232,1) 100%,rgba(41,137,216,1) 100%,rgba(32,124,202,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e9ac7', endColorstr='#207cca',GradientType=0 ); /* IE6-9 */
+    padding: 10px;
+    font-size: 13px;
+    color: white;
+    text-transform: uppercase;
+}
+/*---------End Nomination Portal 2013------------*/
+
+
+/* Ziadd's Changes */
+fieldset .fieldset-wrapper{
+    margin-left: 0 !important;
+}
+
+.field-type-file .form-item{
+    margin-left: 0 !important;
+}
+
+form.node-nomination-form .form-managed-file{
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    border-bottom: none !important;
+    width: 400px !important;
+}
+
+
+#edit-field-nomination-document-path-und-ajax-wrapper,
+#edit-field-nomination-document-1-und-ajax-wrapper,
+#edit-field-nomination-document-2-und-ajax-wrapper,
+#edit-field-nomination-document-3-und-ajax-wrapper,
+#edit-field-nomination-document-4-und-ajax-wrapper,
+#edit-field-nomination-document-5-und-ajax-wrapper,
+#edit-field-nomination-document-6-und-ajax-wrapper{
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+    width: 590px !important;
+    margin-bottom: 10px !important;
+    background-color: #f9f9f9 !important;
+}
+
+#edit-field-nomination-document-path-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-1-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-2-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-3-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-4-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-5-und-ajax-wrapper .fieldset-wrapper .form-file,
+#edit-field-nomination-document-6-und-ajax-wrapper .fieldset-wrapper .form-file{
+    margin-left: 0 !important;
+}
+
+
+#edit-field-nomination-document-path-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-1-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-2-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-3-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-4-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-5-und-ajax-wrapper .file-widget .form-submit,
+#edit-field-nomination-document-6-und-ajax-wrapper .file-widget .form-submit{
+    margin-right: -148px !important;
+    height: 40px !important;
+}
+
+#edit-field-nomination-document-path-und-ajax-wrapper,
+#edit-field-nomination-document-1-und-ajax-wrapper,
+#edit-field-nomination-document-2-und-ajax-wrapper,
+#edit-field-nomination-document-3-und-ajax-wrapper,
+#edit-field-nomination-document-4-und-ajax-wrapper,
+#edit-field-nomination-document-5-und-ajax-wrapper,
+#edit-field-nomination-document-6-und-ajax-wrapper{
+    margin-left: 0!important;
+    width: 590px !important;
+}
+
+.field-type-file .form-item{
+    border-bottom: none;
+    margin-bottom: 0 !important;
+}
+
+.fieldset-wrapper{
+    margin-top: 15px !important;
+}
+
+fieldset{
+    top: 0 !important;
+    width: 590px !important;
+    padding: 0 !important;
+    margin: 0 !important
+}
+
+fieldset legend{
+    height: 1em !important;
+    left: 0 !important;
+    position: relative !important;
+    text-indent: 20px !important;
+    top: 0 !important;
+}
+
+fieldset.error legend{
+    color: red !important;
+}
+
+fieldset.error .fieldset-wrapper{
+    border: 2px solid red;
+}
+
+#edit-field-nomination-document-path-und-table,
+#edit-field-nomination-document-1-und-table,
+#edit-field-nomination-document-2-und-table,
+#edit-field-nomination-document-3-und-table,
+#edit-field-nomination-document-4-und-table,
+#edit-field-nomination-document-5-und-table,
+#edit-field-nomination-document-6-und-table{
+    width: 590px !important;
+    margin: 0 !important;
+}
+
+
+form.node-nomination-form #edit-field-nomination-document-path-und-table .form-managed-file span.file,
+form.node-nomination-form #edit-field-nomination-document-1-und-table .form-managed-file span.file,
+form.node-nomination-form #edit-field-nomination-document-2-und-table .form-managed-file span.file,
+form.node-nomination-form #edit-field-nomination-document-3-und-table .form-managed-file span.file,
+form.node-nomination-form #edit-field-nomination-document-4-und-table .form-managed-file span.file,
+form.node-nomination-form #edit-field-nomination-document-5-und-table .form-managed-file span.file,
+form.node-nomination-form #edit-field-nomination-document-6-und-table .form-managed-file span.file{
+    margin-top: 0px !important;
+    max-width: 415px !important;
+    float: left !important;
+    margin-left: -10px !important;
+}
+
+
+#edit-field-nomination-document-path-und table tbody,
+#edit-field-nomination-document-path-und table tbody tr.odd,
+#edit-field-nomination-document-1-und table tbody,
+#edit-field-nomination-document-1-und table tbody tr.odd,
+#edit-field-nomination-document-2-und table tbody,
+#edit-field-nomination-document-2-und table tbody tr.odd,
+#edit-field-nomination-document-3-und table tbody,
+#edit-field-nomination-document-3-und table tbody tr.odd,
+#edit-field-nomination-document-4-und table tbody,
+#edit-field-nomination-document-4-und table tbody tr.odd,
+#edit-field-nomination-document-5-und table tbody,
+#edit-field-nomination-document-5-und table tbody tr.odd,
+#edit-field-nomination-document-6-und table tbody,
+#edit-field-nomination-document-6-und table tbody tr.odd{
+    border: none !important;
+    background-color: #e2f2f9 !important;
+}
+
+
+form.node-nomination-form #edit-field-nomination-document-path-und-table .form-managed-file label,
+#edit-field-nomination-document-path-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-1-und-table .form-managed-file label,
+#edit-field-nomination-document-1-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-2-und-table .form-managed-file label,
+#edit-field-nomination-document-2-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-3-und-table .form-managed-file label,
+#edit-field-nomination-document-3-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-4-und-table .form-managed-file label,
+#edit-field-nomination-document-4-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-5-und-table .form-managed-file label,
+#edit-field-nomination-document-5-und table tbody tr.ajax-new-content .form-item label,
+form.node-nomination-form #edit-field-nomination-document-6-und-table .form-managed-file label,
+#edit-field-nomination-document-6-und table tbody tr.ajax-new-content .form-item label{
+    margin-left: -9px !important;
+}
+
+form.node-nomination-form #edit-field-nomination-document-path-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-1-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-2-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-3-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-4-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-5-und-table .form-managed-file span.file-size,
+form.node-nomination-form #edit-field-nomination-document-6-und-table .form-managed-file span.file-size{
+    margin-left: -10px !important;
+    float: left;
+    clear: both;
+    display: block;
+    height: 20px;
+}
+
+#edit-field-nomination-document-path-und-ajax-wrapper .fieldset-wrapper .form-type-managed-file label,
+#edit-field-nomination-document-1-und-ajax-wrapper .fieldset-wrapper .form-type-managed-file label,
+#edit-field-nomination-document-2-und-ajax-wrapper .fieldset-wrapper .form-type-managed-file label,
+#edit-field-nomination-document-3-und-ajax-wrapper .fieldset-wrapper .form-type-managed-file label,
+#edit-field-nomination-document-4-und-ajax-wrapper .fieldset-wrapper .form-type-managed-file label,
+#edit-field-nomination-document-5-und-ajax-wrapper .fieldset-wrapper .form-type-managed-file label,
+#edit-field-nomination-document-6-und-ajax-wrapper .fieldset-wrapper .form-type-managed-file label{
+    width: 565px !important;
+    margin-bottom: 0 !important;
+    margin-left: 22px !important;
+}
+
+.file-widget div.messages{
+    margin: 10px 0 !important;
+}
+
+#edit-reset{
+    margin-left: 0 !important;
+}
+
+#edit-submit{
+    margin-right: 0 !important;
+}
+
+
+input[type=file]:after{
+    left: 113% !important;
+}
+
+#edit-field-nomination-document-path-und table tbody tr td,
+#edit-field-nomination-document-1-und table tbody tr td,
+#edit-field-nomination-document-2-und table tbody tr td,
+#edit-field-nomination-document-3-und table tbody tr td,
+#edit-field-nomination-document-4-und table tbody tr td,
+#edit-field-nomination-document-5-und table tbody tr td,
+#edit-field-nomination-document-6-und table tbody tr td, tr th{
+    width: 100% !important;
+}
+
+#edit-field-nomination-document-path-1-und-0-remove-button,
+#edit-field-nomination-document-1-und-0-remove-button,
+#edit-field-nomination-document-2-und-0-remove-button,
+#edit-field-nomination-document-3-und-0-remove-button,
+#edit-field-nomination-document-4-und-0-remove-button,
+#edit-field-nomination-document-5-und-0-remove-button,
+#edit-field-nomination-document-6-und-0-remove-button{
+    padding: 0 !important;
+    height: 40px !important;
+}
+
+
+
+/* More CSS changes after ID change */
+.field-widget-file-generic table thead{
+    display: none !important;
+}
+
+.field-widget-file-generic table tr{
+    border-top: 1px solid #ccc;
+    background-color: #e2f2f9 !important;
+    padding: !important;
+}
+
+.field-widget-file-generic table tr td{
+    border: 0 !important;
+    max-width: 253px !important;
+    width: 100%;
+}
+
+.field-widget-file-generic table tr td .form-managed-file span.file{
+    margin-top: 0px !important;
+    max-width: 400px !important;
+    width: 100% !important;
+    float: left !important;
+    margin-left: -10px !important;
+    font-size: 14px !important;
+}
+
+.field-widget-file-generic table tr td .form-managed-file span.file-size{
+    margin-left: -10px !important;
+    float: left !important;
+    clear: both !important;
+    display: block !important;
+    height: 20px !important;
+    font-size: 13px !important;
+}
+
+
+.field-widget-file-generic table tr td .form-managed-file label{
+    margin-left: -9px !important;
+    font-size: 15px !important;
+    font-family: 'Helvetica', sans-serif !important;
+    text-align: left !important;
+    margin-top: 0px !important;
+    width: 127px !important;
+}
+
+.field-widget-file-generic table tr td .form-managed-file input.form-text{
+    margin: 0px 0 0 -3px !important;
+}
+
+.field-widget-file-generic table tr td .form-item .description{
+    display: none !important;
+}
+
+.field-widget-file-generic table tr td input.form-submit{
+    float: right !important;
+    margin-right: 12px !important;
+    padding: 0 !important;
+    height: 40px !important;
+}
+
+.form-type-managed-file label{
+    width: 565px !important;
+    margin-bottom: 0 !important;
+    margin-left: 22px !important;
+}
+
+.form-type-managed-file .form-managed-file .form-file{
+    margin-left: 0 !important;
+    float: left !important;
+    margin-top: 0 !important;
+    width: 260px !important;
+}
+
+.form-type-managed-file .form-managed-file .form-submit{
+    margin-right: -148px !important;
+    height: 40px !important;
+    float: right !important;
+}
+
+.field-widget-file-generic{
+    margin-bottom: 10px !important;
+    background-color: #f9f9f9 !important;
+    width: 590px !important;
+    padding-top: 1px !important;
+}
+
+.field-widget-file-generic fieldset{
+    background-color: #f9f9f9 !important;
+}
+
+.field-widget-file-generic fieldset legend{
+    font-size: 18px;
+}
+
+.form-item-field-nomination-office-und .loading_icon{
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+
+/* Error Message Style */
+.messages.error{
+    background-color: #fef5f1 !important;
+    color: #8c2e0b !important;
+    border-color: #ed541d !important;
+    background-image: url('/misc/message-24-error.png') !important;
+    background-position: 8px 8px !important;
+    background-repeat: no-repeat !important;
+    padding: 10px 10px 10px 40px !important;
+    width: 930px !important;
+}
+
+#block-system-main-menu ul li {
+    margin-bottom: 0 !important;
+}
+
+#block-system-main-menu ul li.leaf a {
+    padding: 5px 0 5px 23px !important;
+    display: inline-block !important;
+    line-height: 18px !important;
+    margin-bottom: 0 !important;
+}

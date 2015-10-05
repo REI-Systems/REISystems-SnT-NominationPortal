@@ -1,0 +1,3 @@
+name = Data Encrypt
+description = Encrypts the site's data.
+core = 7.x
