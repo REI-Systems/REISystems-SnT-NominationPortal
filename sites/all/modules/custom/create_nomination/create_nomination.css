@@ -667,9 +667,11 @@ form.node-nomination-form #edit-field-nomination-document-5-und-table .form-mana
     margin-left: 14px;
     width: 660px;
 }
+/*
 form.node-nomination-form .form-managed-file span.file{
     margin-left: -92px;
 }
+*/
 #edit-field-nomination-document-path-und-table tbody tr.ajax-new-content .form-managed-file span.file,
 #edit-field-nomination-document-1-und-table tbody tr.ajax-new-content .form-managed-file span.file,
 #edit-field-nomination-document-2-und-table tbody tr.ajax-new-content .form-managed-file span.file,
