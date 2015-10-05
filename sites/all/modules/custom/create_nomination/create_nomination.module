@@ -207,7 +207,7 @@ function _create_nomination_alter_nomination_node_form(&$form, &$form_state) {
   if (empty($form['nid']['#value'])) {
     $prefix = '<h1>Prepare Your Nomination</h1>'
       . '<p>Follow the steps below to submit your nomination package. Please '
-      . 'refer to the <a href="/sites/default/files/Nomination_Guidelines.pdf" '
+      . 'refer to the <a href="/sites/all/documents/Nomination_Guidelines.pdf" '
       . 'target="_blank"> Nomination Guidelines</a> for award rules. </p>'
       . '<p><b>Individuals or businesses may not be nominated for more than one Small Business Week award category.</b></p>';
 
@@ -272,7 +272,7 @@ function _create_nomination_alter_nomination_node_form(&$form, &$form_state) {
     . '<p> 5.) Click the "Save" button.</p>'
     . '<p>Once your file is uploaded, it will be listed. You can remove a document by clicking the "remove" button.'
     . ' You can upload the documents in any order. Please make sure you upload all the documents required in the '
-    . '<a href="/sites/default/files/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a></p>'
+    . '<a href="/sites/all/documents/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a></p>'
     . '<p>Be sure to save the files you have uploaded. Files that have been saved can be '
     . 'removed, revised, and re-uploaded prior to submission.</p>'
     . '<p><b>Nominations that had been submitted are considered final and cannot be altered.</b></p>'
@@ -280,7 +280,7 @@ function _create_nomination_alter_nomination_node_form(&$form, &$form_state) {
     . '.pptx, .doc, .docx, .xls, .xlsx, .jpg, .jpeg, .png, .tif, .tiff</div><br/>'
     . '<p>SBA has implemented security controls for the protection of your personal information. If you do not wish to '
     . 'submit your information electronically, you may mail your nomination package directly to your local SBA district '
-    . 'office listed within the <a href="/sites/default/files/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a> </p> ';
+    . 'office listed within the <a href="/sites/all/documents/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a> </p> ';
 
   /*
   $form['field_nomination_document_path']['#prefix'] = '<div '
@@ -298,7 +298,7 @@ function _create_nomination_alter_nomination_node_form(&$form, &$form_state) {
     . '<p> 5.) Click the "Save" button.</p>'
     . '<p>Once your file is uploaded, it will be listed. You can remove a document by clicking the "remove" button.'
     . ' You can upload the documents in any order. Please make sure you upload all the documents required in the '
-    . '<a href="/sites/default/files/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a></p>'
+    . '<a href="/sites/all/documents/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a></p>'
     . '<p>Be sure to save the files you have uploaded. Files that have been saved can be '
     . 'removed, revised, and re-uploaded prior to submission.</p>'
     . '<p><b>Nominations that had been submitted are considered final and cannot be altered.</b></p>'
@@ -307,7 +307,7 @@ function _create_nomination_alter_nomination_node_form(&$form, &$form_state) {
     . '.pptx, .doc, .docx, .xls, .xlsx, .jpg, .jpeg, .png, .tif, .tiff</div><br/>'
     . '<p>SBA has implemented security controls for the protection of your personal information. If you do not wish to '
     . 'submit your information electronically, you may mail your nomination package directly to your local SBA district '
-    . 'office listed within the <a href="/sites/default/files/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a> </p> ';
+    . 'office listed within the <a href="/sites/all/documents/Nomination_Guidelines.pdf" target="_blank">Nomination Guidelines.</a> </p> ';
   */
 
   $form['actions']['submit']['#submit'][] = 'create_nomination_form_submit';
