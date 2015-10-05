@@ -297,31 +297,23 @@
                   break;
 
 */
-                  $text = '<p>Incomplete nomination packages will not be considered. All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">If applicable, a nomination letter, to include a concise statement of the qualities and performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A biography of the nominee, not to exceed one page. For “team” nominations, a biography is required for each team member;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A business profile that includes a description of the nominee’s business and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The nominee’s financial statements — including balance sheets, profit-and-loss statements and financial reports —, on 8 1/2’’ x 11’’ paper (for the calendar years 2011, 2012 and 2013);</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Additional supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.  For “team” nominations,  a photo is required for each team member.</label></div>';
+                  $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3301, Small Business Person of the Year) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable.  For “team” nominations, a photo of each nominee or group photo is acceptable;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Additional supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered.</label></div>';
                         break;
-
-
 
 
 
               case 'deadline_exporter_of_year':
 
-                  $text = '<p>All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">If applicable, a nomination letter to include a concise statement of the qualities and  performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A biography of the nominee, not to exceed one page. For “team” nominations, a biography is required for each team member;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A business profile that includes a description of the nominee’s business and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The nominee’s financial statements, including balance sheets, profit-and-loss statements and financial reports, on 8 1/2’’ x 11’’ paper (for the calendar years 2011, 2012 and 2013);</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Additional supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.  For “team” nominations, a photo is required for each team member.</label></div>';
-                  break;
+                  $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3302, Small Business Exporter of the Year) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable.  For “team” nominations, a photo of each nominee or group photo is acceptable;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Additional supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered.</label></div>';
+                        break;
 
 /*
                   $text = '<ul><li>A single cover page stating -</li></ul><span class="right_indented">'
@@ -360,19 +352,16 @@
                       'through SBA district offices and through the online portal.</label></div>';
                       */
 
-                  break;
               case 'deadline_disaster_recovery':
 
-                  $text = '<p>Incomplete nomination packages will not be considered. All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include:</p>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">If applicable, a nomination letter, to include a concise statement of the qualities and performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A biography of the nominee, not to exceed one page. For “team” nominations, a biography is required for each team member;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A business profile that includes a description of the nominee’s business, how the disaster damaged the business, how the company was able to rebuild after receiving the SBA disaster loan and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</label></div>'
+                  $text = '<p>Nominations must contain the information required below. Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package includes:</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member.</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3303, Phoenix Award for Small Business Disaster Recovery) which is available through SBA district offices and the online nominations portal;</label></div>'
                       + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Documentation supporting approval of the SBA disaster loan;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable.  For “team” nominations, a photo of each nominee or group photo is acceptable;</label></div>'
                       + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">If possible, photos documenting the disaster damage and photos of the rebuilt property.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages); </label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.  For “team” nominations,  a photo is required for each team member.</label></div>';
-                  break;
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</label></div>';
+                      break;
 
                   /*
                   $text = '<p> All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include, in the following order if submitted via hard copy:</p>'
@@ -402,14 +391,12 @@
 
               case 'deadline_disaster_recovery_contribution':
 
-                  $text = '<p>Incomplete nomination packages will not be considered. All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal; </label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">If applicable, a nomination letter, to include a concise statement of the qualities and performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A biography of the nominee, not to exceed one page;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A profile that includes a description of the nominee’s business and/or professional occupation, how the nominee responded to the needs of the community in the aftermath of the disaster and information to support the evaluation/selection criteria that applies to the nominee as listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including photos, news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages);</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</label></div>';
-                  break;
+                  $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package includes:</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal.</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3304, Phoenix Award for Outstanding Contributions to Disaster Recovery, Public Official) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including photos, news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</label></div>';
+                      break;
 
                   /*
                   $text =  '<p> All evaluation/selection criteria must be specifically addressed. A complete nomination package will ' +
@@ -438,25 +425,21 @@
 
               case 'deadline_disaster_recovery_contribution_volunteer':
 
-                  $text = '<p>Incomplete nomination packages will not be considered. All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal; </label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">If applicable, a nomination letter, to include a concise statement of the qualities and performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A biography of the nominee, not to exceed one page;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A profile that includes a description of the nominee’s business and/or professional occupation, how the nominee responded to the needs of the community in the aftermath of the disaster and information to support the evaluation/selection criteria that applies to the nominee as listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including photos, news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages);</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</label></div>';
-                  break;
+                  $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package includes:</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal,</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3305, Phoenix Award for Outstanding Contributions to Disaster Recovery, Volunteer) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable.</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including photos, news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</label></div>';
+                      break;
 
               case 'deadline_prime_contractor':
 
-                  $text = '<p>Incomplete nomination packages will not be considered. All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include:</p>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal; </label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A nomination letter to include a concise statement of the qualities and  performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A biography of the nominee, not to exceed one page;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A business profile that includes a description of the nominee’s business and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages);</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</label></div>';
-                  break;
+                  $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package must include:</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3306, Small Business Prime Contractor of the Year Award) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</label></div>';
+                      break;
 
 /*
                   $text = '<p> All evaluation/selection criteria must be specifically addressed. A complete nomination package will also ' +
@@ -479,18 +462,15 @@
                       + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination. Supporting documentation must not exceed 10 pages.</label></div>'
                       + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed SBA Form 2137 Award Nomination Consent Form and additional required forms, which are available ' +
                       'at the Government Contracting Area Office, Attn: Government Contracting Area Director.</label></div>';*/
-                  break;
 
               case 'deadline_sub_contractor':
 
-                  $text = '<p>Incomplete nomination packages will not be considered. All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A nomination letter to include a concise statement of the qualities and  performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A biography of the nominee, not to exceed one page;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A business profile that includes a description of the nominee’s business and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages);</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</label></div>';
-                  break;
+                  $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package must include:</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3307, Small Business Subcontractor of the Year Award) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable.</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</label></div>';
+                      break;
 
                   /*
                   $text = '<p> All evaluation/selection criteria must be specifically addressed. A complete nomination package will also' +
@@ -519,18 +499,14 @@
                       'nominations portal.</label></div>';
                   */
 
-                  break;
               case 'deadline_d_eisenhower':
 
-                  $text = '<p>Incomplete nomination packages will not be considered. All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A business profile that includes a description of the nominee’s business and/or occupation, category for which the nomination is being made under and information to support the evaluation/selection criteria listed below;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A narrative summarizing the company’s subcontracting and supplier/program, not to exceed one page;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A five-year trend analysis, in table format;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A biography of the nominee, not to exceed one page;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages);</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</label></div>';
-                  break;
+                  $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package includes:</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form ) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3308, Dwight D. Eisenhower Award for Excellence) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</label></div>';
+                      break;
 
                   /*
                   $text = '<p> All evaluation/selection criteria must be specifically addressed. A complete nomination package will also ' +
@@ -559,16 +535,14 @@
                       + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed SBA Form 2137 Award Nomination Consent Form and other required forms which are available at ' +
                       'SBA district offices and through the online nominations portal.</label></div>';
                   */
-                  break;
+
               case 'deadline_graduate_award_of_year':
 
-                  $text = '<p>Incomplete nomination packages will not be considered. All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">If applicable, a nomination letter to include a concise statement of the qualities and  performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A biography of the nominee, not to exceed one page;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A business profile that includes a description of the nominee’s business and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic; </label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</label></div>';
+                  $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed. A complete nomination package includes:</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3309, 8(a) Graduate of the Year Award) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">4)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered.</label></div>';
                   break;
 
                   /*
@@ -596,35 +570,12 @@
 
               case 'deadline_innovation_award':
 
-                  $text = '<p>Incomplete nomination packages will not be considered. All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                      + '<ul><li>A single cover page stating:</li></ul><span class="right_indented">'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The name of the SBDC, business addresses with telephone and fax numbers, website, and  e-mail address;'
-                      + '</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The SBDC director’s full name, title, business and home addresses with telephone and  fax numbers, and e-mail address;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The name of the host organization;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The name of the executive director;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The award for which the nomination is being made;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The nominator’s name, title, place of business, business address and telephone number and e-mail address; and</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A one-paragraph description of the SBDC’s services provided.</label></div>'
-                      + '</span>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Nomination letter, to include a concise statement of the qualities and performance that merit the award, not exceeding five pages.  In addition to describing the basis for the nomination, the nomination letter should highlight an individual counselor at the SBDC who, in the view of the nominator, has excelled in providing counseling, training and other program services to small businesses.  The nomination letter should also highlight a success story relating to a particular client business served by the SBDC.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) for the Center director which is available through SBA district offices and the online nominations portal. The Center director may also include completed background forms for individual Center employees, as applicable.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the SBDC director or a digital photo – at least 300 dpi; photocopies are not acceptable.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A brief history of the SBDC, not exceeding one page.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A business profile, not exceeding one page.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages. Videos will not be considered.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Please include the chart below in the nominee’s submission.</label></div>'
-                      + '<div><table border="1"><tr><td></td><td><b>Goal</b></td><td><b>Actual</b></td><td><b>% Achieved</b></td></tr>'
-                      + '<tr><td><b>Long Term Counseling Clients</b></td><td></td><td></td><td></td>'
-                      + '<tr><td><b>New Business Starts</b></td><td></td><td></td><td></td>'
-                      + '<tr><td><b>Capital Infusion</b></td><td></td><td></td><td></td></tr>'
-                      + '<tr><td><b>Client Satisfaction</b></td><td></td><td></td><td></td></tr>'
-                      + '<tr><td><b>Other</b></td><td></td><td></td><td></td></tr>'
-                      + '<tr><td><b>Other</b></td><td></td><td></td><td></td></tr>'
-                      + '<tr><td><b>Other</b></td><td></td><td></td><td></td></tr>'
-                      + '</table></div>'
-                      + '<div><p class="footnote">*SBDCs may have additional goals and performance measures that can be included in the “other” categories.</p></div>';
-                  break;
+                  $text = '<p>Nominations must contain the information required below.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package includes:</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form) for the Center director which is available through SBA district offices and the online nominations portal. The Center director may also include completed background forms for individual Center employees, as applicable;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3310, Small Business Development Center Excellence and Innovation Award) which is available through SBA district offices and the online nominations portal;</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the SBDC director or a digital photo – at least 300 dpi is required; photocopies are not acceptable.</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages. Videos will not be considered.</label></div>';
+                      break;
 
                   /*
                   $text = '<p> All evaluation/selection criteria must be specifically addressed. A complete nomination package will also ' +
@@ -669,35 +620,15 @@
                   */
               case 'deadline_outreach_centers':
 
-                  $text = '<p>Nominations submitted to the Office of Veterans Business Development of the U.S. Small Business Administration must be typewritten on one side of 8 1/2” x 11” white stationery, collated and secured in a 1 1/2” binder. Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include, in the following order if submitted via hard copy:</p>'
-                      + '<ul><li>A single cover page stating:</li></ul><span class="right_indented">'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The name of the VBOC, business addresses with telephone and fax numbers, website, and  e-mail address;'
+                  $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package must include:</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form ) which is available through SBA district offices and online nominations portal;'
                       + '</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The VBOC director’s full name, title, business and home addresses with telephone and  fax numbers, and e-mail address;'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3311, Veterans Business Outreach Center Excellence in Service Award) which is available through SBA district offices and the online nominations portal;'
                       + '</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The name of the host organization;'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee’s executive director or a digital photo – at least 300 dpi is required; photocopies are not acceptable.'
                       + '</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The name of the executive director;'
-                      + '</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The award for which the nomination is being made;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The nominator’s name, title, place of business, business address and telephone number and e-mail address; and'
-                      + '</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A one-paragraph description of the VBOC’s services provided.'
-                      + '</label></div>'
-                      + '</span>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Nomination letter, to include a concise statement of the qualities and performance that merit the award, not exceeding five pages. </label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and online nominations portal.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominee’s executive director or a digital photo – at least 300 dpi; photocopies are not acceptable.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A brief biography of the VBOC director, not exceeding one page.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A business profile, not exceeding one page.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages. Videos will not be considered.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Please include the chart below in the nominee’s submission.</label></div>'
-                      + '<div><table border="1"><tr><td></td><td><b>Goal</b></td><td><b>Actual</b></td><td><b>% Achieved</b></td></tr>'
-                      + '<tr><td><b>Long Term Counseling Clients</b></td><td></td><td></td><td></td>'
-                      + '<tr><td><b>New Business Starts</b></td><td></td><td></td><td></td>'
-                      + '<tr><td><b>Capital Infusion</b></td><td></td><td></td><td></td></tr>'
-                      + '<tr><td><b>Client Satisfaction</b></td><td></td><td></td><td></td></tr>'
-                      + '</table></div>';
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">4)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages. Videos will not be considered.'
+                      + '</label></div>';
 
                   /*
                   $text = '<p> All evaluation/selection criteria must be specifically addressed. A complete nomination package will also ' +
@@ -736,28 +667,18 @@
                       + '<tr><td><b>Client Satisfaction</b></td><td></td><td></td><td></td></tr>'
                       + '</table></div>';
                       */
-
                   break;
+
               case 'deadline_center_of_excellence':
 
-                  $text = '<p>Incomplete nomination packages will not be considered. All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                      + '<ul><li>A single cover page stating -</li></ul><span class="right_indented">'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The name of the WBC, business addresses with telephone and fax numbers, website, and  e-mail address;'
+                  $text = '<p>Nominations must contain the information required below. Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed. A complete nomination package includes:</p>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and online nominations portal.'
                       + '</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The WBC director’s full name, title, business and home addresses with telephone and  fax numbers, and e-mail address;'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed nomination form (SBA Form 3312, Women’s Business Outreach Center of the Year Form) which is available through SBA district offices and the online nominations portal;'
                       + '</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The name of the host organization; the name of the executive director;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The award for which the nomination is being made;</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">The nominator’s name, title, place of business, business address and telephone number and e-mail address; and</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A one-paragraph description of the WBC’s services provided.</label></div>'
-                      + '</span>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and online nominations portal.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominated WBC’s Center Director or a digital photo – at  least 300 dpi; photocopies are not acceptable.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A nomination letter, to include a concise statement of the qualities and WBC performance that merit the award, not exceeding five pages.  In addition to describing the basis for the nomination, the nomination letter should highlight an individual business advisor or trainer at the WBC who, in the view of the nominator, has excelled in providing counseling, training and other program services to small businesses.  The nomination letter should also highlight a success story relating to a particular client business served by the WBC.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A brief biography of the WBC Director, not exceeding one page.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A business profile, not exceeding five pages, including the WBC mission statement, target market, and types of services offered, including any specialized programs or services. The profile should include performance on key milestones for the last three years and address how the center is being Smart in efficiently delivering services including using online technology; Bold in delivering programs reaching both start up and growth oriented businesses, and; Accessible in serving a diverse community (including services in multiple languages, hours and location of services, utilizing community partners to deliver services across the entire service area.)</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered.</label></div>'
-                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A statement by the WBC Director that the Center is in compliance with the Notice of Award.</label></div>';
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered.</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">A statement by the WBC Director that the Center is in compliance with the Notice of Award.</label></div>'
+                      + '<div><input class="checklist_item" type="checkbox" name="checklist_item[]"><label for="checklist_item[]">An original 8” x 10” or 5” x 7” photo of the nominated WBC’s Center Director or a digital photo – at  least 300 dpi; photocopies are not acceptable.</label></div>';
 
                   /*
                   $text = '<p> All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include, in the following order if submitted via hard copy:</p>'
@@ -886,14 +807,11 @@
       else if ($type == 'supporting-documentation') {
         switch ($option) {
           case 'deadline_person_of_year':
-              $text = '<p>Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include:</p>'
-                  + '<p>1)	A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member;</p>'
-                  + '<p>2)	If applicable, a nomination letter, to include a concise statement of the qualities and performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</p>'
-                  + '<p>3)	A biography of the nominee, not to exceed one page. For “team” nominations, a biography is required for each team member;</p>'
-                  + '<p>4)	A business profile that includes a description of the nominee’s business and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</p>'
-                  + '<p>5)	The nominee’s financial statements — including balance sheets, profit-and-loss statements and financial reports —, on 8 1/2’’ x 11’’ paper (for the calendar years 2011, 2012 and 2013);</p>'
-                  + '<p>6)	Additional supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered;</p>'
-                  + '<p>7)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.  For “team” nominations,  a photo is required for each team member.</p>';
+              $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.</p>'
+                  + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member;</p>'
+                  + '<p>2)	A completed nomination form (SBA Form 3301, Small Business Person of the Year) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>3)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable.  For “team” nominations, a photo of each nominee or group photo is acceptable;</p>'
+                  + '<p>4)	Additional supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered.</p>';
 
 /*
             $text = '<p>Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include:</p>'
@@ -922,15 +840,13 @@
               + '<p>10) A completed SBA Form 2137 Award Nomination Consent Form, which is available through SBA district offices and through the online portal.</p>';
               */
 		    break;
+
 		  case 'deadline_exporter_of_year':
-              $text = '<p>All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                  + '<p>1)	A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member;</p>'
-                  + '<p>2)	If applicable, a nomination letter to include a concise statement of the qualities and  performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</p>'
-                  + '<p>3)	A biography of the nominee, not to exceed one page. For “team” nominations, a biography is required for each team member;</p>'
-                  + '<p>4)	A business profile that includes a description of the nominee’s business and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</p>'
-                  + '<p>5)	The nominee’s financial statements, including balance sheets, profit-and-loss statements and financial reports, on 8 1/2’’ x 11’’ paper (for the calendar years 2011, 2012 and 2013);</p>'
-                  + '<p>6)	Additional supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered;</p>'
-                  + '<p>7)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable. For “team” nominations, a photo is required for each team member.</p>';
+              $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.</p>'
+                  + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member;</p>'
+                  + '<p>2)	A completed nomination form (SBA Form 3302, Small Business Exporter of the Year) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>3)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable.  For “team” nominations, a photo of each nominee or group photo is acceptable;</p>'
+                  + '<p>4)	Additional supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered.</p>';
 
 /*
 			$text = '<p>1) A single cover page stating	&mdash;'
@@ -970,16 +886,15 @@
                 'through SBA district offices and through the online portal.</p>'
 			  //+ '<p>11) A description of the products exported and markets served.</p>';*/
 			break;
+
           case 'deadline_disaster_recovery':
-              $text = '<p>Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include:</p>'
-                  + '<p>1)	A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member;</p>'
-                  + '<p>2)	If applicable, a nomination letter, to include a concise statement of the qualities and performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</p>'
-                  + '<p>3)	A biography of the nominee, not to exceed one page. For “team” nominations, a biography is required for each team member;</p>'
-                  + '<p>4)	A business profile that includes a description of the nominee’s business, how the disaster damaged the business, how the company was able to rebuild after receiving the SBA disaster loan and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</p>'
-                  + '<p>5)	Documentation supporting approval of the SBA disaster loan;</p>'
-                  + '<p>6)	If possible, photos documenting the disaster damage and photos of the rebuilt property.</p>'
-                  + '<p>7)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages); </p>'
-                  + '<p>8)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.  For “team” nominations,  a photo is required for each team member.</p>';
+              $text = '<p>Nominations must contain the information required below. Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package includes:</p>'
+                  + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal. For “team” nominations, a background form is required for each team member.</p>'
+                  + '<p>2)	A completed nomination form (SBA Form 3303, Phoenix Award for Small Business Disaster Recovery) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>3)	Documentation supporting approval of the SBA disaster loan;</p>'
+                  + '<p>4)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable.  For “team” nominations, a photo of each nominee or group photo is acceptable;</p>'
+                  + '<p>5)	If possible, photos documenting the disaster damage and photos of the rebuilt property.</p>'
+                  + '<p>6)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</p>';
             /*
             $text = '<p>All evaluation/selection criteria must be specifically addressed. A complete ' +
                 'nomination package will also include, in the following order if submitted via hard copy:</p>'
@@ -1008,14 +923,13 @@
                 'and through the online nominations portal.</p>';
                 */
             break;
+
           case 'deadline_disaster_recovery_contribution':
-              $text = '<p>Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include:</p>'
-                  + '<p>1)	A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal; </p>'
-                  + '<p>2)	If applicable, a nomination letter, to include a concise statement of the qualities and performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</p>'
-                  + '<p>3)	A biography of the nominee, not to exceed one page;</p>'
-                  + '<p>4)	A profile that includes a description of the nominee’s business and/or professional occupation, how the nominee responded to the needs of the community in the aftermath of the disaster and information to support the evaluation/selection criteria that applies to the nominee as listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</p>'
-                  + '<p>5)	Any other supporting documentation deemed significant by the nominator, including photos, news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages);</p>'
-                  + '<p>6)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</p>';
+              $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package includes:</p>'
+                  + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal.</p>'
+                  + '<p>2)	A completed nomination form (SBA Form 3304, Phoenix Award for Outstanding Contributions to Disaster Recovery, Public Official) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>3)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable;</p>'
+                  + '<p>4)	Any other supporting documentation deemed significant by the nominator, including photos, news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</p>';
 
 /*
             $text =  '<p>All evaluation/selection criteria must be specifically addressed. A complete nomination package will ' +
@@ -1042,24 +956,20 @@
                  break;
 
             case 'deadline_disaster_recovery_contribution_volunteer':
-                $text = '<p>Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include:</p>'
-                    + '<p>1)	A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal; </p>'
-                    + '<p>2)	If applicable, a nomination letter, to include a concise statement of the qualities and performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</p>'
-                    + '<p>3)	A biography of the nominee, not to exceed one page;</p>'
-                    + '<p>4)	A profile that includes a description of the nominee’s business and/or professional occupation, how the nominee responded to the needs of the community in the aftermath of the disaster and information to support the evaluation/selection criteria that applies to the nominee as listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</p>'
-                    + '<p>5)	Any other supporting documentation deemed significant by the nominator, including photos, news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages);</p>'
-                    + '<p>6)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</p>';
+                $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package includes:</p>'
+                    + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal,</p>'
+                    + '<p>2)	A completed nomination form (SBA Form 3305, Phoenix Award for Outstanding Contributions to Disaster Recovery, Volunteer) which is available through SBA district offices and the online nominations portal;</p>'
+                    + '<p>3)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable.</p>'
+                    + '<p>4)	Any other supporting documentation deemed significant by the nominator, including photos, news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</p>';
                 break;
 
 
             case 'deadline_prime_contractor':
-              $text = '<p>Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include:</p>'
-                  + '<p>1)	A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal; </p>'
-                  + '<p>2)	A nomination letter to include a concise statement of the qualities and  performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</p>'
-                  + '<p>3)	A biography of the nominee, not to exceed one page;</p>'
-                  + '<p>4)	A business profile that includes a description of the nominee’s business and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</p>'
-                  + '<p>5)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages);</p>'
-                  + '<p>6)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</p>';
+              $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package must include:</p>'
+                  + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>2)	A completed nomination form (SBA Form 3306, Small Business Prime Contractor of the Year Award) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>3)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable;</p>'
+                  + '<p>4)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</p>';
 
 
             /*
@@ -1085,14 +995,13 @@
                 'at the Government Contracting Area Office, Attn: Government Contracting Area Director.</p>'
               */
               break;
+
           case 'deadline_sub_contractor':
-              $text = '<p>Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include:</p>'
-                  + '<p>1)	A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal;</p>'
-                  + '<p>2)	A nomination letter to include a concise statement of the qualities and  performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</p>'
-                  + '<p>3)	A biography of the nominee, not to exceed one page;</p>'
-                  + '<p>4)	A business profile that includes a description of the nominee’s business and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic;</p>'
-                  + '<p>5)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages);</p>'
-                  + '<p>6)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</p>';
+              $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package must include:</p>'
+                  + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA offices and the online nominations portal;</p>'
+                  + '<p>2)	A completed nomination form (SBA Form 3307, Small Business Subcontractor of the Year Award) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>3)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable.</p>'
+                  + '<p>4)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</p>';
 
 
 /*
@@ -1121,15 +1030,13 @@
                 ' at the Government Contracting Area Office, Attn: Government Contracting Area Director and through the online ' +
                 'nominations portal.</p>';*/
               break;
+
           case 'deadline_d_eisenhower':
-              $text = '<p>Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include:</p>'
-                  + '<p>1)	A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal;</p>'
-                  + '<p>2)	A business profile that includes a description of the nominee’s business and/or occupation, category for which the nomination is being made under and information to support the evaluation/selection criteria listed below;</p>'
-                  + '<p>3)	A narrative summarizing the company’s subcontracting and supplier/program, not to exceed one page;</p>'
-                  + '<p>4)	A five-year trend analysis, in table format;</p>'
-                  + '<p>5)	A biography of the nominee, not to exceed one page;</p>'
-                  + '<p>6)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages);</p>'
-                  + '<p>7)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</p>';
+              $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package includes:</p>'
+                  + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form ) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>2)	A completed nomination form (SBA Form 3308, Dwight D. Eisenhower Award for Excellence) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>3)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable;</p>'
+                  + '<p>4)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages).</p>';
 
             /*
             $text = '<p>All evaluation/selection criteria must be specifically addressed. A complete nomination package will also ' +
@@ -1159,13 +1066,11 @@
                 'SBA district offices and through the online nominations portal.</p>';*/
               break;
           case 'deadline_graduate_award_of_year':
-              $text = '<p>Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                  + '<p>1)	A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and the online nominations portal;</p>'
-                  + '<p>2)	If applicable, a nomination letter to include a concise statement of the qualities and  performance that merit the award, not to exceed one page. The nominator’s name, title, place of business, business address, telephone number and e-mail address must be included;</p>'
-                  + '<p>3)	A biography of the nominee, not to exceed one page;</p>'
-                  + '<p>4)	A business profile that includes a description of the nominee’s business and information to support the evaluation/selection criteria listed below. The nominee is encouraged to copy and paste the evaluation/selection criteria and provide supporting information directly under each topic; </p>'
-                  + '<p>5)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered;</p>'
-                  + '<p>6)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi; photocopies are not acceptable.</p>';
+              $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed. A complete nomination package includes:</p>'
+                  + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>2)	A completed nomination form (SBA Form 3309, 8(a) Graduate of the Year Award) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>3)	An original 8” x 10” or 5” x 7” photo of the nominee or a digital photo – at least 300 dpi is required; photocopies are not acceptable;</p>'
+                  + '<p>4)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered.</p>';
 
             /*
             $text = '<p>All evaluation/selection criteria must be specifically addressed. A complete nomination package will also ' +
@@ -1188,34 +1093,11 @@
                 'the online nominations portal.</p>';*/
               break;
           case 'deadline_innovation_award':
-              $text = '<p>Incomplete nomination packages will not be considered. All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                  + '<p>1) A single cover page stating:'
-                  + '<ul><li>The name of the SBDC, business addresses with telephone and fax numbers, website, and  e-mail address;'
-                  + '</li>'
-                  + '<li>The SBDC director’s full name, title, business and home addresses with telephone and  fax numbers, and e-mail address;</li>'
-                  + '<li>The name of the host organization;</li>'
-                  + '<li>The name of the executive director;</li>'
-                  + '<li>The award for which the nomination is being made;</li>'
-                  + '<li>The nominator’s name, title, place of business, business address and telephone number and e-mail address; and</li>'
-                  + '<li>A one-paragraph description of the SBDC’s services provided.</li>'
-                  + '</ul></p>'
-                  + '<p>2)	Nomination letter, to include a concise statement of the qualities and performance that merit the award, not exceeding five pages.  In addition to describing the basis for the nomination, the nomination letter should highlight an individual counselor at the SBDC who, in the view of the nominator, has excelled in providing counseling, training and other program services to small businesses.  The nomination letter should also highlight a success story relating to a particular client business served by the SBDC.</p>'
-                  + '<p>3)	A completed background form (SBA Form 3300, Award Nomination Form) for the Center director which is available through SBA district offices and the online nominations portal. The Center director may also include completed background forms for individual Center employees, as applicable.</p>'
-                  + '<p>4)	An original 8” x 10” or 5” x 7” photo of the SBDC director or a digital photo – at least 300 dpi; photocopies are not acceptable.</p>'
-                  + '<p>5)	A brief history of the SBDC, not exceeding one page.</p>'
-                  + '<p>6)	A business profile, not exceeding one page.</p>'
-                  + '<p>7)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages. Videos will not be considered.</p>'
-                  + '<p>8)	Please include the chart below in the nominee’s submission.</p>'
-                  + '<table border="1"><tr><td></td><td><b>Goal</b></td><td><b>Actual</b></td><td><b>% Achieved</b></td></tr>'
-                  + '<tr><td><b>Long Term Counseling Clients</b></td><td></td><td></td><td></td>'
-                  + '<tr><td><b>New Business Starts</b></td><td></td><td></td><td></td>'
-                  + '<tr><td><b>Capital Infusion</b></td><td></td><td></td><td></td></tr>'
-                  + '<tr><td><b>Client Satisfaction</b></td><td></td><td></td><td></td></tr>'
-                  + '<tr><td><b>Other</b></td><td></td><td></td><td></td></tr>'
-                  + '<tr><td><b>Other</b></td><td></td><td></td><td></td></tr>'
-                  + '<tr><td><b>Other</b></td><td></td><td></td><td></td></tr>'
-                  + '</table>'
-                  + '*SBDCs may have additional goals and performance measures that can be included in the “other” categories.';
+              $text = '<p>Nominations must contain the information required below.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package includes:</p>'
+                  + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form) for the Center director which is available through SBA district offices and the online nominations portal. The Center director may also include completed background forms for individual Center employees, as applicable;</p>'
+                  + '<p>2)	A completed nomination form (SBA Form 3310, Small Business Development Center Excellence and Innovation Award) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>3)	An original 8” x 10” or 5” x 7” photo of the SBDC director or a digital photo – at least 300 dpi is required; photocopies are not acceptable.</p>'
+                  + '<p>4)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages. Videos will not be considered.</p>';
 
  /*
             $text = '<p>All evaluation/selection criteria must be specifically addressed. A complete nomination package will also ' +
@@ -1258,31 +1140,11 @@
               */
               break;
           case 'deadline_outreach_centers':
-              $text = '<p>Nominations submitted to the Office of Veterans Business Development of the U.S. Small Business Administration must be typewritten on one side of 8 1/2” x 11” white stationery, collated and secured in a 1 1/2” binder. Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package will also include, in the following order if submitted via hard copy:</p>'
-                  + '1) A single cover page stating:'
-                  + '<ul><li>The name of the VBOC, business addresses with telephone and fax numbers, website, and  e-mail address;'
-                  + '</li>'
-                  + '<li>The VBOC director’s full name, title, business and home addresses with telephone and  fax numbers, and e-mail address;'
-                  + '</li>'
-                  + '<li>The name of the host organization;</li>'
-                  + '<li>The name of the executive director;</li>'
-                  + '<li>The award for which the nomination is being made;</li>'
-                  + '<li>The nominator’s name, title, place of business, business address and telephone number and e-mail address; and</li>'
-                  + '<li>A one-paragraph description of the VBOC’s services provided. </li>'
-                  + '</ul>'
-                  + '<p>2)	Nomination letter, to include a concise statement of the qualities and performance that merit the award, not exceeding five pages.</p>'
-                  + '<p>3)	A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and online nominations portal.</p>'
-                  + '<p>4)	An original 8” x 10” or 5” x 7” photo of the nominee’s executive director or a digital photo – at least 300 dpi; photocopies are not acceptable.</p>'
-                  + '<p>5)	A brief biography of the VBOC director, not exceeding one page.</p>'
-                  + '<p>6)	A business profile, not exceeding one page.</p>'
-                  + '<p>7)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages. Videos will not be considered.</p>'
-                  + '<p>8)	Please include the chart below in the nominee’s submission.</p>'
-                  + '<table border="1"><tr><td></td><td><b>Goal</b></td><td><b>Actual</b></td><td><b>% Achieved</b></td></tr>'
-                  + '<tr><td><b>Long Term Counseling Clients</b></td><td></td><td></td><td></td>'
-                  + '<tr><td><b>New Business Starts</b></td><td></td><td></td><td></td>'
-                  + '<tr><td><b>Capital Infusion</b></td><td></td><td></td><td></td></tr>'
-                  + '<tr><td><b>Client Satisfaction</b></td><td></td><td></td><td></td></tr>'
-                  + '</table>';
+              $text = '<p>Nominations must contain the information required below.  Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed.  A complete nomination package must include:</p>'
+                  + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form ) which is available through SBA district offices and online nominations portal;</p>'
+                  + '<p>2)	A completed nomination form (SBA Form 3311, Veterans Business Outreach Center Excellence in Service Award) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>3)	An original 8” x 10” or 5” x 7” photo of the nominee’s executive director or a digital photo – at least 300 dpi is required; photocopies are not acceptable.</p>'
+                  + '<p>4)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages. Videos will not be considered.</p>';
 
             /*
             $text = '<p>All evaluation/selection criteria must be specifically addressed. A complete nomination package will also ' +
@@ -1318,24 +1180,12 @@
               + '</table>'*/
             break;
           case 'deadline_center_of_excellence':
-              $text = '<p>Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include:</p>'
-                  + '1) A single cover page stating —'
-                  + '<ul><li>The name of the WBC, business addresses with telephone and fax numbers, website, and  e-mail address;'
-                  + '</li>'
-                  + '<li>The WBC director’s full name, title, business and home addresses with telephone and  fax numbers, and e-mail address;'
-                  + '</li>'
-                  + '<li>The name of the host organization; the name of the executive director;</li>'
-                  + '<li>The award for which the nomination is being made;</li>'
-                  + '<li>The nominator’s name, title, place of business, business address and telephone number and e-mail address; and</li>'
-                  + '<li>A one-paragraph description of the WBC’s services provided.</li>'
-                  + '</ul>'
-                  + '<p>2)	A completed background form (SBA Form 3300, Award Nomination Form) which is available through SBA district offices and online nominations portal.</p>'
-                  + '<p>3)	An original 8” x 10” or 5” x 7” photo of the nominated WBC’s Center Director or a digital photo – at  least 300 dpi; photocopies are not acceptable.</p>'
-                  + '<p>4)	A nomination letter, to include a concise statement of the qualities and WBC performance that merit the award, not exceeding five pages.  In addition to describing the basis for the nomination, the nomination letter should highlight an individual business advisor or trainer at the WBC who, in the view of the nominator, has excelled in providing counseling, training and other program services to small businesses.  The nomination letter should also highlight a success story relating to a particular client business served by the WBC.</p>'
-                  + '<p>5)	A brief biography of the WBC Director, not exceeding one page.</p>'
-                  + '<p>6)	A business profile, not exceeding five pages, including the WBC mission statement, target market, and types of services offered, including any specialized programs or services. The profile should include performance on key milestones for the last three years and address how the center is being Smart in efficiently delivering services including using online technology; Bold in delivering programs reaching both start up and growth oriented businesses, and; Accessible in serving a diverse community (including services in multiple languages, hours and location of services, utilizing community partners to deliver services across the entire service area.)</p>'
-                  + '<p>7)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered.</p>'
-                  + '<p>8)	A statement by the WBC Director that the Center is in compliance with the Notice of Award.</p>';
+              $text = '<p>Nominations must contain the information required below. Incomplete nomination packages will not be considered.  All evaluation/selection criteria must be specifically addressed. A complete nomination package includes:</p>'
+                  + '<p>1)	A completed background form (SBA Form 3300, Award Nominee Background Form) which is available through SBA district offices and online nominations portal.</p>'
+                  + '<p>2)	A completed nomination form (SBA Form 3312, Women’s Business Outreach Center of the Year Form) which is available through SBA district offices and the online nominations portal;</p>'
+                  + '<p>3)	Any other supporting documentation deemed significant by the nominator, including news clips, letters of recommendation, nomination letter (if not self-nominated) and other evidence of the appropriateness of the nomination (supporting documentation must not exceed 10 pages). Videos will not be considered.</p>'
+                  + '<p>4)	A statement by the WBC Director that the Center is in compliance with the Notice of Award.</p>'
+                  + '<p>5)	An original 8” x 10” or 5” x 7” photo of the nominated WBC’s Center Director or a digital photo – at  least 300 dpi; photocopies are not acceptable.</p>';
 
             /*
             $text = '<p>All evaluation/selection criteria must be specifically addressed. A complete nomination package will also include, in the following order if submitted via hard copy:</p>'
