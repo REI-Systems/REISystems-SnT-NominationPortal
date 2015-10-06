@@ -1471,3 +1471,6 @@ input[type=file]:after{
     line-height: 18px !important;
     margin-bottom: 0 !important;
 }
+
+/* Hiding the submitted field */
+div.field-name-field-nomination-submitted { display: none; }
