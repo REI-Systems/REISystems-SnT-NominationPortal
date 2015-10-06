@@ -1044,8 +1044,8 @@ function _create_nomination_get_review_nominee_text($type) {
   $cache = _create_nomination_deadlines_array_from_cache();
 
   if ($type != '_none_') {
-    $deadline_str = 'Deadline for this Award: ' 
-      . Date('M d, Y', $cache->data[$type]) . ' 3:00pm ET';
+    $deadline_str = 'Deadline for this Award: 3:00pm ET, '
+      . Date('F d, Y', $cache->data[$type]);
   }
 
   switch ($type) {
