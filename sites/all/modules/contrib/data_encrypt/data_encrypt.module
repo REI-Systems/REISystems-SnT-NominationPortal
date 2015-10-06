@@ -73,7 +73,7 @@ function data_encrypt_form($form, &$form_state) {
 * was abandoned in favor of file_insert
 */
 function data_encrypt_file_insert($file) {
-// check if uploaded file encryption is set in module's settings
+  // check if uploaded file encryption is set in module's settings
   $file_setting = variable_get('data_encrypt_files', 0);
   if ($file_setting === 0) {
     return;
