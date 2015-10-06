@@ -525,7 +525,7 @@ function create_nomination_form_validate($form, &$form_state) {
     $remove_keys = array();
     for ($i = 1; $i <= $min_required_no_of_files; $i++) {
       //$sub_file_uploaded = $form['field_nomination_document_' . $i]['und']['#file_upload_delta'];
-      if ($form['field_nomination_document_' . $i]['und'][0]['#file'] === 0) {
+      if ($form['field_nomination_document_' . $i]['und'][0]['#file'] === FALSE) {
         //form_set_error('field_nomination_document_' . $i);
         if ($error_displayed == 0) {
           $error_displayed = 1;
