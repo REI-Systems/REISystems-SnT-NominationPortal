@@ -469,6 +469,7 @@ function _create_nomination_alter_nomination_node_form(&$form, &$form_state) {
       $titles = variable_get($variable_name, '');
       $titles_array = explode(',', $titles);
       $form['field_nomination_document_' . $file_field_no]['und']['#title'] = $titles_array[$file_field_no - 1];
+      $form['field_nomination_document_' . $file_field_no]['und'][0]['#title'] = $titles_array[$file_field_no - 1];
     }
   }
 }
