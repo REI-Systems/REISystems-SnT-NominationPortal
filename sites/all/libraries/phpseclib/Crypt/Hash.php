@@ -7,10 +7,10 @@
  *
  * md2, md5, md5-96, sha1, sha1-96, sha256, sha256-96, sha384, and sha512, sha512-96
  *
- * If {@link \phpseclib\Crypt\Hash::setKey() setKey()} is called, {@link \phpseclib\Crypt\Hash::hash() hash()} will return the HMAC as opposed to
+ * If {@link Crypt_Hash::setKey() setKey()} is called, {@link Crypt_Hash::hash() hash()} will return the HMAC as opposed to
  * the hash.  If no valid algorithm is provided, sha1 will be used.
  *
- * PHP version 5
+ * PHP versions 4 and 5
  *
  * {@internal The variable names are the same as those in
  * {@link http://tools.ietf.org/html/rfc2104#section-2 RFC2104}.}}
@@ -18,9 +18,9 @@
  * Here's a short example of how to use this library:
  * <code>
  * <?php
- *    include 'vendor/autoload.php';
+ *    include 'Crypt/Hash.php';
  *
- *    $hash = new \phpseclib\Crypt\Hash('sha1');
+ *    $hash = new Crypt_Hash('sha1');
  *
  *    $hash->setKey('abcdefg');
  *
@@ -28,49 +28,63 @@
  * ?>
  * </code>
  *
+ * LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
  * @category  Crypt
- * @package   Hash
+ * @package   Crypt_Hash
  * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2007 Jim Wigginton
+ * @copyright MMVII Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib\Crypt;
-
-use phpseclib\Math\BigInteger;
+/**#@+
+ * @access private
+ * @see Crypt_Hash::Crypt_Hash()
+ */
+/**
+ * Toggles the internal implementation
+ */
+define('CRYPT_HASH_MODE_INTERNAL', 1);
+/**
+ * Toggles the mhash() implementation, which has been deprecated on PHP 5.3.0+.
+ */
+define('CRYPT_HASH_MODE_MHASH',    2);
+/**
+ * Toggles the hash() implementation, which works on PHP 5.1.2+.
+ */
+define('CRYPT_HASH_MODE_HASH',     3);
+/**#@-*/
 
 /**
  * Pure-PHP implementations of keyed-hash message authentication codes (HMACs) and various cryptographic hashing functions.
  *
- * @package Hash
+ * @package Crypt_Hash
  * @author  Jim Wigginton <terrafrost@php.net>
  * @access  public
  */
-class Hash
+class Crypt_Hash
 {
-    /**#@+
-     * @access private
-     * @see \phpseclib\Crypt\Hash::__construct()
-     */
-    /**
-     * Toggles the internal implementation
-     */
-    const MODE_INTERNAL = 1;
-    /**
-     * Toggles the mhash() implementation, which has been deprecated on PHP 5.3.0+.
-    */
-    const MODE_MHASH = 2;
-    /**
-     * Toggles the hash() implementation, which works on PHP 5.1.2+.
-    */
-    const MODE_HASH = 3;
-    /**#@-*/
-
     /**
      * Hash Parameter
      *
-     * @see \phpseclib\Crypt\Hash::setHash()
+     * @see Crypt_Hash::setHash()
      * @var Integer
      * @access private
      */
@@ -79,7 +93,7 @@ class Hash
     /**
      * Byte-length of compression blocks / key (Internal HMAC)
      *
-     * @see \phpseclib\Crypt\Hash::setAlgorithm()
+     * @see Crypt_Hash::setAlgorithm()
      * @var Integer
      * @access private
      */
@@ -88,7 +102,7 @@ class Hash
     /**
      * Byte-length of hash output (Internal HMAC)
      *
-     * @see \phpseclib\Crypt\Hash::setHash()
+     * @see Crypt_Hash::setHash()
      * @var Integer
      * @access private
      */
@@ -97,7 +111,7 @@ class Hash
     /**
      * Hash Algorithm
      *
-     * @see \phpseclib\Crypt\Hash::setHash()
+     * @see Crypt_Hash::setHash()
      * @var String
      * @access private
      */
@@ -106,7 +120,7 @@ class Hash
     /**
      * Key
      *
-     * @see \phpseclib\Crypt\Hash::setKey()
+     * @see Crypt_Hash::setKey()
      * @var String
      * @access private
      */
@@ -115,7 +129,7 @@ class Hash
     /**
      * Outer XOR (Internal HMAC)
      *
-     * @see \phpseclib\Crypt\Hash::setKey()
+     * @see Crypt_Hash::setKey()
      * @var String
      * @access private
      */
@@ -124,7 +138,7 @@ class Hash
     /**
      * Inner XOR (Internal HMAC)
      *
-     * @see \phpseclib\Crypt\Hash::setKey()
+     * @see Crypt_Hash::setKey()
      * @var String
      * @access private
      */
@@ -134,21 +148,21 @@ class Hash
      * Default Constructor.
      *
      * @param optional String $hash
-     * @return \phpseclib\Crypt\Hash
+     * @return Crypt_Hash
      * @access public
      */
-    function __construct($hash = 'sha1')
+    function Crypt_Hash($hash = 'sha1')
     {
-        if (!defined('CRYPT_HASH_MODE')) {
+        if ( !defined('CRYPT_HASH_MODE') ) {
             switch (true) {
                 case extension_loaded('hash'):
-                    define('CRYPT_HASH_MODE', self::MODE_HASH);
+                    define('CRYPT_HASH_MODE', CRYPT_HASH_MODE_HASH);
                     break;
                 case extension_loaded('mhash'):
-                    define('CRYPT_HASH_MODE', self::MODE_MHASH);
+                    define('CRYPT_HASH_MODE', CRYPT_HASH_MODE_MHASH);
                     break;
                 default:
-                    define('CRYPT_HASH_MODE', self::MODE_INTERNAL);
+                    define('CRYPT_HASH_MODE', CRYPT_HASH_MODE_INTERNAL);
             }
         }
 
@@ -217,19 +231,19 @@ class Hash
 
         switch ($hash) {
             case 'md2':
-                $mode = CRYPT_HASH_MODE == self::MODE_HASH && in_array('md2', hash_algos()) ?
-                    self::MODE_HASH : self::MODE_INTERNAL;
+                $mode = CRYPT_HASH_MODE == CRYPT_HASH_MODE_HASH && in_array('md2', hash_algos()) ?
+                    CRYPT_HASH_MODE_HASH : CRYPT_HASH_MODE_INTERNAL;
                 break;
             case 'sha384':
             case 'sha512':
-                $mode = CRYPT_HASH_MODE == self::MODE_MHASH ? self::MODE_INTERNAL : CRYPT_HASH_MODE;
+                $mode = CRYPT_HASH_MODE == CRYPT_HASH_MODE_MHASH ? CRYPT_HASH_MODE_INTERNAL : CRYPT_HASH_MODE;
                 break;
             default:
                 $mode = CRYPT_HASH_MODE;
         }
 
-        switch ($mode) {
-            case self::MODE_MHASH:
+        switch ( $mode ) {
+            case CRYPT_HASH_MODE_MHASH:
                 switch ($hash) {
                     case 'md5':
                         $this->hash = MHASH_MD5;
@@ -242,7 +256,7 @@ class Hash
                         $this->hash = MHASH_SHA1;
                 }
                 return;
-            case self::MODE_HASH:
+            case CRYPT_HASH_MODE_HASH:
                 switch ($hash) {
                     case 'md5':
                         $this->hash = 'md5';
@@ -262,26 +276,26 @@ class Hash
 
         switch ($hash) {
             case 'md2':
-                $this->b = 16;
-                $this->hash = array($this, '_md2');
-                break;
+                 $this->b = 16;
+                 $this->hash = array($this, '_md2');
+                 break;
             case 'md5':
-                $this->b = 64;
-                $this->hash = array($this, '_md5');
-                break;
+                 $this->b = 64;
+                 $this->hash = array($this, '_md5');
+                 break;
             case 'sha256':
-                $this->b = 64;
-                $this->hash = array($this, '_sha256');
-                break;
+                 $this->b = 64;
+                 $this->hash = array($this, '_sha256');
+                 break;
             case 'sha384':
             case 'sha512':
-                $this->b = 128;
-                $this->hash = array($this, '_sha512');
-                break;
+                 $this->b = 128;
+                 $this->hash = array($this, '_sha512');
+                 break;
             case 'sha1':
             default:
-                $this->b = 64;
-                $this->hash = array($this, '_sha1');
+                 $this->b = 64;
+                 $this->hash = array($this, '_sha1');
         }
 
         $this->ipad = str_repeat(chr(0x36), $this->b);
@@ -297,17 +311,17 @@ class Hash
      */
     function hash($text)
     {
-        $mode = is_array($this->hash) ? self::MODE_INTERNAL : CRYPT_HASH_MODE;
+        $mode = is_array($this->hash) ? CRYPT_HASH_MODE_INTERNAL : CRYPT_HASH_MODE;
 
         if (!empty($this->key) || is_string($this->key)) {
-            switch ($mode) {
-                case self::MODE_MHASH:
+            switch ( $mode ) {
+                case CRYPT_HASH_MODE_MHASH:
                     $output = mhash($this->hash, $text, $this->key);
                     break;
-                case self::MODE_HASH:
+                case CRYPT_HASH_MODE_HASH:
                     $output = hash_hmac($this->hash, $text, $this->key, true);
                     break;
-                case self::MODE_INTERNAL:
+                case CRYPT_HASH_MODE_INTERNAL:
                     /* "Applications that use keys longer than B bytes will first hash the key using H and then use the
                         resultant L byte string as the actual key to HMAC."
 
@@ -323,14 +337,14 @@ class Hash
                     $output = call_user_func($this->hash, $output); // step 7
             }
         } else {
-            switch ($mode) {
-                case self::MODE_MHASH:
+            switch ( $mode ) {
+                case CRYPT_HASH_MODE_MHASH:
                     $output = mhash($this->hash, $text);
                     break;
-                case self::MODE_HASH:
+                case CRYPT_HASH_MODE_HASH:
                     $output = hash($this->hash, $text, true);
                     break;
-                case self::MODE_INTERNAL:
+                case CRYPT_HASH_MODE_INTERNAL:
                     $output = call_user_func($this->hash, $text);
             }
         }
@@ -497,14 +511,12 @@ class Hash
 
             // Extend the sixteen 32-bit words into sixty-four 32-bit words
             for ($i = 16; $i < 64; $i++) {
-                // @codingStandardsIgnoreStart
                 $s0 = $this->_rightRotate($w[$i - 15],  7) ^
                       $this->_rightRotate($w[$i - 15], 18) ^
                       $this->_rightShift( $w[$i - 15],  3);
                 $s1 = $this->_rightRotate($w[$i - 2], 17) ^
                       $this->_rightRotate($w[$i - 2], 19) ^
                       $this->_rightShift( $w[$i - 2], 10);
-                // @codingStandardsIgnoreEnd
                 $w[$i] = $this->_add($w[$i - 16], $s0, $w[$i - 7], $s1);
 
             }
@@ -564,6 +576,10 @@ class Hash
      */
     function _sha512($m)
     {
+        if (!class_exists('Math_BigInteger')) {
+            include_once 'Math/BigInteger.php';
+        }
+
         static $init384, $init512, $k;
 
         if (!isset($k)) {
@@ -578,9 +594,9 @@ class Hash
             );
 
             for ($i = 0; $i < 8; $i++) {
-                $init384[$i] = new BigInteger($init384[$i], 16);
+                $init384[$i] = new Math_BigInteger($init384[$i], 16);
                 $init384[$i]->setPrecision(64);
-                $init512[$i] = new BigInteger($init512[$i], 16);
+                $init512[$i] = new Math_BigInteger($init512[$i], 16);
                 $init512[$i]->setPrecision(64);
             }
 
@@ -610,7 +626,7 @@ class Hash
             );
 
             for ($i = 0; $i < 80; $i++) {
-                $k[$i] = new BigInteger($k[$i], 16);
+                $k[$i] = new Math_BigInteger($k[$i], 16);
             }
         }
 
@@ -629,7 +645,7 @@ class Hash
         foreach ($chunks as $chunk) {
             $w = array();
             for ($i = 0; $i < 16; $i++) {
-                $temp = new BigInteger($this->_string_shift($chunk, 8), 256);
+                $temp = new Math_BigInteger($this->_string_shift($chunk, 8), 256);
                 $temp->setPrecision(64);
                 $w[] = $temp;
             }
@@ -725,7 +741,7 @@ class Hash
         }
 
         // Produce the final hash value (big-endian)
-        // (\phpseclib\Crypt\Hash::hash() trims the output for hashes but not for HMACs.  as such, we trim the output here)
+        // (Crypt_Hash::hash() trims the output for hashes but not for HMACs.  as such, we trim the output here)
         $temp = $hash[0]->toBytes() . $hash[1]->toBytes() . $hash[2]->toBytes() . $hash[3]->toBytes() .
                 $hash[4]->toBytes() . $hash[5]->toBytes();
         if ($this->l != 48) {
@@ -783,7 +799,7 @@ class Hash
      * Add
      *
      * _sha256() adds multiple unsigned 32-bit integers.  Since PHP doesn't support unsigned integers and since the
-     * possibility of overflow exists, care has to be taken.  BigInteger could be used but this should be faster.
+     * possibility of overflow exists, care has to be taken.  Math_BigInteger() could be used but this should be faster.
      *
      * @param Integer $...
      * @return Integer
