@@ -7,27 +7,40 @@
  *
  * PHP version 5
  *
+ * LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
  * @category  Net
- * @package   SFTP
+ * @package   Net_SFTP_Stream
  * @author    Jim Wigginton <terrafrost@php.net>
- * @copyright 2013 Jim Wigginton
+ * @copyright MMXIII Jim Wigginton
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib\Net\SFTP;
-
-use phpseclib\Crypt\RSA;
-use phpseclib\Net\SFTP;
-
 /**
  * SFTP Stream Wrapper
  *
- * @package SFTP
+ * @package Net_SFTP_Stream
  * @author  Jim Wigginton <terrafrost@php.net>
  * @access  public
  */
-class Stream
+class Net_SFTP_Stream
 {
     /**
      * SFTP instances
@@ -35,6 +48,7 @@ class Stream
      * Rather than re-create the connection we re-use instances if possible
      *
      * @var Array
+     * @access static
      */
     static $instances;
 
@@ -124,7 +138,8 @@ class Stream
         if (in_array($protocol, stream_get_wrappers(), true)) {
             return false;
         }
-        return stream_wrapper_register($protocol, get_called_class());
+        $class = function_exists('get_called_class') ? get_called_class() : __CLASS__;
+        return stream_wrapper_register($protocol, $class);
     }
 
     /**
@@ -132,10 +147,14 @@ class Stream
      *
      * @access public
      */
-    function __construct()
+    function Net_SFTP_Stream()
     {
         if (defined('NET_SFTP_STREAM_LOGGING')) {
             echo "__construct()\r\n";
+        }
+
+        if (!class_exists('Net_SFTP')) {
+            include_once 'Net/SFTP.php';
         }
     }
 
@@ -169,7 +188,7 @@ class Stream
         if ($host[0] == '$') {
             $host = substr($host, 1);
             global $$host;
-            if (($$host instanceof SFTP) === false) {
+            if (!is_object($$host) || get_class($$host) != 'Net_SFTP') {
                 return false;
             }
             $this->sftp = $$host;
@@ -183,7 +202,7 @@ class Stream
             if (isset($context[$scheme]['sftp'])) {
                 $sftp = $context[$scheme]['sftp'];
             }
-            if (isset($sftp) && $sftp instanceof SFTP) {
+            if (isset($sftp) && is_object($sftp) && get_class($sftp) == 'Net_SFTP') {
                 $this->sftp = $sftp;
                 return $path;
             }
@@ -193,7 +212,7 @@ class Stream
             if (isset($context[$scheme]['password'])) {
                 $pass = $context[$scheme]['password'];
             }
-            if (isset($context[$scheme]['privkey']) && $context[$scheme]['privkey'] instanceof RSA) {
+            if (isset($context[$scheme]['privkey']) && is_object($context[$scheme]['privkey']) && get_Class($context[$scheme]['privkey']) == 'Crypt_RSA') {
                 $pass = $context[$scheme]['privkey'];
             }
 
@@ -201,11 +220,11 @@ class Stream
                 return false;
             }
 
-            // casting $pass to a string is necessary in the event that it's a \phpseclib\Crypt\RSA object
+            // casting $pass to a string is necessary in the event that it's a Crypt_RSA object
             if (isset(self::$instances[$host][$port][$user][(string) $pass])) {
                 $this->sftp = self::$instances[$host][$port][$user][(string) $pass];
             } else {
-                $this->sftp = new SFTP($host, $port);
+                $this->sftp = new Net_SFTP($host, $port);
                 $this->sftp->disableStatCache();
                 if (isset($this->notification) && is_callable($this->notification)) {
                     /* if !is_callable($this->notification) we could do this:
@@ -262,17 +281,14 @@ class Stream
         if ($this->size === false) {
             if ($this->mode[0] == 'r') {
                 return false;
-            } else {
-                $this->sftp->touch($path);
-                $this->size = 0;
             }
         } else {
             switch ($this->mode[0]) {
                 case 'x':
                     return false;
                 case 'w':
+                case 'c':
                     $this->sftp->truncate($path, 0);
-                    $this->size = 0;
             }
         }
 
@@ -337,7 +353,7 @@ class Stream
                 return false;
         }
 
-        $result = $this->sftp->put($this->path, $data, SFTP::SOURCE_STRING, $this->pos);
+        $result = $this->sftp->put($this->path, $data, NET_SFTP_STRING, $this->pos);
         if (isset($this->notification) && is_callable($this->notification)) {
             if (!$result) {
                 call_user_func($this->notification, STREAM_NOTIFY_FAILURE, STREAM_NOTIFY_SEVERITY_ERR, $this->sftp->getLastSFTPError(), NET_SFTP_OPEN, 0, 0);
@@ -477,7 +493,7 @@ class Stream
      * Renames a file or directory
      *
      * Attempts to rename oldname to newname, moving it between directories if necessary.
-     * If newname exists, it will be overwritten.  This is a departure from what \phpseclib\Net\SFTP
+     * If newname exists, it will be overwritten.  This is a departure from what Net_SFTP
      * does.
      *
      * @param String $path_from
@@ -496,7 +512,7 @@ class Stream
 
         $path_from = $this->_parse_path($path_from);
         $path_to = parse_url($path_to);
-        if ($path_from === false) {
+        if ($path_from == false) {
             return false;
         }
 
@@ -633,7 +649,7 @@ class Stream
     /**
      * Flushes the output
      *
-     * See <http://php.net/fflush>. Always returns true because \phpseclib\Net\SFTP doesn't cache stuff before writing
+     * See <http://php.net/fflush>. Always returns true because Net_SFTP doesn't cache stuff before writing
      *
      * @return Boolean
      * @access public
@@ -678,7 +694,7 @@ class Stream
     /**
      * Retrieve information about a file
      *
-     * Ignores the STREAM_URL_STAT_QUIET flag because the entirety of \phpseclib\Net\SFTP\Stream is quiet by default
+     * Ignores the STREAM_URL_STAT_QUIET flag because the entirety of Net_SFTP_Stream is quiet by default
      * might be worthwhile to reconstruct bits 12-16 (ie. the file type) if mode doesn't have them but we'll
      * cross that bridge when and if it's reached
      *
@@ -725,7 +741,7 @@ class Stream
      * Change stream options
      *
      * STREAM_OPTION_WRITE_BUFFER isn't supported for the same reason stream_flush isn't.
-     * The other two aren't supported because of limitations in \phpseclib\Net\SFTP.
+     * The other two aren't supported because of limitations in Net_SFTP.
      *
      * @param Integer $option
      * @param Integer $arg1
@@ -782,3 +798,5 @@ class Stream
         return call_user_func_array(array($this, $name), $arguments);
     }
 }
+
+Net_SFTP_Stream::register();

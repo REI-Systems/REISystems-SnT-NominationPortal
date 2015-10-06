@@ -5,7 +5,7 @@
  *
  * Uses mcrypt, if available, and an internal implementation, otherwise.
  *
- * PHP version 5
+ * PHP versions 4 and 5
  *
  * Useful resources are as follows:
  *
@@ -14,9 +14,9 @@
  * Here's a short example of how to use this library:
  * <code>
  * <?php
- *    include 'vendor/autoload.php';
+ *    include 'Crypt/RC2.php';
  *
- *    $rc2 = new \phpseclib\Crypt\RC2();
+ *    $rc2 = new Crypt_RC2();
  *
  *    $rc2->setKey('abcdefgh');
  *
@@ -26,29 +26,105 @@
  * ?>
  * </code>
  *
+ * LICENSE: Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
  * @category Crypt
- * @package  RC2
+ * @package  Crypt_RC2
  * @author   Patrick Monnerat <pm@datasphere.ch>
  * @license  http://www.opensource.org/licenses/mit-license.html  MIT License
  * @link     http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib\Crypt;
+/**
+ * Include Crypt_Base
+ *
+ * Base cipher class
+ */
+if (!class_exists('Crypt_Base')) {
+    include_once 'Base.php';
+}
 
-use phpseclib\Crypt\Base;
+/**#@+
+ * @access public
+ * @see Crypt_RC2::encrypt()
+ * @see Crypt_RC2::decrypt()
+ */
+/**
+ * Encrypt / decrypt using the Counter mode.
+ *
+ * Set to -1 since that's what Crypt/Random.php uses to index the CTR mode.
+ *
+ * @link http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Counter_.28CTR.29
+ */
+define('CRYPT_RC2_MODE_CTR', CRYPT_MODE_CTR);
+/**
+ * Encrypt / decrypt using the Electronic Code Book mode.
+ *
+ * @link http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Electronic_codebook_.28ECB.29
+ */
+define('CRYPT_RC2_MODE_ECB', CRYPT_MODE_ECB);
+/**
+ * Encrypt / decrypt using the Code Book Chaining mode.
+ *
+ * @link http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher-block_chaining_.28CBC.29
+ */
+define('CRYPT_RC2_MODE_CBC', CRYPT_MODE_CBC);
+/**
+ * Encrypt / decrypt using the Cipher Feedback mode.
+ *
+ * @link http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Cipher_feedback_.28CFB.29
+ */
+define('CRYPT_RC2_MODE_CFB', CRYPT_MODE_CFB);
+/**
+ * Encrypt / decrypt using the Cipher Feedback mode.
+ *
+ * @link http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Output_feedback_.28OFB.29
+ */
+define('CRYPT_RC2_MODE_OFB', CRYPT_MODE_OFB);
+/**#@-*/
+
+/**#@+
+ * @access private
+ * @see Crypt_RC2::Crypt_RC2()
+ */
+/**
+ * Toggles the internal implementation
+ */
+define('CRYPT_RC2_MODE_INTERNAL', CRYPT_MODE_INTERNAL);
+/**
+ * Toggles the mcrypt implementation
+ */
+define('CRYPT_RC2_MODE_MCRYPT', CRYPT_MODE_MCRYPT);
+/**#@-*/
 
 /**
  * Pure-PHP implementation of RC2.
  *
- * @package RC2
+ * @package Crypt_RC2
  * @access  public
  */
-class RC2 extends Base
+class Crypt_RC2 extends Crypt_Base
 {
     /**
      * Block Length of the cipher
      *
-     * @see \phpseclib\Crypt\Base::block_size
+     * @see Crypt_Base::block_size
      * @var Integer
      * @access private
      */
@@ -57,39 +133,36 @@ class RC2 extends Base
     /**
      * The Key
      *
-     * @see \phpseclib\Crypt\Base::key
+     * @see Crypt_Base::key
      * @see setKey()
      * @var String
      * @access private
      */
-    var $key;
-
-    /**
-     * The Original (unpadded) Key
-     *
-     * @see \phpseclib\Crypt\Base::key
-     * @see setKey()
-     * @see encrypt()
-     * @see decrypt()
-     * @var String
-     * @access private
-     */
-    var $orig_key;
+    var $key = "\0";
 
     /**
      * The default password key_size used by setPassword()
      *
-     * @see \phpseclib\Crypt\Base::password_key_size
-     * @see \phpseclib\Crypt\Base::setPassword()
+     * @see Crypt_Base::password_key_size
+     * @see Crypt_Base::setPassword()
      * @var Integer
      * @access private
      */
     var $password_key_size = 16; // = 128 bits
 
     /**
+     * The namespace used by the cipher for its constants.
+     *
+     * @see Crypt_Base::const_namespace
+     * @var String
+     * @access private
+     */
+    var $const_namespace = 'RC2';
+
+    /**
      * The mcrypt specific name of the cipher
      *
-     * @see \phpseclib\Crypt\Base::cipher_name_mcrypt
+     * @see Crypt_Base::cipher_name_mcrypt
      * @var String
      * @access private
      */
@@ -98,7 +171,7 @@ class RC2 extends Base
     /**
      * Optimizing value while CFB-encrypting
      *
-     * @see \phpseclib\Crypt\Base::cfb_init_len
+     * @see Crypt_Base::cfb_init_len
      * @var Integer
      * @access private
      */
@@ -107,8 +180,8 @@ class RC2 extends Base
     /**
      * The key length in bits.
      *
-     * @see \phpseclib\Crypt\RC2::setKeyLength()
-     * @see \phpseclib\Crypt\RC2::setKey()
+     * @see Crypt_RC2::setKeyLength()
+     * @see Crypt_RC2::setKey()
      * @var Integer
      * @access private
      * @internal Should be in range [1..1024].
@@ -117,20 +190,9 @@ class RC2 extends Base
     var $default_key_length = 1024;
 
     /**
-     * The key length in bits.
-     *
-     * @see \phpseclib\Crypt\RC2::isValidEnine()
-     * @see \phpseclib\Crypt\RC2::setKey()
-     * @var Integer
-     * @access private
-     * @internal Should be in range [1..1024].
-     */
-    var $current_key_length;
-
-    /**
      * The Key Schedule
      *
-     * @see \phpseclib\Crypt\RC2::_setupKey()
+     * @see Crypt_RC2::_setupKey()
      * @var Array
      * @access private
      */
@@ -140,7 +202,7 @@ class RC2 extends Base
      * Key expansion randomization table.
      * Twice the same 256-value sequence to save a modulus in key expansion.
      *
-     * @see \phpseclib\Crypt\RC2::setKey()
+     * @see Crypt_RC2::setKey()
      * @var Array
      * @access private
      */
@@ -214,7 +276,7 @@ class RC2 extends Base
     /**
      * Inverse key expansion randomization table.
      *
-     * @see \phpseclib\Crypt\RC2::setKey()
+     * @see Crypt_RC2::setKey()
      * @var Array
      * @access private
      */
@@ -254,27 +316,32 @@ class RC2 extends Base
     );
 
     /**
-     * Test for engine validity
+     * Default Constructor.
      *
-     * This is mainly just a wrapper to set things up for Crypt_Base::isValidEngine()
+     * Determines whether or not the mcrypt extension should be used.
      *
-     * @see \phpseclib\Crypt\Base::Crypt_Base()
-     * @param Integer $engine
+     * $mode could be:
+     *
+     * - CRYPT_RC2_MODE_ECB
+     *
+     * - CRYPT_RC2_MODE_CBC
+     *
+     * - CRYPT_RC2_MODE_CTR
+     *
+     * - CRYPT_RC2_MODE_CFB
+     *
+     * - CRYPT_RC2_MODE_OFB
+     *
+     * If not explicitly set, CRYPT_RC2_MODE_CBC will be used.
+     *
+     * @see Crypt_Base::Crypt_Base()
+     * @param optional Integer $mode
      * @access public
-     * @return Boolean
      */
-    function isValidEngine($engine)
+    function Crypt_RC2($mode = CRYPT_RC2_MODE_CBC)
     {
-        switch ($engine) {
-            case self::ENGINE_OPENSSL:
-                if ($this->current_key_length != 128 || strlen($this->orig_key) != 16) {
-                    return false;
-                }
-                $this->cipher_name_openssl_ecb = 'rc2-ecb';
-                $this->cipher_name_openssl = 'rc2-' . $this->_openssl_translate_mode();
-        }
-
-        return parent::isValidEngine($engine);
+        parent::Crypt_Base($mode);
+        $this->setKey('');
     }
 
     /**
@@ -282,7 +349,7 @@ class RC2 extends Base
      *
      * Valid key lengths are 1 to 1024.
      * Calling this function after setting the key has no effect until the next
-     *  \phpseclib\Crypt\RC2::setKey() call.
+     *  Crypt_RC2::setKey() call.
      *
      * @access public
      * @param Integer $length in bits
@@ -305,21 +372,18 @@ class RC2 extends Base
      * If the key is not explicitly set, it'll be assumed to be a single
      * null byte.
      *
-     * @see \phpseclib\Crypt\Base::setKey()
+     * @see Crypt_Base::setKey()
      * @access public
      * @param String $key
-     * @param Integer $t1 optional Effective key length in bits.
+     * @param Integer $t1 optional          Effective key length in bits.
      */
     function setKey($key, $t1 = 0)
     {
-        $this->orig_key = $key;
-
         if ($t1 <= 0) {
             $t1 = $this->default_key_length;
-        } elseif ($t1 > 1024) {
+        } else if ($t1 > 1024) {
             $t1 = 1024;
         }
-        $this->current_key_length = $t1;
         // Key byte count should be 1..128.
         $key = strlen($key) ? substr($key, 0, 128) : "\x00";
         $t = strlen($key);
@@ -353,56 +417,10 @@ class RC2 extends Base
     }
 
     /**
-     * Encrypts a message.
-     *
-     * Mostly a wrapper for Crypt_Base::encrypt, with some additional OpenSSL handling code
-     *
-     * @see decrypt()
-     * @access public
-     * @param String $plaintext
-     * @return String $ciphertext
-     */
-    function encrypt($plaintext)
-    {
-        if ($this->engine == self::ENGINE_OPENSSL) {
-            $temp = $this->key;
-            $this->key = $this->orig_key;
-            $result = parent::encrypt($plaintext);
-            $this->key = $temp;
-            return $result;
-        }
-
-        return parent::encrypt($plaintext);
-    }
-
-    /**
-     * Decrypts a message.
-     *
-     * Mostly a wrapper for Crypt_Base::decrypt, with some additional OpenSSL handling code
-     *
-     * @see encrypt()
-     * @access public
-     * @param String $ciphertext
-     * @return String $plaintext
-     */
-    function decrypt($ciphertext)
-    {
-        if ($this->engine == self::ENGINE_OPENSSL) {
-            $temp = $this->key;
-            $this->key = $this->orig_key;
-            $result = parent::decrypt($ciphertext);
-            $this->key = $temp;
-            return $result;
-        }
-
-        return parent::encrypt($ciphertext);
-    }
-
-    /**
      * Encrypts a block
      *
-     * @see \phpseclib\Crypt\Base::_encryptBlock()
-     * @see \phpseclib\Crypt\Base::encrypt()
+     * @see Crypt_Base::_encryptBlock()
+     * @see Crypt_Base::encrypt()
      * @access private
      * @param String $in
      * @return String
@@ -446,8 +464,8 @@ class RC2 extends Base
     /**
      * Decrypts a block
      *
-     * @see \phpseclib\Crypt\Base::_decryptBlock()
-     * @see \phpseclib\Crypt\Base::decrypt()
+     * @see Crypt_Base::_decryptBlock()
+     * @see Crypt_Base::decrypt()
      * @access private
      * @param String $in
      * @return String
@@ -489,33 +507,14 @@ class RC2 extends Base
     }
 
     /**
-     * Setup the \phpseclib\Crypt\Base::ENGINE_MCRYPT $engine
-     *
-     * @see \phpseclib\Crypt\Base::_setupMcrypt()
-     * @access private
-     */
-    function _setupMcrypt()
-    {
-        if (!isset($this->key)) {
-            $this->setKey('');
-        }
-
-        parent::_setupMcrypt();
-    }
-
-    /**
      * Creates the key schedule
      *
-     * @see \phpseclib\Crypt\Base::_setupKey()
+     * @see Crypt_Base::_setupKey()
      * @access private
      */
     function _setupKey()
     {
-        if (!isset($this->key)) {
-            $this->setKey('');
-        }
-
-        // Key has already been expanded in \phpseclib\Crypt\RC2::setKey():
+        // Key has already been expanded in Crypt_RC2::setKey():
         // Only the first value must be altered.
         $l = unpack('Ca/Cb/v*', $this->key);
         array_unshift($l, $this->pitable[$l['a']] | ($l['b'] << 8));
@@ -527,40 +526,30 @@ class RC2 extends Base
     /**
      * Setup the performance-optimized function for de/encrypt()
      *
-     * @see \phpseclib\Crypt\Base::_setupInlineCrypt()
+     * @see Crypt_Base::_setupInlineCrypt()
      * @access private
      */
     function _setupInlineCrypt()
     {
-        $lambda_functions =& self::_getLambdaFunctions();
+        $lambda_functions = &Crypt_RC2::_getLambdaFunctions();
 
         // The first 10 generated $lambda_functions will use the $keys hardcoded as integers
         // for the mixing rounds, for better inline crypt performance [~20% faster].
         // But for memory reason we have to limit those ultra-optimized $lambda_functions to an amount of 10.
-        // (Currently, for Crypt_RC2, one generated $lambda_function cost on php5.5@32bit ~60kb unfreeable mem and ~100kb on php5.5@64bit)
-        $gen_hi_opt_code = (bool)( count($lambda_functions) < 10 );
-
-        // Generation of a uniqe hash for our generated code
-        $code_hash = "Crypt_RC2, {$this->mode}";
-        if ($gen_hi_opt_code) {
-            $code_hash = str_pad($code_hash, 32) . $this->_hashInlineCryptFunction($this->key);
+        $keys = $this->keys;
+        if (count($lambda_functions) >= 10) {
+            foreach ($this->keys as $k => $v) {
+                $keys[$k] = '$keys[' . $k . ']';
+            }
         }
+
+        $code_hash = md5(str_pad("Crypt_RC2, {$this->mode}, ", 32, "\0") . implode(',', $keys));
 
         // Is there a re-usable $lambda_functions in there?
         // If not, we have to create it.
         if (!isset($lambda_functions[$code_hash])) {
             // Init code for both, encrypt and decrypt.
             $init_crypt = '$keys = $self->keys;';
-
-            switch (true) {
-                case $gen_hi_opt_code:
-                    $keys = $this->keys;
-                default:
-                    $keys = array();
-                    foreach ($this->keys as $k => $v) {
-                        $keys[$k] = '$keys[' . $k . ']';
-                    }
-            }
 
             // $in is the current 8 bytes block which has to be en/decrypt
             $encrypt_block = $decrypt_block = '
