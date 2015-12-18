@@ -9,7 +9,7 @@ print '</pre>';*/
     and small business owners since 1963. During this week, the U.S. Small Business Administration honors
     small business owners and entrepreneurs for their outstanding achievements through various awards.</p>
     <p>SBA is currently seeking nominations from the public for exceptional entrepreneurs. You can use this
-    online portal to submit your nomination for the following awards:</p>
+        online portal to submit your nomination for the awards listed below. For eligibility requirements and selection criteria, see the “Nomination Guidelines.” <strong>Nominations must be submitted by 3:00 pm ET, January 11, 2016.</strong></p>
     <ul>
         <li> Small Business Person of the Year Awards</li>
         <li>Small Business Exporter of the Year</li>
