@@ -1,5 +1,5 @@
-/.htaccess
-.htaccess
+sites/default/files/**/*
+sites/default/files/settings.php
 /sites/default
 .DS_Store
 *.DS_Store
