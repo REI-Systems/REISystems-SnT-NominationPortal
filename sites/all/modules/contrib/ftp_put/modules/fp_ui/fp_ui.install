@@ -1,0 +1,77 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the FTP put module.
+ */
+
+/**
+* Implements hook_install()
+*/
+function fp_ui_install() {
+  variable_set('fp_ui_tempdir', 'sites/default/files');
+  variable_set('fp_ui_outputdir', 'sites/default/files/output');
+  variable_get('fp_ui_archivedir', 'sites/default/files/archive');
+  variable_set('fp_ui_log', 0);
+}
+
+/**
+* Implements hook_uninstall()
+*/
+function fp_ui_uninstall() {
+  variable_del('fp_ui_tempdir');
+  variable_del('fp_ui_outputdir');
+  variable_del('fp_ui_archivedir');
+  variable_del('fp_ui_log');
+}
+
+/**
+* Implements hook_schema()
+*/
+function fp_ui_schema() {
+  $schema['ftp_put_stats'] = array(
+    'description' => "Stats of ftp_put usage.",
+    'fields' => array(
+      'fid' => array(
+      'description' => "Unique ID",
+      'type' => 'serial',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+    ),
+	'timestamp' => array(
+      'description' => "Time of FTP Request.",
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => FALSE,
+      'default' => 0,
+    ),
+	 'hash' => array(
+      'description' => 'Hash of transferred files.',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'ftp_ip' => array(
+      'description' => 'IP of the remote FTP server.',
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => FALSE,
+      'default' => 'none'
+    ),
+    'uid' => array(
+      'description' => "User ID.",
+      'type' => 'int',
+      'not null' => FALSE,
+      'default' => -1,
+    ),
+	'error' => array(
+      'description' => 'FTP put errors.',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+  ),
+    'primary key' => array('fid'),
+    'indexes' => array(
+    'timestamp' => array('timestamp'),
+    ),
+  );          
+  return $schema;
+}

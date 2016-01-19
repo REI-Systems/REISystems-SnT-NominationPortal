@@ -1,0 +1,5 @@
+name = FTP Put UI
+description = UI for the FTP Put module.
+core = 7.x
+dependencies[] = ftp_put
+package = "FTP Put"

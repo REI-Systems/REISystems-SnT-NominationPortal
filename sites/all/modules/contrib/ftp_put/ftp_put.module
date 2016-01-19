@@ -1,0 +1,395 @@
+<?php
+/**
+* This module implements file handlers on the local server side
+* See fp_ui module of the User Interface
+*/
+
+/**
+* Implements a function available via a URL (see fp_ui module and hook_menu)
+* initiates the FTP transfer process
+*/
+function ftp_put_nomprocess($nid = '') {
+// 1. set messages to return and spawn a log object
+  /*
+  $success_message      =  'Thank you for your nomination. Your nomination has been successfully processed.';
+  $error_message        =  'Processing your nomination resulted in error(s). 
+                            Please check your application against the guidelines
+                            and contact the admin of this server if the error persists.';
+  $memory_error_message =  'Processing your nomination resulted in error(s).
+                            The total uploaded files size exceeds 100 MB. Please makes 
+                            some of the files smaller or delete them.';
+*/
+
+  $success_message      =  array( 'text'   => 'Thank you for your nomination. Your nomination has been successfully submitted.',
+                                  'result' => 'success',);
+
+  $error_message        =  array( 'text'   => 'Processing your nomination resulted in error(s).
+                            Please check your application against the guidelines
+                            and contact the admin of this server if the error persists.',
+                                  'result' => 'error',);
+
+  $memory_error_message =  array( 'text'   => 'Processing your nomination resulted in error(s).
+                            The total uploaded files size exceeds 100 MB. Please makes
+                            some of the files smaller or delete them.',
+                                  'result' => 'error',);
+
+
+  $log = new StdClass();
+  
+// 2. check if a valid nid has been sent
+  if (!is_numeric($nid)) {
+    $log->error .= 'bad nid | ';
+    _ftp_put_log($log);
+    return $error_message;
+  }
+
+// 3. construct an array of strings from specified entity fields
+// and uploaded files associated with this entity
+  $packaged_data_array = _ftp_put_package($nid, $log);
+// if there is data, loop over all files and call the zip and ftp functions
+  if ($packaged_data_array === FALSE) {
+    $log->error .= 'no packaged files | ';
+	  _ftp_put_log($log);
+    return $error_message;
+  }
+  
+// 4. call the zip function to zip the files into one bundle and leave them at a local directory
+  $entity_zip_result = _ftp_put_compress($packaged_data_array, $log);
+// check if compression succeeded and return if it did not
+  if ($entity_zip_result === FALSE || empty($entity_zip_result)) {
+    $log->error .= 'ZIP returned no files | ';
+    _ftp_put_log($log);
+    return $error_message;
+  }
+  elseif ($entity_zip_result == 'memory') {
+    $log->error .= 'Memory exceeded | ';
+    _ftp_put_log($log);
+    return $memory_error_message;
+  }
+  
+// 5. set the 'field_nomination_submitted' field to 1 upon successful completion of the nomination
+    $nomination_node = node_load($nid);
+    $nomination_node->field_nomination_submitted[LANGUAGE_NONE][0]['value']  = '1';
+    node_save($nomination_node);
+    if ($nomination_node->nid != $nid) {
+      $log->error .= 'node API error | ';
+      _ftp_put_log($log);
+      return $error_message;
+    }
+    
+// 6. save the log and erros to the DB if logging is enabled in settings
+    _ftp_put_log($log);
+    return $success_message;
+}
+
+
+/**
+* Creates an array from a node
+* @arg array of strings of entity types to process
+*/
+function _ftp_put_package($nid, &$log) {
+// return if input is empty
+  if (empty($nid)) {
+    $log->error .= 'no NID to package | ';
+    return FALSE;
+  }
+  $node = node_load($nid);
+// check if this node has already been submitted
+  if ($node->field_nomination_submitted[LANGUAGE_NONE][0]['value'] == 1) {
+    $log->error .= 'node has already been submitted | ';
+    return FALSE;
+  }
+// array for returning data
+  $data_array = array();
+// collect fields and attached files from the node
+  $entity_array = entity_load('node', array($nid));
+// check if node and entity have loaded, if not, return
+  if ($node === FALSE || empty($entity_array)) {
+    $log->error .= 'load' . $nid . ' | ';
+	  return FALSE;
+  }
+// loop through entities and extract all fields' values and attached files
+  $field_values = '';
+// set default state
+  $state = 'XX';
+  $content_file_array = array();
+  $field_list = field_info_instances('node', $node->type);
+// add nominator's information to the field_values to be included in the plain text form
+  global $user;
+  $field_values .= 'NOMINATOR'                         . "\r\n" .
+                   'nominator user name:'              . $user->name     . "\r\n" . 
+                   'nominator email:'                  . $user->mail     . "\r\n" . 
+                   'nominator ip address:'             . $user->hostname . "\r\n";
+  $profile = profile2_load_by_user($user->uid, 'main');
+  $field_values .= 'nominator title:'      . $profile->field_profile_title[LANGUAGE_NONE][0]['value']      .  "\r\n" . 
+                   'nominator first name:' . $profile->field_profile_first_name[LANGUAGE_NONE][0]['value'] .  "\r\n" .
+                   'nominator last name:'  . $profile->field_profile_last_name[LANGUAGE_NONE][0]['value']  .  "\r\n" .
+                   'nominator company:'    . $profile->field_profile_company_name[LANGUAGE_NONE][0]['value']  .  "\r\n" .
+                   'APPLICATION'. "\r\n";
+// 1. add file stamps
+   $field_values .= 'submission timestamp:' .  time()          . "\r\n" .
+                    'creation timestamp:'   .  $node->created  . "\r\n";
+                    
+// assemble all form input into one string in this loop
+// 2. loop over all fields and see if they are db fields with values
+  foreach ($field_list as $field => $huinja) {
+    $field_array = field_get_items('node', $entity_array[$nid], $field);
+// a plain text field check
+    if ( isset($field_array[0]['value']) ) {
+// record nomination award name by calling a lookup function from nomination_email module
+      if ($field =='field_nomination_select_award') {
+        $award_type = $field_array[0]['value'];
+        $field_values .= $field . ':' . _ftp_put_get_award_name($field_array[0]['value']) . "\r\n";
+        continue;
+      }
+// assemble all field values into a variable
+	    $field_values .= $field .  ':' . $field_array[0]['value'] . "\r\n";
+  }
+// take down the state in two-letter codes of the nomination
+  if ($field == 'field_nomination_state') {
+    $state = $field_array[0]['value'];
+  }
+  }
+// 3. construct an MD5 hash off of the filled in form lines
+//    if it's empty construct random hash
+  if (!empty($field_values)) {
+    $field_hash = md5($field_values);
+  }
+  else {
+    $field_hash = md5(mt_rand());
+  }
+// 4. add hash to log
+  $log->hash .=  $field_hash . ' | ';
+// 5. add the umbrella file name to the array
+  $content_file_array['content_hash'] = $state . '_' . $field_hash;
+// 6. loop over all fields and see if they are attached files  
+  /*
+  foreach ($field_list as $field => $huinja) {
+    $field_array = field_get_items('node', $entity_array[$nid], $field);
+// this is a check for files attached to a field, 
+// the structure of the field array is different from plain text
+    if (isset($field_array[0]['uri'])) {
+// there can be multiple files attached to the same field
+// loop over each attached file
+      foreach ($field_array as $attached_number => $attached_field) {
+// 7. add file descriptions, if any to the text form _sba_nomportal_form.txt
+   if (isset($attached_field['description'])) {
+     $field_values .=  'attached_file:'             . $attached_field['filename']    . "\r\n" . 
+                       'file_description:'          . $attached_field['description'] . "\r\n";
+   }
+        $field_file = $attached_field['uri'];
+        $file_path = drupal_realpath($field_file);
+        $file_path = str_replace('\\', '/', $file_path);
+        $file_content = file_get_contents($file_path);
+        $content_file_array[$state . '_' . 
+                            $field_hash  . '_' . 
+                            $attached_field['fid'] . '_' . 
+                            $attached_field['filename']] = $file_content;
+    }
+    }
+  }
+  */
+
+  /**
+   * Instead of going through all File Upload fields, just go through field_nomination_document_path field as that has all
+   * file attachments that should be going to private nomination site. If you go through each file upload field like it was before,
+   * it would cause duplication of files information sent to the private site which is bad.
+   */
+
+  /**
+   * Changed the implementation of looking at field_nomination_document_path field, started looking at
+   * individual fields mentioned below to be able to get their original names(titles) as well to display
+   * in sba_nomportal txt file which wasn't the case earlier.
+   */
+  $field_names = array(
+    'field_nomination_document_1','field_nomination_document_2','field_nomination_document_3',
+    'field_nomination_document_4','field_nomination_document_5','field_nomination_document_6',
+    'field_nomination_document_7','field_nomination_document_8',
+  );
+  foreach ($field_names as $field_name) {
+    $field_array = field_get_items('node', $entity_array[$nid], $field_name);
+    // this is a check for files attached to a field,
+    // the structure of the field array is different from plain text
+    if (isset($field_array[0]['uri'])) {
+      $field_name_array = explode('_', $field_name);
+      $file_field_no = $field_name_array[3];
+      $variable_name = $award_type . '_file_fields_titles';
+      $titles = variable_get($variable_name, '');
+      $field_title_array = explode(',', $titles);
+      $field_title = $field_title_array[$file_field_no - 1];
+      $field_values .= "\nFiles For:" . $field_title . " -> " . count($field_array) . "\r\n";
+      // there can be multiple files attached to the same field
+      // loop over each attached file
+      foreach ($field_array as $attached_number => $attached_field) {
+        // 7. add file descriptions, if any to the text form _sba_nomportal_form.txt
+        if (isset($attached_field['description'])) {
+          $field_values .=  'attached_file:'             . $attached_field['filename']    . "\r\n" .
+            'file_description:'          . $attached_field['description'] . "\r\n";
+        }
+        $field_file = $attached_field['uri'];
+        $file_path = drupal_realpath($field_file);
+        $file_path = str_replace('\\', '/', $file_path);
+        $file_content = file_get_contents($file_path);
+        $content_file_array[$state . '_' .
+          $field_hash  . '_' .
+          $attached_field['fid'] . '_' .
+          $attached_field['filename']] = $file_content;
+      }
+    }
+  }
+
+  /*
+  $field_array = field_get_items('node', $entity_array[$nid], 'field_nomination_document_path');
+  // this is a check for files attached to a field,
+  // the structure of the field array is different from plain text
+  if (isset($field_array[0]['uri'])) {
+    // there can be multiple files attached to the same field
+    // loop over each attached file
+    foreach ($field_array as $attached_number => $attached_field) {
+      // 7. add file descriptions, if any to the text form _sba_nomportal_form.txt
+      if (isset($attached_field['description'])) {
+        $field_values .=  'attached_file:'             . $attached_field['filename']    . "\r\n" .
+          'file_description:'          . $attached_field['description'] . "\r\n";
+      }
+      $field_file = $attached_field['uri'];
+      $file_path = drupal_realpath($field_file);
+      $file_path = str_replace('\\', '/', $file_path);
+      $file_content = file_get_contents($file_path);
+      $content_file_array[$state . '_' .
+        $field_hash  . '_' .
+        $attached_field['fid'] . '_' .
+        $attached_field['filename']] = $file_content;
+    }
+  }
+  */
+
+// 8. add assembled form input text to the array keyed on _sba_nomportal_form.txt to compress
+  $content_file_array[$state . '_' . $field_hash . '_sba_nomportal_form.txt'] = $field_values;
+  return $content_file_array;
+}
+
+/**
+* @arg array of files to compress, keyed on file name with value of file content
+* both strings.
+* Depending on the "Compress" setting, writes compressed or 
+* ucompressed files into the 'temp' directory, see Settings
+* return bool; array with file names and paths of FTP-ed files on success, FALSE on failure of at least one file
+*/
+function _ftp_put_compress($file_array, &$log) {
+// confirm that the output and archive directories are present and writable
+  $output_dir  = variable_get('fp_ui_outputdir',  NULL);
+  $archive_dir = variable_get('fp_ui_archivedir', NULL);
+// record output dir into log under ftp_ip field
+  $log->ftp_ip = $output_dir;
+  $output_dir_result  =  file_prepare_directory($output_dir,  FILE_CREATE_DIRECTORY);
+  $archive_dir_result =  file_prepare_directory($archive_dir, FILE_CREATE_DIRECTORY);
+  if ($output_dir_result === FALSE || $archive_dir_result === FALSE) {
+    $log->error .= 'directory creation or permissions | ';
+    return FALSE;
+  }
+// array to return
+  $return_array = array();	
+// proceed only if there is input and content hash is present
+  if (empty($file_array) || !isset($file_array['content_hash'])) {
+    $log->error .= 'empty or bad compress input | ';
+    return FALSE;
+  }
+// *** Compress Content *** 
+//  1. construct a directory path to put all uncompressed files in
+  $zipped_file_name = $file_array['content_hash'] . '.zip';
+  $bundle_dir = $output_dir . '/' . $zipped_file_name;
+//  2. construct an array with file paths to return
+  $return_array[$zipped_file_name] = $bundle_dir;
+//  3. delete the umbrella file name from the array to avoid saving it
+  unset($file_array['content_hash']);
+//  4. construct a new Zip archive object
+  $zip = new ZipArchive;
+  $zip_status = $zip->open($bundle_dir, ZipArchive::CREATE);
+//  5. check for errors when creating zip archive and return with FALSE if it fails
+  if ($zip_status !== TRUE) {
+    $log->error .= 'ZIP open | ';
+	  return FALSE;
+  }
+  foreach ($file_array as $file_name => $file_content) {
+// call the memory check function and proceed only if well below memory limit
+    if (_ftp_put_check_memory() === FALSE) {
+      $log->error .= 'memory limit | ';
+// close archive and wipe out the file that has been created so that it is not picked up by SBA server
+      $zip->close();
+      file_unmanaged_delete($bundle_dir);
+      return 'memory';  
+    }
+    $result = $zip->addFromString($file_name,  $file_content);
+//  6. trip the flag if the result is FALSE and return with FALSE
+		if ($result === FALSE) {
+		  $log->error .= 'ZIP add | ';
+		  return FALSE;
+		}
+  }
+
+//  7. close the zip archive for the current file bundle
+  if ($zip->close() === FALSE) {
+    $log->error .= 'ZIP close | ';
+    return FALSE;
+  }
+//  8. return array with file path if all operations succeeded
+  return $return_array;
+}
+
+/**
+* Keeps log of transfers and erros if logging is on in settings
+* @args log object
+*/
+function _ftp_put_log(&$log) {
+  if (variable_get('fp_ui_log', 0) == 0) {
+    return;
+  }
+  global $user;
+  $log->uid = $user->uid;
+  date_default_timezone_set('America/New_York');
+  $log->timestamp = date('c');
+  drupal_write_record('ftp_put_stats', $log);
+}
+
+/**
+ * Return name of the award type based on id.
+ */
+function _ftp_put_get_award_name($id) {
+  $award_types = array(
+    "_none_" => "- Select an award -",
+    "deadline_person_of_year" => "Small Business Person of the Year Awards",
+    "deadline_exporter_of_year" => "Small Business Exporter of the Year",
+    "deadline_disaster_recovery" => "Phoenix Award for Small Business Disaster Recovery",
+    "deadline_disaster_recovery_contribution" => "Phoenix Award for Outstanding Contributions to Disaster Recovery, Public Official",
+    "deadline_disaster_recovery_contribution_volunteer" => "Phoenix Award for Outstanding Contributions to Disaster Recovery, Volunteer",
+    "deadline_prime_contractor" => "Federal Procurement Award - Small Business Prime Contractor of the Year Award",
+    "deadline_sub_contractor" => "Federal Procurement Award - Small Business Subcontractor of the Year Award",
+    "deadline_d_eisenhower" => "Federal Procurement Award - Dwight D. Eisenhower Award for Excellence",
+    "deadline_graduate_award_of_year" => "8(a) Graduate of the Year Award",
+    "deadline_innovation_award" => "Small Business Development Center Excellence and Innovation Award",
+    "deadline_outreach_centers" => "Veteran Business Outreach Center Excellence in Service Award",
+    "deadline_center_of_excellence" => "Women’s Business Center of Excellence Award",
+  );
+  return isset($award_types[$id]) ? $award_types[$id] : '';
+}
+
+/**
+ * Checks the current RAM usage against PHP's memory_limit
+ * found in phpinfo()
+ * If usage is approaching the limit, return FALSE, otherwise return TRUE
+ * @return bool
+ */
+function _ftp_put_check_memory() {
+// get memory limit value and parse out the digits. It is given in MB as 128M, e.g.
+  $memory_printout = preg_match('/\d*/', ini_get('memory_limit'), $matches);
+// convert the limit to bytes
+  $memory_limit = $matches[0] * 1024 * 1024;
+// get the current true allocated memory
+  $allocated_memory = memory_get_usage(TRUE);
+// if the allocated memory is greater than 90% of the limit return FALSE
+  if (($memory_limit - $allocated_memory) <= ($memory_limit/10) ) {
+    return FALSE;
+  }
+// otherwise return TRUE  
+  return TRUE;
+}
