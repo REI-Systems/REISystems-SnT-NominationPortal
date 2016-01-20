@@ -142,6 +142,7 @@ DirectoryIndex index.php index.html index.htm
   </IfModule>
 </IfModule>
 
+Header set X-Frame-Options SAMEORIGIN
 
 # Adding the file upload size restrictions
 php_value upload_max_filesize 5M
