@@ -84,8 +84,19 @@ function create_nomination_form_alter(&$form, &$form_state, $form_id) {
     case 'user_login': // Log-in form.
       // Password
       $form['pass']['#attributes']['autocomplete'] = 'off';
+      // PCI + Information disclosure protection.
+      $form['#attributes']['autocomplete'] = 'off';
       break;
 
+    case 'user_register_form':
+      // PCI + Information disclosure protection.
+      $form['#attributes']['autocomplete'] = 'off';
+      break;
+
+    case 'user_pass':
+      // PCI + Information disclosure protection.
+      $form['#attributes']['autocomplete'] = 'off';
+      break;
   }
 }
 
